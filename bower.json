@@ -1,0 +1,30 @@
+{
+  "name": "Polymer Webdesign",
+  "authors": [
+    "Sandra Berger",
+    "Marco Boxler",
+    "Haiyan Bührig",
+    "Heiko Etwein",
+    "Johannes Finckh",
+    "Simon Müller",
+    "Felix Wiedenbach"
+  ],
+  "description": "Git-Project for creating new Webcomponents using Polymer",
+  "moduleType": [],
+  "license": "BSD",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.2.1",
+    "iron-elements": "PolymerElements/iron-elements#^1.0.0",
+    "neon-elements": "PolymerElements/neon-elements#^1.0.0",
+    "paper-elements": "PolymerElements/paper-elements#^1.0.1",
+    "platinum-elements": "PolymerElements/platinum-elements#^1.1.0"
+  }
+}
