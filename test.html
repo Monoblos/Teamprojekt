@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Cool Page</title>
+		<style>
+		  .hidden {
+			display: none;
+		  }
+		  [unresolved] {
+			opacity: 0;
+		  }
+		  a {
+			color: white;
+			text-decoration: none;
+		  }
+		  .conentdiv {
+			padding-left: 5px;
+			padding-top: 8px;
+		  }
+		  #username {
+			padding-left: 5px;
+		  }
+		</style>
+		<style is="custom-style">
+		  paper-spinner-lite.left {
+			--paper-spinner-color: var(--paper-blue-grey-500);
+		  }
+		  paper-toggle-button {
+		    --paper-toggle-button-unchecked-button-color: var(--paper-blue-grey-500);
+		    --paper-toggle-button-checked-button-color: var(--google-blue-500);
+		  }
+		  paper-progress {
+				--paper-progress-transition-duration: 2s;
+		  }
+		</style>
+		<script src="./bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
+		<link rel="import" href="./bower_components/paper-spinner/paper-spinner-lite.html">
+		<link rel="import" href="./bower_components/paper-button/paper-button.html">
+		<link rel="import" href="./bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+		<link rel="import" href="./bower_components/paper-listbox/paper-listbox.html">
+		<link rel="import" href="./bower_components/paper-item/paper-item.html">
+		<link rel="import" href="./bower_components/paper-toggle-button/paper-toggle-button.html">
+		<link rel="import" href="./bower_components/paper-drawer-panel/paper-drawer-panel.html">
+		<link rel="import" href="./bower_components/paper-header-panel/paper-header-panel.html">
+		<link rel="import" href="./bower_components/paper-toolbar/paper-toolbar.html">
+		<link rel="import" href="./bower_components/paper-icon-button/paper-icon-button.html">
+		<link rel="import" href="./bower_components/paper-tabs/paper-tab.html">
+		<link rel="import" href="./bower_components/paper-tabs/paper-tabs.html">
+		<link rel="import" href="./bower_components/paper-toast/paper-toast.html">
+		<link rel="import" href="./bower_components/paper-slider/paper-slider.html">
+		<link rel="import" href="./bower_components/paper-radio-group/paper-radio-group.html">
+		<link rel="import" href="./bower_components/paper-radio-button/paper-radio-button.html">
+		<link rel="import" href="./bower_components/paper-dialog/paper-dialog.html">
+		<link rel="import" href="./bower_components/paper-dialog-scrollable/paper-dialog-scrollable.html">
+		<link rel="import" href="./bower_components/paper-badge/paper-badge.html">
+		<link rel="import" href="./bower_components/paper-icon-button/paper-icon-button.html">
+		<link rel="import" href="./bower_components/paper-fab/paper-fab.html">
+		<!-- <link rel="import" href="./bower_components/paper-behaviors/paper-ripple-behavior.html"> <!-- -->
+		<link rel="import" href="./my-paper-ripple.html"> <!-- -->
+	</head>
+	<body>
+		<script>
+		  window.addEventListener('WebComponentsReady', function() {
+			spinner.remove();
+			main.removeAttribute("unresolved");
+			animButton.getRipple().animationSpeed = 0.25;
+			animButton.getRipple().leftToRight = true;
+		  });
+		  toggle = function() {
+			spinners = document.querySelectorAll("paper-spinner-lite");
+			for (i = 0; i < spinners.length; ++i) {
+			  elem = spinners[i];
+			  if (elem.hasAttribute("active")) {
+				elem.removeAttribute("active");
+			  } else {
+				elem.setAttribute("active");
+			  }
+			}
+		  };
+		  displayTab = function(id) {
+			divs = document.querySelectorAll(".conentdiv");
+			divs[0].classList.add("hidden");
+			divs[1].classList.add("hidden");
+			divs[2].classList.add("hidden");
+			divs[id - 1].classList.remove("hidden");
+			badge.updatePosition();
+		  };
+		  fancyAutocloseToast = function() {
+			autoclostoast.text = "This toast auto-closes after 3 seconds";
+			setTimeout(function() { autoclostoast.text = "This toast auto-closes after 2 seconds"; }, 1000);
+			setTimeout(function() { autoclostoast.text = "This toast auto-closes after 1 seconds"; }, 2000);
+			autoclostoast.open();
+		  };
+		  animating = false;
+		  loadanimation = function() {
+		    if (animating) { return; }
+			animating = true;
+  			prgBar.value = 100;
+			setTimeout(function() { prgBar.value = 0; }, 2000);
+			setTimeout(function() { animating = false; }, 4000);
+  		  };
+		  
+		  normal = function() {
+			slider.customStyle['--paper-slider-active-color'] = "var(--google-blue-700)";
+			slider.customStyle['--paper-slider-knob-color'] = "var(--google-blue-700)";
+		    slider.updateStyles();
+			animButton.customStyle['--paper-button-ink-color'] = undefined;
+			animButton.updateStyles();
+		  }
+		  pinkIt = function() {
+			slider.customStyle['--paper-slider-active-color'] = "#e91e63";
+			slider.customStyle['--paper-slider-knob-color'] = "#e91e63";
+		    slider.updateStyles();
+			animButton.customStyle['--paper-button-ink-color'] = "#e91e63";
+			animButton.updateStyles();
+		  }
+		  lastTimeout = -1;
+  		  favclicked = function() {
+		    if (lastTimeout != -1) {
+			  clearTimeout(lastTimeout);
+			}
+  			badge.label = parseInt(badge.label) + 1;
+			lastTimeout = setTimeout(function() { badge.label = 0; }, 5000);
+  		  };
+		</script>
+
+		<p id="spinner">Loading... </p>
+		<div id="main" unresolved>
+			<paper-drawer-panel force-narrow disable-edge-swipe>
+				<paper-header-panel drawer>
+					<paper-toolbar>
+						<div>Side-Menu</div>
+					</paper-toolbar>
+					<div>
+						<paper-input id="username" label="User" char-counter maxlength="25" auto-validate allowed-pattern="[a-zA-Z0-9+-_#]"></paper-input>
+					</div>
+				</paper-header-panel>
+				<paper-header-panel main>
+					<paper-toolbar>
+						<paper-icon-button icon="menu" paper-drawer-toggle></paper-icon-button>
+						<paper-tabs id="tabs" selected="0" noink>
+							<paper-tab id="apptitle" onclick="displayTab(1)">Someones App</paper-tab>
+							<paper-tab onclick="displayTab(2)">Toast Tab</paper-tab>
+							<paper-tab onclick="displayTab(3)">Tab 3</paper-tab>
+						</paper-tabs>
+						<a href="http://www.htwg-konstanz.de/" tabindex="-1"><paper-item>Link to HTWG-Homepage</paper-item></a>
+					</paper-toolbar>
+					<div id="tab1" class="conentdiv">
+						<div>
+							<paper-spinner-lite class="left"></paper-spinner-lite>
+							<paper-spinner-lite active class="right"></paper-spinner-lite>
+							<paper-toggle-button onclick="toggle()" checked noink></paper-toggle-button>
+						</div>
+						<div>
+						<paper-dropdown-menu noink id="dropd" label="Something cool">
+							<paper-listbox class="dropdown-content">
+								<paper-item>YOLO</paper-item>
+								<paper-item>SWAG</paper-item>
+								<paper-item>Hashtag</paper-item>
+								<paper-item>Lohnsteuerabrechnung</paper-item>
+							</paper-listbox>
+						</paper-dropdown-menu>
+						</div>
+					</div>
+					<div id="tab2" class="conentdiv hidden">
+						<paper-button raised onclick="fancyAutocloseToast()">Open toast</paper-button>
+						<paper-toast id="autoclostoast" text="This toast auto-closes after 3 seconds"></paper-toast>
+					</div>
+					<div id="tab3" class="conentdiv hidden">
+						<paper-slider id="slider" value="50" editable></paper-slider>
+						<div>
+						Coloring mode:
+						<paper-radio-group id="group" selected="i1" allow-empty-selection>
+							<paper-radio-button name="i1" onclick="normal()">Normal</paper-radio-button>
+							<paper-radio-button name="i2" onclick="pinkIt()">Pink!</paper-radio-button>
+							<paper-radio-button name="i3" disabled>Fancy</paper-radio-button>
+						</paper-radio-group>
+						</div>
+
+						<div style='padding-top: 15px; padding-bottom: 5px'>
+							<div style="display: inline-block;">
+								<paper-fab mini icon="favorite" title="heart"></paper-fab>
+							</div>
+							<div style="display: inline-block; overflow: hidden;">
+								<paper-icon-button id="fafico" icon="favorite" alt="fafico" onclick="favclicked()"></paper-icon-button>
+								<paper-badge id="badge" for="fafico" label="0"></paper-badge>
+							</div>
+						</div>
+
+						<paper-progress id="prgBar" class="transiting" value="0"></paper-progress>
+						<paper-button raised id="animButton" onclick="loadanimation()" style="margin-top: 5px">Show loading</paper-button>
+					</div>
+				</paper-header-panel>
+			</paper-drawer-panel>
+		</div>
+	</body>
+	<script>
+		username.addEventListener('change', function() {
+			apptitle.children[0].innerText = "App of " + username.value;
+			tabs.notifyResize();
+		});
+	</script>
+</html>
