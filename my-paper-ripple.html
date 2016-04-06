@@ -281,6 +281,10 @@ Apply `circle` class to make the rippling effect within a circle.
         return this.element.animationSpeed;
       },
 
+      get doWave() {
+        return this.element.doWave;
+      },
+
       get radius() {
         var width2 = this.containerMetrics.width * this.containerMetrics.width;
         var height2 = this.containerMetrics.height * this.containerMetrics.height;
@@ -343,9 +347,16 @@ Apply `circle` class to make the rippling effect within a circle.
         );
       },
 
+      get fullMovementFraction() {
+        return Math.min(
+          1,
+          this.radius / this.containerMetrics.size
+        );
+      },
+
       get xNow() {
         if (this.xEnd) {
-          return this.xStart + this.translationFraction * (this.xEnd - this.xStart);
+          return this.xStart + this.fullMovementFraction * (this.xEnd - this.xStart);
         }
 
         return this.xStart;
@@ -353,7 +364,7 @@ Apply `circle` class to make the rippling effect within a circle.
 
       get yNow() {
         if (this.yEnd) {
-          return this.yStart + this.translationFraction * (this.yEnd - this.yStart);
+          return this.yStart + this.fullMovementFraction * (this.yEnd - this.yStart);
         }
 
         return this.yStart;
@@ -385,10 +396,17 @@ Apply `circle` class to make the rippling effect within a circle.
         var dy;
 
         this.wave.style.opacity = this.opacity;
-        this.wave2.style.opacity = this.opacity;
+		if (this.doWave) {
+			this.wave2.style.opacity = this.opacity;
+		} else {
+			this.wave2.style.opacity = 0;
+		}
 
         scale = this.radius / (this.containerMetrics.size / 2);
         dx = this.xNow - (this.containerMetrics.width / 2);
+		if (this.doWave) {
+			dx = (this.xNow - this.containerMetrics.width*1.5)*1.4;
+		}
         dy = this.yNow - (this.containerMetrics.height / 2);
 
 
@@ -396,10 +414,15 @@ Apply `circle` class to make the rippling effect within a circle.
         // https://bugs.webkit.org/show_bug.cgi?id=98538
         this.waveContainer.style.webkitTransform = 'translate(' + dx + 'px, ' + dy + 'px)';
         this.waveContainer.style.transform = 'translate3d(' + dx + 'px, ' + dy + 'px, 0)';
-        this.wave.style.webkitTransform = 'scale(' + scale + ',' + scale + ')';
-        this.wave.style.transform = 'scale3d(' + scale + ',' + scale + ',1)';
-        this.wave2.style.webkitTransform = 'scale(' + 0.5 + ',' + 0.2 + ')';
-        this.wave2.style.transform = 'scale3d(' + 0.5 + ',' + 0.2 + ',1)';
+		if (this.doWave) {
+			this.wave.style.webkitTransform = 'scale(' + 0.4 + ',' + 0.5 + ')';
+			this.wave.style.transform = 'scale3d(' + 0.4 + ',' + 0.5 + ',1)';
+			this.wave2.style.webkitTransform = 'scale(' + 0.4 + ',' + 0.5 + ')';
+			this.wave2.style.transform = 'scale3d(' + 0.4 + ',' + 0.5 + ',1)';
+		} else {
+			this.wave.style.webkitTransform = 'scale(' + scale + ',' + scale + ')';
+			this.wave.style.transform = 'scale3d(' + scale + ',' + scale + ',1)';
+		}
       },
 
       /** @param {Event=} event */
@@ -419,6 +442,13 @@ Apply `circle` class to make the rippling effect within a circle.
         } else if (this.leftToRight) {
           this.xStart = 0;
           this.yStart = yCenter;
+        } else if (this.doWave) {
+          this.xStart = 0;
+          this.xEnd = this.containerMetrics.width*2;
+          this.yStart = this.containerMetrics.height;
+          this.slideDistance = Utility.distance(
+            this.xStart, this.yStart, this.xEnd, this.yEnd
+          );
 		}else {
           this.xStart = event ?
               event.detail.x - this.containerMetrics.boundingRect.left :
@@ -508,6 +538,18 @@ Apply `circle` class to make the rippling effect within a circle.
         animationSpeed: {
           type: Number,
           value: 1.0
+        },
+
+        /**
+         * Send to waves from left to right.
+         *
+         * @attribute doWave
+         * @type boolean
+         * @default true
+         */
+        doWave: {
+          type: Boolean,
+          value: true
         },
 
         /**
