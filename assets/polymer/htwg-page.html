@@ -1,0 +1,93 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../../bower_components/iron-icons/image-icons.html">
+
+<dom-module id="htwg-page">
+    <template>
+        <style>
+            /* <htwg-page> */
+            div.page {
+                position: relative;
+                min-height: 100vh;
+                width: 100%;
+            }
+            div.page div.content {
+                min-height: calc(100vh - 50px);
+            }
+
+            /* <htwg-page center><element> */
+            :host[center] div.page {
+                height: 100vh;
+                transform-style: preserve-3d;
+            }
+
+            /* <htwg-page center><element> */
+            :host[center] div.page div.content {
+                position: relative;
+                top: 50%;
+                transform: translateY(-50%);
+                min-height: unset;
+            }
+            :host[center] div.page div.content ::content * {
+                position: relative;
+                left: 50%;
+                transform: translateX(-50%);
+            }
+
+            /* iron-icon.next-page */
+            div.page iron-icon.next-page {
+                position: relative;
+                left: 50%;
+                transform: translateX(-50%) scale(2);
+                color: #009CDD;
+                cursor: pointer;
+                margin-bottom: 25px;
+            }
+            div.page iron-icon.next-page:hover {
+                color: #00B4FF;
+            }
+
+            /* <htwg-page center> iron-icon.next-page */
+            :host[center] div.page iron-icon.next-page {
+                position: absolute;
+                left: 0;
+                right: 0;
+                bottom: 25px;
+                margin: 0 auto;
+                transform: scale(2);
+            }
+        </style>
+        <div id="htwg-page-0" class="page">
+            <div class="content">
+                <content></content>
+            </div>
+
+            <iron-icon icon="image:details" class="next-page" on-tap="nextPage" data-href="htwg-page-0"></iron-icon>
+        </div>
+    </template>
+
+    <script>
+        var htwg_page_num = 0;
+
+        Polymer({
+            is: 'htwg-page',
+            properties: {
+                center: {
+                    type: Boolean,
+                    value: false
+                }
+            },
+            ready: function() {
+                this.$$('.htwg-page').id = 'htwg-page-' + htwg_page_num++;
+                this.$$('.next-page').dataset.href = 'htwg-page-' + htwg_page_num;
+            },
+            nextPage: function(e) {
+                if(this.$$('div.page').parentElement.nextSibling) {
+                    location.href='#';
+                    location.href='#' + e.target.dataset.href;
+                }
+            }
+        });
+    </script>
+</dom-module>
+
