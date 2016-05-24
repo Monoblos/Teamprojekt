@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8"/>
+		<title>Fancy Page</title>
+		<style>
+		  .hidden {
+			display: none;
+		  }
+		  [unresolved] {
+			opacity: 0;
+		  }
+		</style>
+		<style is="custom-style">
+		</style>
+		<script src="/bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
+		<link rel="import" href="/app/elements/article-element.html">
+		<!-- <link rel="import" href="/app/elements/block-pageing.html"> <!-- -->
+		<link rel="import" href="/app/elements/fakulty-select.html"> <!-- -->
+		<style>		
+			#main > *:before {
+				content: " ";
+				display: block;
+				height: 1px;
+				border: 0;
+				border-top: 2px solid blue;
+				margin: 0.5em 0;
+				padding: 0;
+			}
+			#main > .topelement:before {
+				content: inherit;
+			}
+			
+			html, body, #main, .topelement {
+				height: 100%;
+			}
+
+			.centered {
+				height: 100%;
+				width: 100%;
+				display: table-cell;
+				vertical-align: middle
+			}
+
+			#paging {
+				position: absolute;
+				right: 0.4em;
+				top: 0.4em;
+				width: 3.5em;
+			}
+			#logo {
+				width: 10em;
+				display: block;
+				margin-left: auto;
+				margin-right: auto;
+			}
+			#arrow {
+				position: absolute;
+				bottom: 1px;
+				left: 45%;
+				width: 10%;
+			}
+		</style>
+	</head>
+	<body>
+		<script>
+		  window.addEventListener('WebComponentsReady', function() {
+			spinner.remove();
+			main.removeAttribute("unresolved");
+		  });
+		</script>
+
+		<p id="spinner">Loading... </p>
+		<div id="main" unresolved>
+			<div class="topelement">
+				<div class="centered">
+					<img src="/public/images/logo_htwg.bmp" id="logo"/>
+				</div>
+				<img src="/public/images/icon_more.bmp" id="paging"/>
+				<img src="/public/images/arrow_down_blue.bmp" id="arrow"/>
+			</div>
+			<article-element headline="Selbstverständnis">
+				Die Hochschule Konstanz Technik, Wirtschaft und Gestaltung (HTWG) ist eine moderne Hochschule mit
+				einem anwendungsorientierten Profil. Sie verfügt über ein breites Fächerspektrum und profitiert
+				von der Interdisziplinarität sowie der Verbindung von Theorie und Praxis. Dieser Text ist noch viel
+				länger aber wird passen abgeschnitten.
+			</article-element>
+			<fakulty-select></fakulty-select>
+			<article-element headline="Des weiteren">
+				ist das auch ein Artikel. Die Hochschule Konstanz Technik, Wirtschaft und Gestaltung (HTWG) ist eine moderne Hochschule mit
+				einem anwendungsorientierten Profil. Sie verfügt über ein breites Fächerspektrum und profitiert
+				von der Interdisziplinarität sowie der Verbindung von Theorie und Praxis.
+			</article-element>
+			<article-element headline="One Pager">
+				Die Hochschule Konstanz Technik, Wirtschaft und Gestaltung (HTWG) ist eine moderne Hochschule mit
+				einem anwendungsorientierten Profil. Sie verfügt über ein breites Fächerspektrum und profitiert
+				von der Interdisziplinarität sowie der Verbindung von Theorie und Praxis.
+			</article-element>
+			<article-element headline="Das Ende">
+				Die Hochschule Konstanz Technik, Wirtschaft und Gestaltung (HTWG) ist eine moderne Hochschule mit
+				einem anwendungsorientierten Profil. Sie verfügt über ein breites Fächerspektrum und profitiert
+				von der Interdisziplinarität sowie der Verbindung von Theorie und Praxis.
+			</article-element>
+		</div>
+	</body>
+</html>
