@@ -1,0 +1,100 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../../bower_components/iron-iconset-svg/iron-iconset-svg.html">
+
+<dom-module id="htwg-paper-container">
+    <template>
+        <style>
+            /* <htwg-paper> */
+            :host {
+                cursor: pointer;
+                position: absolute;
+                left: 0;
+                right: 0;
+                top: 0;
+                bottom: 0;
+                overflow: hidden;
+            }
+
+            iron-icon.menu-button {
+                color: #009CDD;
+                background-color: white;
+                border-radius: 20px;
+                position: absolute;
+                top: 25px;
+                right: 50px;
+                transform: scale(2);
+                z-index: 100;
+                padding: 5px;
+                transition: background-color 250ms, transform 500ms;
+            }
+            iron-icon.menu-button:hover {
+                background-color: lightgrey;
+            }
+            iron-icon.menu-button.menu-open {
+                transform: scale(2) translate(-50px);
+            }
+            iron-icon.menu-button.page-hide {
+                transform: scale(2) translate(-50vw);
+            }
+        </style>
+
+        <iron-icon class="menu-button" icon="htwg-icons:settings" on-tap="toggleMenu"></iron-icon>
+
+        <content></content>
+    </template>
+
+    <script>
+        Polymer({
+            is: 'htwg-paper-container',
+            listeners: {
+                'tap': 'openMenu',
+                'openMenu': 'openMenu',
+                'selectPage': 'selectPage',
+                'toggleMenu': 'toggleMenu'
+            },
+            openMenu: function (e) {
+                var menuButton = this.$$('iron-icon.menu-button');
+                var mainPaper = this.querySelector('htwg-paper[main] div.paper').parentElement;
+                var openPaper = this.querySelector('htwg-paper.page-open div.paper');
+                e.stopPropagation();
+
+                if(openPaper)
+                    openPaper.parentElement.classList.remove('page-open');
+
+                menuButton.classList.remove('page-hide');
+                mainPaper.classList.remove('page-hide');
+                menuButton.classList.add('menu-open');
+                mainPaper.classList.add('menu-open');
+            },
+            selectPage: function (e) {
+                var menuButton = this.$$('iron-icon.menu-button');
+                var mainPaper = this.querySelector('htwg-paper[main] div.paper').parentElement;
+                e.stopPropagation();
+
+                menuButton.classList.remove('menu-open');
+                mainPaper.classList.remove('menu-open');
+
+                if(e.target != mainPaper) {
+                    e.target.classList.add('page-open');
+                    menuButton.classList.add('page-hide');
+                    mainPaper.classList.add('page-hide');
+                }
+            },
+            toggleMenu: function(e) {
+                var menuButton = this.$$('iron-icon.menu-button');
+                var mainPaper = this.querySelector('htwg-paper[main] div.paper').parentElement;
+                e.stopPropagation();
+
+                if(mainPaper.classList.contains('menu-open')) {
+                    menuButton.classList.remove('menu-open');
+                    mainPaper.classList.remove('menu-open');
+                } else {
+                    menuButton.classList.add('menu-open');
+                    mainPaper.classList.add('menu-open');
+                }
+            }
+        });
+    </script>
+</dom-module>
+
