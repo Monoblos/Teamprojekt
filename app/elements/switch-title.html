@@ -1,6 +1,7 @@
 <link rel="import" href="/bower_components/polymer/polymer.html">
 <link rel="import" href="/bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="/bower_components/iron-icons/social-icons.html">
+<link rel="import" href="/bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="/bower_components/paper-item/paper-item.html">
 <link rel="import" href="/app/elements/article-element.html">
 <link rel="import" href="/app/elements/fakulty-select.html">
@@ -135,6 +136,10 @@
 			left: 10px;
 			right: 10px;
 		}
+		#weather-icon {
+			position: absolute;
+			left: 45vw;
+		}
 	</style>
 
 	<template>
@@ -147,6 +152,20 @@
 			c-7.614,9.729-16.815,10.576-20.728,10.576c-3.912,0-13.114-0.211-21.362-10.787C18.36,62.97,7.927,63.393,6.305,63.393
 			c0,2.68,0,6.345,0,6.345h333.288C339.672,67.622,339.8,65.499,339.827,63.383z"/>
 		</svg>
+		<iron-ajax
+			auto
+			id="weather-ajax"
+			url="http://api.wunderground.com/api/34e7943c5d7c759c/conditions/q/Germany/Konstanz.json"
+			handle-as="json"
+			debounce-duration="300"
+			last-response="{{weather}}"></iron-ajax>
+		<iron-ajax
+			auto
+			id="times-ajax"
+			url="http://api.wunderground.com/api/34e7943c5d7c759c/astronomy/q/Germany/Konstanz.json"
+			handle-as="json"
+			debounce-duration="300"
+			last-response="{{times}}"></iron-ajax>
 		<iron-icon icon="icons:menu" id="paging" on-tap="togglemenu" class$="{{pagingColor}}"></iron-icon>
 		<div class="topelement" hidden$="{{showMenu}}">
 			<div class="centered">
@@ -192,6 +211,10 @@
 				<p>{{title}}</p>
 				<iron-icon icon="icons:chevron-right"></iron-icon>
 			</div>
+			<div id="weather-icon">
+				<img src="{{weather.current_observation.icon_url}}"></img>
+				<div>Ist es tag? {{isDay}}</div>
+			</div>
 		</div>
 		<div class="drawer" hidden$="{{showMenu}}">
 			<iron-icon icon="icons:expand-more" id="more"></iron-icon>
@@ -235,6 +258,16 @@
 				pagingColor: {
 					type: String,
 					computed: 'comPagingColor(showMenu)'
+				},
+				weather: {
+					type: Object
+				},
+				times: {
+					type: Object
+				},
+				isDay: {
+					type: Boolean,
+					computed: 'compIsDay(times)'
 				}
 			},
 			ready: function() {
@@ -265,7 +298,27 @@
 			},
 		    togglemenu: function() {
 				this.showMenu = !this.showMenu;
-		    }
+		    },
+			compIsDay: function(times) {
+				var sunrise = times.sun_phase.sunrise;
+				var sunrise_hour = Number(sunrise.hour);
+				var sunrise_minute = Number(sunrise.minute);
+				
+				var sunset = times.sun_phase.sunset;
+				var sunset_hour = Number(sunset.hour);
+				var sunset_minute = Number(sunset.minute);
+				
+				var cur = times.moon_phase.current_time;
+				var cur_hour = Number(cur.hour);
+				var cur_minute = Number(cur.minute);
+				
+				if ((cur_hour > sunrise_hour || (cur_hour == sunrise_hour && cur_minute >= sunrise_minute)) &&
+					(cur_hour < sunset_hour || (cur_hour == sunset_hour && cur_minute <= sunset_minute))
+					) {
+					return true;
+				}
+				return false;
+			}
 		});
 	</script>
 </dom-module>
