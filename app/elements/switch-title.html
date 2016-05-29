@@ -155,17 +155,10 @@
 		<iron-ajax
 			auto
 			id="weather-ajax"
-			url="http://api.wunderground.com/api/34e7943c5d7c759c/conditions/q/Germany/Konstanz.json"
+			url="http://api.wunderground.com/api/34e7943c5d7c759c/conditions/astronomy/q/Germany/Konstanz.json"
 			handle-as="json"
 			debounce-duration="300"
 			last-response="{{weather}}"></iron-ajax>
-		<iron-ajax
-			auto
-			id="times-ajax"
-			url="http://api.wunderground.com/api/34e7943c5d7c759c/astronomy/q/Germany/Konstanz.json"
-			handle-as="json"
-			debounce-duration="300"
-			last-response="{{times}}"></iron-ajax>
 		<iron-icon icon="icons:menu" id="paging" on-tap="togglemenu" class$="{{pagingColor}}"></iron-icon>
 		<div class="topelement" hidden$="{{showMenu}}">
 			<div class="centered">
@@ -262,12 +255,9 @@
 				weather: {
 					type: Object
 				},
-				times: {
-					type: Object
-				},
 				isDay: {
 					type: Boolean,
-					computed: 'compIsDay(times)'
+					computed: 'compIsDay(weather)'
 				}
 			},
 			ready: function() {
@@ -299,16 +289,16 @@
 		    togglemenu: function() {
 				this.showMenu = !this.showMenu;
 		    },
-			compIsDay: function(times) {
-				var sunrise = times.sun_phase.sunrise;
+			compIsDay: function(weather) {
+				var sunrise = weather.sun_phase.sunrise;
 				var sunrise_hour = Number(sunrise.hour);
 				var sunrise_minute = Number(sunrise.minute);
 				
-				var sunset = times.sun_phase.sunset;
+				var sunset = weather.sun_phase.sunset;
 				var sunset_hour = Number(sunset.hour);
 				var sunset_minute = Number(sunset.minute);
 				
-				var cur = times.moon_phase.current_time;
+				var cur = weather.moon_phase.current_time;
 				var cur_hour = Number(cur.hour);
 				var cur_minute = Number(cur.minute);
 				
