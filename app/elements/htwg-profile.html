@@ -1,0 +1,49 @@
+<link rel="import" href="/bower_components/polymer/polymer.html">
+<link rel="import" href="/bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="/bower_components/iron-icons/maps-icons.html">
+<link rel="import" href="/bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="/app/elements/htwg-login.html">
+
+<dom-module name="htwg-profile">
+    <style>
+        :host{
+            width: 100vw;
+            color: #00a0ff;
+        }
+
+        :host > header {
+            height: 35px;
+            width: calc(100vw - 40px);
+            padding: 0px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        :host > header > div > p {
+            border: 2px solid #00a0ff;
+            padding: 1px 5px;
+            font-weight: bold;
+            display: inline;
+        }
+    </style>
+
+    <template>
+        <header>
+            <iron-icon icon="maps:my-location"></iron-icon>
+            <div><p>HTWG Konstanz</p></div>
+            <iron-icon icon="icons:card-travel"></iron-icon>
+        </header>
+        <section>
+            <iron-pages selected="0">
+                <htwg-login></htwg-login>
+            </iron-pages>
+        </section>
+    </template>
+
+    <script>
+        Polymer({
+            is: "htwg-profile"
+        });
+    </script>
+</dom-module>
