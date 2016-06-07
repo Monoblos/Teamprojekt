@@ -1,0 +1,18 @@
+html, body {
+    background-color: white;
+    color: #009CDD;
+    margin: 0;
+    }
+
+select, #contend {
+    border-color: #009CDD;
+    border-style: solid;
+    border-width: 2px;
+    background: white url(img/select-arrow.png) no-repeat 90% center;
+    width: 300px; /*Width of select dropdown to give space for arrow image*/
+    text-indent: 0.01px; /* Removes default arrow from firefox*/
+    text-overflow: "";  /*Removes default arrow from firefox*/ /*My custom style for fonts*/
+    color: #009CDD;
+    padding: 5px;
+}
+
