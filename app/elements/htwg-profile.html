@@ -1,8 +1,8 @@
 <link rel="import" href="/bower_components/polymer/polymer.html">
 <link rel="import" href="/bower_components/iron-icons/iron-icons.html">
-<link rel="import" href="/bower_components/iron-icons/maps-icons.html">
 <link rel="import" href="/bower_components/iron-pages/iron-pages.html">
 <link rel="import" href="/app/elements/htwg-login.html">
+<link rel="import" href="/app/elements/htwg-calendar.html">
 
 <dom-module name="htwg-profile">
     <style>
@@ -30,13 +30,14 @@
 
     <template>
         <header>
-            <iron-icon icon="maps:my-location"></iron-icon>
+            <iron-icon icon="icons:explore"></iron-icon>
             <div><p>HTWG Konstanz</p></div>
             <iron-icon icon="icons:card-travel"></iron-icon>
         </header>
         <section>
-            <iron-pages selected="0">
+            <iron-pages selected="1">
                 <htwg-login></htwg-login>
+                <htwg-calendar></htwg-calendar>
             </iron-pages>
         </section>
     </template>
