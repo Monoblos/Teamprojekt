@@ -1,6 +1,7 @@
 <link rel="import" href="/bower_components/polymer/polymer.html">
 <link rel="import" href="/bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="/bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="/app/elements/htwg-iconset.html">
 <link rel="import" href="/app/elements/htwg-login.html">
 <link rel="import" href="/app/elements/htwg-calendar.html">
 
@@ -30,12 +31,12 @@
 
     <template>
         <header>
-            <iron-icon icon="icons:explore"></iron-icon>
+            <iron-icon icon="htwg:vermittlung"></iron-icon>
             <div><p>HTWG Konstanz</p></div>
-            <iron-icon icon="icons:card-travel"></iron-icon>
+            <iron-icon icon="htwg:werkzeugkoffer"></iron-icon>
         </header>
         <section>
-            <iron-pages selected="1">
+            <iron-pages selected="0">
                 <htwg-login></htwg-login>
                 <htwg-calendar></htwg-calendar>
             </iron-pages>

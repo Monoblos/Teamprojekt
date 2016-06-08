@@ -1,5 +1,6 @@
 <link rel="import" href="/bower_components/polymer/polymer.html">
 <link rel="import" href="/bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="/app/elements/htwg-iconset.html">
 
 <dom-module name="htwg-calendar">
     <style>
@@ -71,37 +72,32 @@
             flex-wrap: wrap;
             width: calc(100% - 40px);
             padding: 0px 20px;
-            justify-content: flex-start;
+            justify-content: space-between;
         }
 
         #days > div, #rows > div {
-            width: 12%;
+            width: 12.6%;
             text-align: center;
             border: 1px solid transparent;
-        }
-
-        #rows > div {
-            border: 1px solid #00a0ff;
-            margin-right: 1.69%;
             margin-bottom: 3px;
         }
 
-        #rows > div:nth-child(7n+8){
-            margin-right: 0%;
+        #rows > div.day {
+            border: 1px solid #00a0ff;
         }
     </style>
 
     <template>
         <header>
-            <iron-icon icon="icons:add"></iron-icon>
-            <iron-icon icon="icons:add-alert"></iron-icon>
-            <iron-icon icon="icons:list"></iron-icon>
+            <iron-icon icon="htwg:plus"></iron-icon>
+            <iron-icon icon="htwg:terminabonnieren"></iron-icon>
+            <iron-icon icon="htwg:kursanmelden"></iron-icon>
         </header>
-        <template is="dom-if" if="selectedDayFeed">
+        <template is="dom-if" if="{{selectedDayFeed.length}}">
             <section name="entries">
                 <template is="dom-repeat" items="{{selectedDayFeed}}">
-                    <div class$="{{highlightClass(item)}}">
-                        <iron-icon icon="icons:{{item.type}}"></iron-icon>
+                    <div class$="{{getClass(item, 'entry')}}">
+                        <iron-icon icon="htwg:{{item.type}}"></iron-icon>
                         <div>
                             <template is="dom-if" if="{{item.author}}">
                                 <p>{{item.author}}:</p>
@@ -132,10 +128,13 @@
             <template is="dom-if" if="{{calendar.max_day}}">
                 <section id="rows">
                         <template is="dom-repeat" items="{{createArray(calendar.offset)}}">
-                            <div></div>
+                            <div name="spacer"></div>
                         </template>
                         <template is="dom-repeat" items="{{createArray(calendar.max_day)}}">
-                            <div>{{item}}</div>
+                            <div class$="{{getClass(item, 'day')}}">{{item}}</div>
+                        </template>
+                        <template is="dom-repeat" items="{{createArray(calendar.postset)}}">
+                            <div name="spacer"></div>
                         </template>
                     </div>
                 </section>
@@ -165,16 +164,20 @@
                 }
             },
             ready: function(){
+                var date = new Date();
+                this.appointments = this.getAppointments(''+date.getFullYear(), ('0' + date.getMonth()).slice(-2));
+                console.log(typeof date.getFullYear());
                 this.renderCalendar();
-                this.selectedDayFeed = [
-                    {"type":"account-balance", "text":"Fällt aus! Bin Skifahren.", "author":"Liquid Layout - Jo Wickert"},
-                    {"type":"account-circle", "text":"Mittagessen mitnehmen"},
-                    {"type":"assignment", "text":"Abgabe Giraffe, jpg, HD", "author":"Philipp Finkbeiner", "important":true},
-                    {"type":"event", "text":"Wie man ein Café zerstört", "author":"Prof. Volker Friedrich", "time":"19:30", "room":"L202"}
-                ];
+                this.selectedDayFeed = [];
+                //var currdate = date.getFullYear() + '-' + ('0' + (date.getMonth() + 1).slice(-2) + '-' + ('0' + date.getDay()).slice(-2));
+                var currdate = '2016-06-14';
+                console.log(currdate);
+                if(this.appointments.hasOwnProperty(currdate)) {
+                    this.selectedDayFeed = this.appointments[currdate];
+                }
             },
-            highlightClass: function(item){
-                return item.important ? 'entry highlight' : 'entry';
+            getClass: function(item, defaultClass){
+                return item.important ? 'highlight ' + defaultClass : defaultClass;
             },
             hasDetails: function(item){
                 return item.time && item.room;
@@ -200,15 +203,34 @@
                 this.set('calendar.max_day', this.calendar.months[date.getMonth()].max_day);
                 date.setDate(1);
                 this.set('calendar.offset', (date.getDay() + 6) % 7);
-                console.log(this.calendar);
+                this.set('calendar.postset', 7 - ((this.calendar.offset + this.calendar.max_day) % 7));
+                this.set('calendar.year', date.getFullYear());
             },
             createArray: function(size){
                 var array = [];
                 for(var i = 1; i <= size; i++){
                     array.push(i);
                 }
-                console.log(array);
                 return array;
+            },
+            getAppointments: function(year, month){
+                return {
+                    "2016-06-01": [
+                        {"type":"veranstaltung", "text":"Wie man ein Café aufbaut", "author":"Friedrich der Große", "time":"07:30", "room":"F033"}
+                    ],
+                    "2016-06-08": [
+                        {"type":"persoenliches", "text":"Mittagessen mitnehmen"}
+                    ],
+                    "2016-06-14": [
+                        {"type":"kursvorlesung", "text":"Fällt aus! Bin Skifahren.", "author":"Liquid Layout - Jo Wickert"},
+                        {"type":"persoenliches", "text":"Mittagessen mitnehmen"},
+                        {"type":"abgabepruefung", "text":"Abgabe Giraffe, jpg, HD", "author":"Philipp Finkbeiner", "important":true},
+                        {"type":"veranstaltung", "text":"Wie man ein Café zerstört", "author":"Prof. Volker Friedrich", "time":"19:30", "room":"L202"}
+                    ],
+                    "2016-06-22": [
+                        {"type":"abgabepruefung", "text":"Abgabe Affe svg", "author":"Orang Utan", "important":true}
+                    ]
+                };
             }
         });
     </script>
