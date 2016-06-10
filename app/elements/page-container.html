@@ -1,0 +1,75 @@
+<link rel="import" href="/bower_components/polymer/polymer.html">
+<link rel="import" href="/bower_components/app-route/app-location.html">
+<link rel="import" href="/bower_components/app-route/app-route.html">
+<link rel="import" href="/bower_components/iron-input/iron-input.html">
+
+<dom-module name="page-container">
+	<style>
+		.content {
+			padding-left: 4px;
+			padding-top: 4px;
+		}
+	</style>
+
+	<template id="page-container">
+		<app-location route="{{route}}"></app-location>
+		<app-route
+			route="{{route}}"
+			pattern="/:x"
+			data="{{routeData}}"
+			tail="{{subroute}}">
+		</app-route>
+		<app-route
+			route="{{subroute}}"
+			pattern="/:x"
+			data="{{subrouteData}}">
+		</app-route>
+
+	
+		<div class="content">
+			<div>Content</div>
+			<div>{{pageContent}}</div>
+		</div>
+	</template>
+
+	<script>
+		Polymer({
+			is: "page-container",
+			listeners: {
+			},
+			properties: {
+				routeData: {
+					type: Object,
+					value: {"x": ""},
+					notify: true
+				},
+				subrouteData: {
+					type: Object,
+					value: {"x": ""},
+					notify: true
+				},
+				pageContent: {
+					type: String,
+					computed: 'pageAction(routeData.x, subrouteData.x)'
+				},
+				refreshContent: {
+					type: Number,
+					value: 0
+				}
+			},
+			ready: function() {
+				console.log("       Route: " + this.route);
+				console.log("   RouteData: " + this.routeData.x);
+				console.log("SubrouteData: " + this.subrouteData.x);
+				this.refreshContent++;
+			},
+			pageAction: function(page, subpage) {
+				if (this.subroute && this.subroute.path == "") {
+					this.subroute.x = "";
+					subpage = "";
+				}
+				return "Branched to Page \"" + page + "\" with supbage \"" + subpage + "\"";
+			}
+		});
+	</script>
+</dom-module>
