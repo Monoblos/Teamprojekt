@@ -34,7 +34,24 @@
     .desc{
         width: 450px;
     }
+    .btn {
+      -webkit-border-radius: 8;
+      -moz-border-radius: 8;
+      border-radius: 8px;
+      font-family: Arial;
+      color: #ffffff;
+      font-size: 20px;
+      background: #f9af03;
+      padding: 10px 40px 10px 40px;
+      text-decoration: none;
+      box-shadow: none;
+      margin-left: 138px;
+    }
 
+    .btn:hover {
+      background: #946c16;
+      text-decoration: none;
+    }
     </style>
 
     <template>
@@ -57,6 +74,9 @@
         <p class="desc" style="display: none;" id="description">
 
         </p>
+        <p>
+            <button class="btn">Speichern</button>
+        </p> 
     </template>
 
     <script>
