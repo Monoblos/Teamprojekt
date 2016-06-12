@@ -1,0 +1,256 @@
+<link rel="import" href="/bower_components/polymer/polymer.html">
+<link rel="import" href="/bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="/app/elements/htwg-iconset.html">
+
+<dom-module name="htwg-course">
+    <style>
+
+    select{
+        border-color: #009CDD;
+        border-style: solid;
+        border-width: 4px;
+        background: white url(../svg/pfeil.svg) no-repeat;
+        background-position: right;
+        font-size: 13pt;
+        font-weight: bold;
+        width: 450px; 
+        text-indent: 0.01px;
+        text-overflow: "";
+        color: #009CDD;
+        padding: 5px;
+    }
+    :host > header {
+            height: 35px;
+            width: calc(100vw - 40px);
+            padding: 0px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+        }
+    h1{
+        color: #f9af03;
+        padding-left: 10px; 
+    }
+    .desc{
+        width: 450px;
+    }
+
+    </style>
+
+    <template>
+        <header>
+            <iron-icon icon="htwg:plus"></iron-icon>
+            <iron-icon icon="htwg:terminabonnieren"></iron-icon>
+            <iron-icon icon="htwg:kursanmelden"></iron-icon>
+        </header>
+
+        <h1> Kurs anmelden</h1>
+        <p>
+        <select id="faculty" on-change="facultySelected"></select>
+        </p>
+        <p>
+        <select style="display: none" id="studyPath" on-change="pathSelected"></select>
+        </p>  
+        <p>      
+        <select style="display: none" id="courses" on-change="courseSelected"></select>
+        </p>
+        <p class="desc" style="display: none;" id="description">
+
+        </p>
+    </template>
+
+    <script>
+        Polymer({
+            is: "htwg-course",
+            properties: {
+            },
+            ready: function(){
+                var faculties = this.getFaculties();
+                this.$.faculty.innerHTML = "<option>Fakultät</option>";
+                for (var fac in faculties) {
+                    if (faculties.hasOwnProperty(fac)) {
+                    this.$.faculty.innerHTML += "<option value= \""+fac+"\">"+faculties[fac]+"</option>";
+                    }
+
+                }
+            },
+            facultySelected: function(){
+                var facs = this.$.faculty;
+                var curfac = facs.options[facs.selectedIndex].value;
+                var sps = this.getPaths(curfac);
+
+                studyPath.style.display = "block";
+
+                this.$.studyPath.innerHTML = "<option>Studiengang</option>";
+
+                for (var sp in sps) {
+                    if (sps.hasOwnProperty(sp)) {
+                    this.$.studyPath.innerHTML += "<option value= \""+sp+"\">"+sps[sp]+"</option>";
+                    }
+
+                }
+            },
+            pathSelected: function(){
+                var studyPath = this.$.studyPath;
+                var cursp = studyPath.options[studyPath.selectedIndex].value;
+                var cs = this.getCourses(cursp);
+
+                courses.style.display = "block";
+
+                this.$.courses.innerHTML = "<option>Kurse</option>";
+
+                for(var c in cs)
+                    if(cs.hasOwnProperty(c)){
+                        this.$.courses.innerHTML +="<option value= \""+c+"\">"+cs[c]+"</option>"; 
+                    }
+
+
+            },
+            courseSelected: function(){
+                this.$.description.style.display= "block";
+                var studyPath = this.$.studyPath;
+                var curpath = studyPath.options[studyPath.selectedIndex].value;
+                var courses = this.$.courses;
+                var curcourse = courses.options[courses.selectedIndex].value;
+                var des = this.getDescription(curpath, curcourse);
+
+                this.$.description.innerHTML = des;
+
+               
+            },
+            getFaculties: function(){
+                return {
+                    "ag": "Architektur und Gestaltung",
+                    "bi": "Bauingenieurwesen",
+                    "ei": "Elektrotechnik und Informationstechnik",
+                    "in": "Informatik",
+                    "ma": "Machinenbau",
+                    "ws": "Wirtschafts-, Kultur- und Rechtswissenschaften",
+
+                }
+            },
+            getPaths: function(faculty){
+                var temp ={
+                    "ag": {
+                        "ba6": "Architektur6",
+                        "ba8": "Architektur8",
+                        "bkd": "Kommunikationsdesign",
+                        "mkd": "Kommunikationsdesign Master",
+                    },
+                    "bi": {
+                        "bib": "Bauingenieurwesen",
+                        "mib": "Bauingenieurwesen Master",
+                        "mwi": "Wirtschaftsingenieurwesen Studienrichtung Bauwesen Master",
+                        "urb": "Umwelttechnik und Ressourcenmanagement",
+                        "wib": "Wirtschaftsingenieurwesen Bau",
+                    },
+                    "ei": {
+                        "ait": "Automobilinformationstechnik",
+                        "eib": "Elekto- und Informationstechnik",
+                        "eim": "Elektrische Systeme Master",
+                        "ipe": "International Project Engineering Master",
+                        "eiw": "Wirtschaftsingenieurwesen Elektrotechnik und Informationstechnik",
+                        "mwi": "Wirtschaftsingenieurwesen Master",
+                        "sem": "System Engineering Master",
+
+                      
+                    },
+                    "in": {
+                        "ain": "Angewandte Informatik",
+                        "bit": "Buisness Information Technology",
+                        "gib": "Gesundheitsinformatik",
+                        "msi": "Master Informatics",
+                        "win": "Wirtschaftsinformatik",
+                    },
+                    "ma": {
+                        "ase": "Automotive Systems Engineering Master",
+                        "mep": "Machinenbau Entwicklung und Produktion",
+                        "mke": "Maschinenbau Konstruktion und Entwicklung",
+                        "mme": "Mechatronik Master",
+                        "mms": "Mechanical Engineering and International Sales Management Master",
+                        "mwi": "Wirtschaftsingenieurwesen Master",
+                        "uvt": "Umwelt- und Verfahrenstechnik Master",
+                        "vub": "Verfahrens- und Umwelttechnik",
+                        "wim": "Wirtschaftsingenieurwesen Maschinenbau",
+
+                    },
+                    "ws": {
+                        "asm": "Internationales Management Asien Master",
+                        "bac": "Wirtschaftssprachen Asien und Management China",
+                        "bas": "Wirtschaftssprachen Asien und Management Südost- und Südasien",
+                        "bwb": "Betriebswirtschaftslehre",
+                        "bwm": "Unternehmensführung Master",
+                        "wrb": "Wirtschaftsrecht",
+                        "wrm": "Legal Management Master",
+                    },
+                }
+                return temp[faculty];
+            },
+            getCourses: function(studyPath){
+                var temp= {
+                    "ain":{
+                        "digi":     "Digitaltechnik",
+                        "mathe1":   "Mathematik1",
+                        "prog1":    "Programmiertechnik1",
+                        "komko":    "Kommunikationskompetenz",
+                        "sysmo":    "Softwaremodellierung",
+                        "sysprog":  "Systemprogrammierung",
+                        "mathe2":   "Mathematik2",
+                        "rear":     "Rechnerarchitekturen", 
+                        "prog2":    "Programmiertechnik2",
+                        "alda":     "Algorithmen und Datenstrukturen",
+                        "bsys":     "Betriebssysteme",
+                        "se":       "Softwaretechnik",
+                        "dbsys":    "Datenbanksysteme",
+                        "sss":      "Signale, Systeme und Sensoren",
+                        "ti":       "Theoretische Informatik",
+                        "versy":    "Verteilte Systeme",
+                        "rn":       "Rechnernetze",
+                        "en":       "Englisch",
+                        "syso":     "Systemsoftware",
+                        "webtech":  "Web-Technologien",
+                        "swqs":     "Softwarequalitätssicherung",
+                        "spko":     "Sprachkonzepte",
+                        "sa":       "Softwarearchitekturen",
+                        "itsec":    "IT-Sicherheit",
+                        "kt":       "Kommunikationstechnik",
+                        "shcd":     "Software/Hardware Co-design",
+                        "mps":      "Mikroprozessorsysteme",
+                        "md":       "Mediendesign",
+                        "cg":       "Computergraphik",
+                        "mm":       "Multimedia",
+                        "resy":     "Realzeitsysteme",
+                        "st":       "Systemtechnik",
+                        "uc":       "Ubiquitous computing",
+                        "kds":      "Komponenten digitaler Systeme",
+                        "mr":       "Mobile Robotik",
+                        "bv":       "Bildverarbeitung",
+                        "tp":       "Teamprojekt",
+                        "bwl":      "Betriebswirtschaftslehre",
+                    }
+                }
+                return temp[studyPath];
+            },
+            getDescription: function(studyPath, course)
+            {
+                 var temp = {
+                    "ain":
+                    {
+                        "prog1":    "<b> Professor: Heiko Drachenfels <br>" +
+                                    " Zeiten: Mittwoch, 15:45 - 17:15<br>" +
+                                    " Kontaktzeit: 6 SWS<br>" +
+                                    " ECTS 8<br>" +
+                                    " Studieninhalte:</b><br>"+ 
+                                    " Die Studierenden kennen und verstehen die grundlegenden Konzepte der imperativen und"+
+                                    " objektorientierten Programmierung. Sie können einfache Problemstellungen mit" +
+                                    " Programmen lösen und können mit den für die praktische Umsetzung erforderlichen"+ 
+                                    " Programmierwerkzeugen umgehen. Sie sind in der Lage, sich die Zeit für das"+
+                                    " termingerechte Lösen einer Aufgabenstellung einzuteilen."
+                    }
+                }
+                return temp[studyPath][course];
+            }
+
+        });
+    </script>
+</dom-module>
