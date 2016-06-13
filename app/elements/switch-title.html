@@ -6,7 +6,8 @@
 <link rel="import" href="/app/elements/article-element.html">
 <link rel="import" href="/app/elements/fakulty-select.html">
 <link rel="import" href="/app/elements/recent-chat.html">
-<link rel="import" href="/app/elements/htwg-profile.html">
+<link rel="import" href="/app/elements/htwg-login.html">
+<link rel="import" href="/app/elements/htwg-calendar.html">
 
 
 <!-- Example: <template-element attr-a="not foo"><template-element> -->
@@ -117,7 +118,7 @@
 		.menu {
 			background-color: white;
 			color: black;
-			height: 100%;
+			min-height: 100%;
 		}
 		.menu paper-item {
 			font-weight: bold;
@@ -215,7 +216,7 @@
 			<content select=".drawer"></content>
 		</div>
 		<div class="menu" hidden$="{{!showMenu}}">
-			<htwg-profile></htwg-profile>
+			<htwg-calendar></htwg-calendar>
 		</div>
 	</template>
 

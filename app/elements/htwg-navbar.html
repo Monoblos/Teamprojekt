@@ -1,0 +1,60 @@
+<link rel="import" href="/bower_components/polymer/polymer.html">
+<link rel="import" href="/bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="/app/elements/htwg-iconset.html">
+
+<dom-module name="htwg-navbar">
+    <style>
+        :host{
+            width: 100vw;
+            color: #00a0ff;
+            background-color: #FFFFFF;
+            position: fixed;
+            top: 0px;
+            left: 0px;
+            z-index: 99;
+        }
+
+        .navbar {
+            height: 35px;
+            width: calc(100vw - 40px);
+            padding: 0px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .navbar > div > p {
+            border: 2px solid #00a0ff;
+            padding: 1px 5px;
+            font-weight: bold;
+            display: inline;
+        }
+
+        .collapsed {
+            display: none;
+        }
+    </style>
+
+    <template>
+        <nav class="navbar">
+            <iron-icon icon="htwg:compass"></iron-icon>
+            <div><p>HTWG Konstanz</p></div>
+            <iron-icon id="default" icon="htwg:toolbox" on-tap="toggle"></iron-icon>
+            <div id="extended" class="collapsed" on-tap="toggle">
+                <iron-icon icon="htwg:magnifier"></iron-icon>
+                <iron-icon icon="htwg:pen"></iron-icon>
+                <iron-icon icon="htwg:wrench"></iron-icon>
+            </div>
+        </nav>
+    </template>
+
+    <script>
+        Polymer({
+            is: "htwg-navbar",
+            toggle: function(){
+                this.$.default.classList.toggle('collapsed');
+                this.$.extended.classList.toggle('collapsed');
+            }
+        });
+    </script>
+</dom-module>
