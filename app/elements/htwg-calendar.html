@@ -187,12 +187,8 @@
                 var date = new Date();
                 this.appointments = this.getAppointments(''+date.getFullYear(), ('0' + (1+date.getMonth())).slice(-2));
                 this.renderCalendar();
-                this.selectedDayFeed = [];
-                var currdate = date.getFullYear() + '-' + ('0' + (date.getMonth() + 1)).slice(-2) + '-' + ('0' + date.getDate()).slice(-2);
-                this.selected = currdate.slice(-2);
-                if(this.appointments.hasOwnProperty(currdate)) {
-                    this.selectedDayFeed = this.appointments[currdate];
-                }
+                this.selected = date.getDate();
+                this.setFeed(date.getFullYear() + '-' + ('0' + (date.getMonth() + 1)).slice(-2) + '-' + ('0' + date.getDate()).slice(-2));
             },
             getFeedClass: function(item, defaultClass){
                 return item.important ? 'highlight ' + defaultClass : defaultClass;
@@ -276,10 +272,12 @@
                 el.parentNode.classList.add('selected');
                 var day = el.innerText;
                 this.selected = day;
+                this.setFeed(this.calendar.year + '-' + this.calendar.month.key + '-' + ('0' + day).slice(-2));
+            },
+            setFeed: function(date){
                 this.selectedDayFeed = [];
-                var currdate = this.calendar.year + '-' + this.calendar.month.key + '-' + ('0' + day).slice(-2);
-                if(this.appointments.hasOwnProperty(currdate)) {
-                    this.selectedDayFeed = this.appointments[currdate];
+                if(this.appointments.hasOwnProperty(date)) {
+                    this.selectedDayFeed = this.appointments[date];
                 }
             }
         });
