@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html class="sunny">
+	<head>
+		<title>Element test Page</title>
+		<script src="/bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
+		<link rel="import" href="/app/elements/page-container.html"> <!-- -->
+		<style>
+			.sunny {
+				color: white;
+				background-color: #00a0ff;
+			}
+			.sunny .drawer {
+				color: white;
+				background-color: #0088ff;
+			}
+			.rain {
+				color: white;
+				background-color: #0080aa;
+			}
+			.rain .drawer {
+				color: white;
+				background-color: #0055aa;
+			}
+			.night {
+				color: white;
+				background-color: #003855;
+			}
+			.night .drawer {
+				color: white;
+				background-color: #002255;
+			}
+			
+			html, body, page-container, .content, #tofill {
+				height: 100%;
+				width: 100%;
+			}
+			#tofill {
+				position: relative;
+			}
+			body {
+				margin: 0;
+			}
+			
+		</style>
+	</head>
+	<body>
+		<page-container default-page="htwg-image"></page-container>
+	</body>
+</html>
