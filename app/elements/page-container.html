@@ -1,0 +1,141 @@
+<link rel="import" href="/bower_components/polymer/polymer.html">
+<link rel="import" href="/bower_components/app-route/app-location.html">
+<link rel="import" href="/bower_components/app-route/app-route.html">
+<link rel="import" href="/bower_components/iron-ajax/iron-ajax.html">
+
+<dom-module name="page-container" attributes="defaultPage">
+	<style>
+	</style>
+
+	<template id="page-container">
+		<app-location route="{{route}}"></app-location>
+		<app-route id="baseRoute"
+			route="{{route}}"
+			pattern="/:x"
+			data="{{routeData}}"
+			tail="{{subroute}}"
+			query-params="{{queryParams}}">
+		</app-route>
+		<app-route
+			route="{{subroute}}"
+			pattern="/:x"
+			data="{{subrouteData}}">
+		</app-route>
+
+		<iron-ajax
+			id="pageLoader"
+			auto
+			url="/app/elements/{{pageContent}}.html"
+			params="{{jsonParams}}"
+			handle-as="html"
+			on-response="handleResponse"
+			on-error="handleError"
+			debounce-duration="300"></iron-ajax>
+		<iron-ajax
+			id="dictLoader"
+			auto
+			url="/route-dict.json"
+			handle-as="text"
+			last-response="{{textDict}}"
+			debounce-duration="300"></iron-ajax>
+	
+		<div class="content">
+			<div id="tofill"></div>
+		</div>
+	</template>
+
+	<script>
+		Polymer({
+			is: "page-container",
+			listeners: {
+			},
+			observers: [
+				'insertPolymerNode(pageContent, subrouteData.x, queryParams)'
+			],
+			properties: {
+				textDict: {
+					type: String,
+					value: '{"": "htwg-image"}'
+				},
+				routeDict: {
+					type: Object,
+					computed: "jsonToOject(textDict)"
+				},
+				routeData: {
+					type: Object,
+					value: {"x": ""},
+					notify: true
+				},
+				subrouteData: {
+					type: Object,
+					value: {"x": ""},
+					notify: true
+				},
+				pageContent: {
+					type: String,
+					computed: 'pageAction(routeData.x, subrouteData.x, queryParams)',
+					notify: true
+				},
+				jsonParams: {
+					type: String,
+					computed: 'stringifyParams(queryParams)'
+				}
+			},
+			ready: function() {
+				this.routeDict[""] = this.defaultPage;
+			},
+			pageAction: function(page, subpage, queryParams) {
+				if (page in this.routeDict) {
+					return this.routeDict[page];
+				}
+				
+				console.log("No match for " + page);
+				
+				if (this.routeDict[""]) {
+					console.log("Using no-path page");
+					return this.routeDict[""];
+				}
+				return "htwg-image";
+			},
+			insertPolymerNode: function(nodeName, arg, options) {
+				var el = document.createElement("link");
+				el.rel = "import";
+				el.href = "/app/elements/" + nodeName + ".html";
+				Polymer.dom(this.root).appendChild(el);
+				
+				el = document.createElement(nodeName);
+				el.arg = arg;
+				tofill.innerHTML = "";
+				tofill.appendChild(el);
+			},
+			handleResponse: function(data) {
+				return;
+				var el = document.createElement('html');
+				el.innerHTML = data.detail.parseResponse();
+				var links = el.getElementsByTagName('link');
+				for (var i = 0; i < links.length; i++) {
+					if (links[i].rel == "import") {
+						this.addDependency(links[i]);
+					}
+				}
+				ajaxData = data.detail.parseResponse();
+				tofill.innerHTML = el.getElementsByTagName('div')[0].innerHTML;
+			},
+			handleError: function(error) {
+				var el = document.createElement('div');
+				el.innerHTML = "Page " + this.pageContent + " not found.";
+				tofill.innerHTML = "";
+				tofill.appendChild(el);
+			},
+			stringifyParams: function(params) {
+				return JSON.stringify(params);
+			},
+			jsonToOject: function(text) {
+				return JSON.parse(text);
+			},
+			addDependency: function(dep) {
+				Polymer.dom(this.root).appendChild(dep);
+			}
+		});
+	</script>
+</dom-module>

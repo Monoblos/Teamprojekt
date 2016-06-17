@@ -1,0 +1,101 @@
+<link rel="import" href="/bower_components/polymer/polymer.html">
+<link rel="import" href="/bower_components/paper-item/paper-item.html">
+
+<dom-module name="fakulty-select" attributes="attrA attrb">
+	<style>
+		#bb1 {
+			padding-left: 4px;
+			padding-right: 4px;
+			margin-right: 6px;
+		}
+		#sizer {
+			clear: both;
+		}
+		.container {
+			border: 3px solid white;
+			width: 100%;
+			margin-top: 4px;
+			float: left;
+		}
+		#ele1 {
+			width: 20%;
+		}
+		#ele2 {
+			width: 80%;
+		}
+		.column {
+			float: left;
+		}
+		#close {
+			padding-left: 14pt;
+		}
+		#open {
+			overflow-x: none;
+			overflow-y: always;
+		}
+		.hidden {
+			display: none;
+		}
+	</style>
+
+	<template>
+		<div id="bb1">
+			<div class="container">
+				<div id="close" class$="{{isVisible(0, isOpen)}}" on-mouseover="{{doOpen}}" on-mouseout="{{doClose}}">
+					<h1>
+						Fakultäten
+					</h1>
+				</div>
+				<div id="open" class$="{{isVisible(1, isOpen)}}">
+					<!-- Add clock-like scrolling -->
+					<div role="listbox" id="ele1" class="column">
+					  <paper-item>BA</paper-item>
+					  <paper-item>MA</paper-item>
+					</div>
+					<div role="listbox" id="ele2" class="column">
+					  <paper-item>Angewandte Informatik</paper-item>
+					  <paper-item>Architektur (BA6/BA8)</paper-item>
+					  <paper-item>Automobilinformationstechnik</paper-item>
+					  <paper-item>Bauingenieurwesen</paper-item>
+					  <paper-item>Betriebswirtschaftslehre</paper-item>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div id="sizer"></div>
+	</template>
+
+	<script>
+		Polymer({
+			is: "fakulty-select",
+			listeners: {
+				click: "clickListener",
+				mouseover: "doOpen",
+				mouseout: "doClose"
+			},
+			properties: {
+				isOpen: {
+					type: Boolean,
+					value: false
+				}
+			},
+			ready: function() {
+			},
+			isVisible: function(id, isOpen) {
+				if (isOpen == id) {
+					return "";
+				}
+				return "hidden";
+			},
+			clickListener: function() {
+				this.doOpen();
+			},
+			doOpen: function() {
+				this.isOpen = true;
+			},
+			doClose: function() {
+				this.isOpen = false;
+			}
+		});
+	</script>
+</dom-module>
