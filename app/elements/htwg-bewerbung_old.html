@@ -1,0 +1,249 @@
+<link rel="import" href="/bower_components/polymer/polymer.html">
+<link rel="import" href="/bower_components/paper-toolbar/paper-toolbar.html">
+<link rel="import" href="/bower_components/paper-menu/paper-menu.html">
+<link rel="import" href="/bower_components/paper-menu-button/paper-menu-button.html">
+<link rel="import" href="/bower_components/paper-item/paper-item.html">
+<link rel="import" href="/bower_components/paper-button/paper-button.html">
+<link rel="import" href="/bower_components/paper-radio-button/paper-radio-button.html">
+<link rel="import" href="/bower_components/paper-badge/paper-badge.html">
+<link rel="import" href="/bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="/bower_components/iron-icons/social-icons.html">
+
+
+
+
+
+<dom-module id="htwg-bewerbung">
+    <template>
+
+      <style is="custom-style">
+
+
+	      paper-radio-button.radio {
+	        --paper-radio-button-checked-color: var(--paper-blue-500);
+	        --paper-radio-button-checked-ink-color: var(--paper-blue-500);
+	        --paper-radio-button-unchecked-color: var(--paper-blue-900);
+	        --paper-radio-button-unchecked-ink-color: var(--paper-blue-900);
+	        --paper-radio-button-label-color: var(--paper-blue-500);
+	      }
+
+
+	    #bewerbungMenu1 {
+	    	padding-top: 20px;
+	    }
+
+	    .flex-container {
+	    	display: flex;
+	    	margin-left: 50%;
+	    	margin-right: 50%;
+	    	padding: 5px;
+	    }
+
+	    hr {
+	    	width: 200px; 
+    		height: 1px;
+		    margin-left: 50%;
+	    	margin-right: 50%;
+		    color: blue;
+		    background: blue;
+
+	    }
+
+	    #chevron-left {
+	    	margin-left: 50%;
+	    	margin-right: 50%;
+	    }
+
+	    #close {
+	    	margin-left: auto;
+	    	margin-right: auto;
+	    }
+
+	    span {
+	    	display:block;
+   			width:100px;
+		   	height: 100%;
+		   	margin-right: 50%;
+		   	margin-left: 50%;
+		   	padding-top: 20px;
+		   	color: blue;
+		   	font-family:'Arial';
+		   	font-weight: bold;
+	    }
+
+
+       </style>
+
+
+
+            <div class="menu" hidden$="{{showMenu1}}">
+
+
+       				<!--<svg>
+       					<g id="chevron-left"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></g>
+       					<g id="close"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></g>
+       				</svg> -->
+				
+
+
+       			<span>Bewerbung</span>
+
+
+
+	            <div id="bewerbungMenu1" class="flex-container">
+	               <paper-radio-group>
+	                    <paper-radio-button id="bachelorRadio" on-tap="showMenu2Bachelor" class="radio" name="bachelor">Bachelor</paper-radio-button>
+	                    <paper-radio-button id="masterRadio"   on-tap="showMenu2Master" class="radio" name="master">Master</paper-radio-button>
+	                </paper-radio-group>
+	            </div>
+	            
+	            <hr>
+
+	           <div id="bewerbungMenu2Bachelor" class="flex-container" hidden$="{{!Menu2Bachelor}}">
+	                <paper-radio-group>
+	                    <paper-radio-button id="agRadioB"  on-tap="showMenu3Bachelor" class="radio" name="ag">Architektur & Gestaltung b</paper-radio-button>
+	                    <paper-radio-button id="biwRadioB" class="radio" name="biw">Bauingenieurwesen b</paper-radio-button>
+	                    <paper-radio-button id="eitRadioB" class="radio" name="eit">Elektro- & Informationstechn. b</paper-radio-button>
+	                    <paper-radio-button id="infRadioB" class="radio" name="inf">Informatik b</paper-radio-button>
+	                    <paper-radio-button id="mbRadioB"  class="radio" name="mb">Maschienenbau b</paper-radio-button>
+	                    <paper-radio-button id="bwlRadioB" class="radio" name="bwl">Betriebswirtschaftslehre b</paper-radio-button>
+	                </paper-radio-group>
+	            </div>
+
+	          	<hr hidden$="{{!Menu2Bachelor}}">
+
+
+	          	<div id="bewerbungMenu2Master" class="flex-container" hidden$="{{!Menu2Master}}">
+	                <paper-radio-group>
+	                    <paper-radio-button id="agRadioM" on-tap="showMenu3Master"  class="radio" name="ag">Architektur & Gestaltung m</paper-radio-button>
+	                    <paper-radio-button id="biwRadioM" class="radio" name="biw">Bauingenieurwesen m</paper-radio-button>
+	                    <paper-radio-button id="eitRadioM" class="radio" name="eit">Elektro- & Informationstechn. m</paper-radio-button>
+	                    <paper-radio-button id="infRadioM" class="radio" name="inf">Informatik m</paper-radio-button>
+	                    <paper-radio-button id="mbRadioM"  class="radio" name="mb">Maschienenbau m</paper-radio-button>
+	                    <paper-radio-button id="bwlRadioM" class="radio" name="bwl">Betriebswirtschaftslehre m</paper-radio-button>
+	                </paper-radio-group>
+	            </div>
+
+	            <hr hidden$="{{!Menu2Master}}">
+
+
+	            <div id="bewerbungMenu3Bachelor" class="flex-container"  hidden$="{{!Menu3BachelorAG}}">
+	                <paper-radio-group>
+	                    <paper-radio-button class="radio" name="bar">Bachelor Architektur</paper-radio-button>
+	                    <paper-radio-button class="radio" name="bkd">Bachelor Kommunikationsdesign</paper-radio-button>
+	                </paper-radio-group>
+	            </div>
+
+	             <hr hidden$="{{!Menu3BachelorAG}}">
+
+
+	            <div id="bewerbungMenu3Master" class="flex-container" hidden$="{{!Menu3MasterAG}}">
+	                <paper-radio-group>
+	                    <paper-radio-button class="radio" name="mar">Master Architektur</paper-radio-button>
+	                    <paper-radio-button class="radio" name="mkd">Master Kommunikationsdesign</paper-radio-button>
+	                </paper-radio-group>
+	            </div>
+
+
+	             <hr hidden$="{{!Menu3MasterAG}}">
+
+        </div>
+
+
+           
+        
+    </template>
+
+    <script>
+        Polymer({
+            is: 'htwg-bewerbung',
+            properties: {
+            	text1: {
+                    type: String,
+                    value: ""
+                },
+                Menu1: {
+                    type: Boolean,
+                    value: true
+                
+                ,},
+                Menu2Bachelor: {
+                    type: Boolean,
+                    value: false
+                },
+                 Menu3BachelorAG: {
+                    type: Boolean,
+                    value: false
+                },
+                Menu2Master: {
+                    type: Boolean,
+                    value: false
+                },
+                Menu3MasterAG: {
+                    type: Boolean,
+                    value: false
+                }
+
+            },
+            ready: function() {
+                console.log("Loading.");
+            },
+            bar: function(e) {
+            	var StudyType = e.currentTarget.name;
+            	text1 = StudyType;
+            	console.log(text1);
+            	if (StudyType == "bachelor") {
+    				console.log("bachelor2");
+				} else if (StudyType == "master") {
+					console.log("master2")
+				}
+            	
+            },
+            init: function() {
+            	console.log("inivvvvt")
+            	
+                this.$.Menu3BachelorAG = false;
+                this.$.Menu2Bachelor = false;
+
+                this.$.Menu3BachelorAG = false;
+                this.$.Menu2Bachelor = false;
+                this.$.Menu3BachelorAG = false;
+                this.$.Menu2Bachelor = false;
+                this.$.Menu3BachelorAG = false;
+                this.$.Menu2Bachelor = false;
+
+                this.$.Menu2Master = false;
+                this.$.Menu3MasterAG = false;
+            	
+            },
+            showMenu2Bachelor: function() {
+
+                if(this.Menu2Bachelor) {
+                	this.init();
+                }
+
+            	console.log('Bachelor2')
+                this.Menu2Bachelor = !this.Menu2Bachelor;
+                this.Menu2Master = false;
+                this.Menu3MasterAG = false;
+
+            },
+             showMenu2Master: function() {
+             	console.log('Master2')
+                this.Menu2Master = !this.Menu2Master;
+                this.Menu2Bachelor = false;
+                this.Menu3BachelorAG = false;
+            },
+            showMenu3Bachelor: function() {
+            	console.log('Bachelor3')
+                this.Menu3BachelorAG = !this.Menu3BachelorAG;
+                 this.Menu3MasterAG = false;
+            },
+            showMenu3Master: function() {
+            	console.log('Master3')
+                this.Menu3MasterAG = !this.Menu3MasterAG;
+                this.Menu3BachelorAG = false;
+            }
+        });
+    </script>
+</dom-module>
