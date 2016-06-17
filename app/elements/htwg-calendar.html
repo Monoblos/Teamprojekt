@@ -1,0 +1,237 @@
+<link rel="import" href="/bower_components/polymer/polymer.html">
+<link rel="import" href="/bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="/app/elements/htwg-iconset.html">
+
+<dom-module name="htwg-calendar">
+    <style>
+        :host > section{
+            display: flex;
+            justify-content: flex-start;
+            flex-direction: column;
+            align-items: center;
+            padding: 0px 5vw;
+        }
+
+        :host > header {
+            height: 35px;
+            width: calc(100vw - 40px);
+            padding: 0px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+        }
+
+        .entry {
+            display: flex;
+            width:100%;
+            justify-content: flex-start;
+            align-items: center;
+            margin: 10px 0px;
+        }
+
+        .entry > iron-icon {
+            margin-right: 10px;
+        }
+
+        .entry > div > p {
+            margin: 2px 0px;
+        }
+
+        .highlight{
+            color: #FFFF00;
+        }
+
+        .bold {
+            font-weight: bold;
+        }
+
+        hr {
+            border: 2px solid #00a0ff;
+            width: 100%;
+        }
+
+        #calendar > header {
+            height: 35px;
+            width: calc(100% - 40px);
+            padding: 0px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        #days {
+            display: flex;
+            justify-content: space-between;
+            width: calc(100% - 40px);
+            padding: 0px 20px;
+            margin-bottom: 10px;
+        }
+
+        #rows {
+            display: flex;
+            flex-wrap: wrap;
+            width: calc(100% - 40px);
+            padding: 0px 20px;
+            justify-content: space-between;
+        }
+
+        #days > div, #rows > div {
+            width: 12.6%;
+            text-align: center;
+            border: 1px solid transparent;
+            margin-bottom: 3px;
+        }
+
+        #rows > div.day {
+            border: 1px solid #00a0ff;
+        }
+    </style>
+
+    <template>
+        <header>
+            <iron-icon icon="htwg:plus"></iron-icon>
+            <iron-icon icon="htwg:terminabonnieren"></iron-icon>
+            <iron-icon icon="htwg:kursanmelden"></iron-icon>
+        </header>
+        <template is="dom-if" if="{{selectedDayFeed.length}}">
+            <section name="entries">
+                <template is="dom-repeat" items="{{selectedDayFeed}}">
+                    <div class$="{{getClass(item, 'entry')}}">
+                        <iron-icon icon="htwg:{{item.type}}"></iron-icon>
+                        <div>
+                            <template is="dom-if" if="{{item.author}}">
+                                <p>{{item.author}}:</p>
+                            </template>
+                            <template is="dom-if" if="{{hasDetails(item)}}">
+                                <p class="bold">{{item.time}} | {{item.room}}</p>
+                            </template>
+                            <template is="dom-if" if="{{item.text}}">
+                                <p class="bold">{{item.text}}</p>
+                            </template>
+                        </div>
+                    </div>
+                </template>
+                <hr />
+            </section>
+        </template>
+        <section id="calendar">
+            <header>
+                <iron-icon icon="icons:chevron-left"></iron-icon>
+                <div><p>{{calendar.month}}</p></div>
+                <iron-icon icon="icons:chevron-right"></iron-icon>
+            </header>
+            <section id="days">
+                <template is="dom-repeat" items="{{calendar.days}}">
+                    <div>{{item}}</div>
+                </template>
+            </section>
+            <template is="dom-if" if="{{calendar.max_day}}">
+                <section id="rows">
+                        <template is="dom-repeat" items="{{createArray(calendar.offset)}}">
+                            <div name="spacer"></div>
+                        </template>
+                        <template is="dom-repeat" items="{{createArray(calendar.max_day)}}">
+                            <div class$="{{getClass(item, 'day')}}">{{item}}</div>
+                        </template>
+                        <template is="dom-repeat" items="{{createArray(calendar.postset)}}">
+                            <div name="spacer"></div>
+                        </template>
+                    </div>
+                </section>
+            </template>
+        </section>
+    </template>
+
+    <script>
+        Polymer({
+            is: "htwg-calendar",
+            properties: {
+                dates: {
+                    type: Object,
+                    value: {}
+                },
+                selectedDayFeed: {
+                    type: Array,
+                    value: function(){
+                        return [];
+                    }
+                },
+                calendar: {
+                    type: Object,
+                    value: function(){
+                        return {};
+                    }
+                }
+            },
+            ready: function(){
+                var date = new Date();
+                this.appointments = this.getAppointments(''+date.getFullYear(), ('0' + date.getMonth()).slice(-2));
+                console.log(typeof date.getFullYear());
+                this.renderCalendar();
+                this.selectedDayFeed = [];
+                //var currdate = date.getFullYear() + '-' + ('0' + (date.getMonth() + 1).slice(-2) + '-' + ('0' + date.getDay()).slice(-2));
+                var currdate = '2016-06-14';
+                console.log(currdate);
+                if(this.appointments.hasOwnProperty(currdate)) {
+                    this.selectedDayFeed = this.appointments[currdate];
+                }
+            },
+            getClass: function(item, defaultClass){
+                return item.important ? 'highlight ' + defaultClass : defaultClass;
+            },
+            hasDetails: function(item){
+                return item.time && item.room;
+            },
+            renderCalendar: function(){
+                var date = new Date();
+                this.set('calendar.months', [
+                    {"name":"Januar","max_day":31},
+                    {"name":"Februar","max_day":29},
+                    {"name":"März","max_day":31},
+                    {"name":"April","max_day":30},
+                    {"name":"Mai","max_day":31},
+                    {"name":"Juni","max_day":30},
+                    {"name":"Juli","max_day":31},
+                    {"name":"August","max_day":31},
+                    {"name":"September","max_day":30},
+                    {"name":"Oktober","max_day":31},
+                    {"name":"November","max_day":30},
+                    {"name":"Dezember","max_day":31}
+                ]);
+                this.set('calendar.days', ["Mo","Di","Mi","Do","Fr","Sa","So"]);
+                this.set('calendar.month', this.calendar.months[date.getMonth()].name);
+                this.set('calendar.max_day', this.calendar.months[date.getMonth()].max_day);
+                date.setDate(1);
+                this.set('calendar.offset', (date.getDay() + 6) % 7);
+                this.set('calendar.postset', 7 - ((this.calendar.offset + this.calendar.max_day) % 7));
+                this.set('calendar.year', date.getFullYear());
+            },
+            createArray: function(size){
+                var array = [];
+                for(var i = 1; i <= size; i++){
+                    array.push(i);
+                }
+                return array;
+            },
+            getAppointments: function(year, month){
+                return {
+                    "2016-06-01": [
+                        {"type":"veranstaltung", "text":"Wie man ein Café aufbaut", "author":"Friedrich der Große", "time":"07:30", "room":"F033"}
+                    ],
+                    "2016-06-08": [
+                        {"type":"persoenliches", "text":"Mittagessen mitnehmen"}
+                    ],
+                    "2016-06-14": [
+                        {"type":"kursvorlesung", "text":"Fällt aus! Bin Skifahren.", "author":"Liquid Layout - Jo Wickert"},
+                        {"type":"persoenliches", "text":"Mittagessen mitnehmen"},
+                        {"type":"abgabepruefung", "text":"Abgabe Giraffe, jpg, HD", "author":"Philipp Finkbeiner", "important":true},
+                        {"type":"veranstaltung", "text":"Wie man ein Café zerstört", "author":"Prof. Volker Friedrich", "time":"19:30", "room":"L202"}
+                    ],
+                    "2016-06-22": [
+                        {"type":"abgabepruefung", "text":"Abgabe Affe svg", "author":"Orang Utan", "important":true}
+                    ]
+                };
+            }
+        });
+    </script>
+</dom-module>
