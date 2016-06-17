@@ -14,13 +14,13 @@
         }
 
         :host > header {
-            height: 35px;
+            height: 32px;
             width: calc(100vw - 40px);
             padding: 0px 20px;
             display: flex;
             align-items: center;
             justify-content: flex-end;
-            margin-top: 35px;
+            margin-top: 32px;
         }
 
         .entry {
@@ -277,7 +277,11 @@
             setFeed: function(date){
                 this.selectedDayFeed = [];
                 if(this.appointments.hasOwnProperty(date)) {
-                    this.selectedDayFeed = this.appointments[date];
+                    for(var i = 0; i < this.appointments[date].length; i++){
+                        if(localStorage.getItem(this.appointments[date][i].type)){
+                            this.push('selectedDayFeed', this.appointments[date][i]);
+                        }
+                    }
                 }
             }
         });
