@@ -6,6 +6,9 @@
 <link rel="import" href="/app/elements/article-element.html">
 <link rel="import" href="/app/elements/fakulty-select.html">
 <link rel="import" href="/app/elements/recent-chat.html">
+<link rel="import" href="/app/elements/htwg-login.html">
+<link rel="import" href="/app/elements/htwg-calendar.html">
+<link rel="import" href="/app/elements/htwg-subscribe.html">
 
 
 <!-- Example: <template-element attr-a="not foo"><template-element> -->
@@ -116,7 +119,7 @@
 		.menu {
 			background-color: white;
 			color: black;
-			height: 100%;
+			min-height: 100%;
 		}
 		.menu paper-item {
 			font-weight: bold;
@@ -152,14 +155,14 @@
 			c-7.614,9.729-16.815,10.576-20.728,10.576c-3.912,0-13.114-0.211-21.362-10.787C18.36,62.97,7.927,63.393,6.305,63.393
 			c0,2.68,0,6.345,0,6.345h333.288C339.672,67.622,339.8,65.499,339.827,63.383z"/>
 		</svg>
-		<iron-ajax
+		<!--<iron-ajax
 			auto
 			id="weather-ajax"
 			url="http://api.wunderground.com/api/34e7943c5d7c759c/conditions/astronomy/q/Germany/Konstanz.json"
 			handle-as="json"
 			debounce-duration="300"
-			last-response="{{weather}}"></iron-ajax>
-		<iron-icon icon="icons:menu" id="paging" on-tap="togglemenu" class$="{{pagingColor}}"></iron-icon>
+			last-response="{{weather}}"></iron-ajax>-->
+		<iron-icon hidden$="{{showMenu}}" icon="icons:menu" id="paging" on-tap="togglemenu" class$="{{pagingColor}}"></iron-icon>
 		<div class="topelement" hidden$="{{showMenu}}">
 			<div class="centered">
 				<svg
@@ -214,22 +217,7 @@
 			<content select=".drawer"></content>
 		</div>
 		<div class="menu" hidden$="{{!showMenu}}">
-			<div id="htwgMenuName" on-tap="togglemenu">
-				<p>{{title}}</p>
-				<iron-icon icon="social:person"></iron-icon>
-			</div>
-			<div role="listbox" id="menucontent">
-				<paper-item>Bewerbung</paper-item>
-				<paper-item>Schülerangebote</paper-item>
-				<paper-item>Promotion</paper-item>
-				<paper-item>International</paper-item>
-				<paper-item>Stellenbörse</paper-item>
-				<paper-item>Biblithek</paper-item>
-				<paper-item>Leben in Konstanz</paper-item>
-				<paper-item>Bafög</paper-item>
-				<paper-item>Wohnungen</paper-item>
-			</div>
-			<recent-chat></recent-chat>
+			<htwg-calendar></htwg-calendar>
 		</div>
 	</template>
 
