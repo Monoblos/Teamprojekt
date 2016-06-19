@@ -1,1 +1,1 @@
-python -m http.server --cgi 8000
+python serveit.py 8000

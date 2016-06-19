@@ -35,7 +35,7 @@
 		.menu {
 			background-color: white;
 			color: black;
-			height: 100%;
+			min-height: 100%;
 		}
 		.menu paper-item {
 			font-weight: bold;
@@ -78,8 +78,8 @@
 				<template is="dom-repeat" items="[[customElements]]" as="el">
 					<a href="[[el.link]]"><paper-item class="removeable">[[el.name]]</paper-item></a>
 				</template>
-				<template is="dom-repeat" items="[[undisplayedElements]]" as="el" hidden$="{{!isEdit}}">
-					<a href="[[el.link]]"><paper-item class="addable">[[el.name]]</paper-item></a>
+				<template is="dom-repeat" items="[[undisplayedElements]]" as="el">
+					<a href="[[el.link]]" hidden$="[[!isEdit]]"><paper-item class="addable">[[el.name]]</paper-item></a>
 				</template>
 			</div>
 		</div>

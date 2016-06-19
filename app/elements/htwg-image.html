@@ -6,9 +6,8 @@
 
 <dom-module name="htwg-image" attributes="menuLink">
 	<style>
-		.content {
-			padding-left: 4px;
-			padding-top: 4px;
+		:host {
+			background-color: var(--primary-color);
 		}
 		.hidden {
 			display: none;
@@ -18,6 +17,7 @@
 			top: 81vh;
 			position: relative;
 			padding: 19vh 5px 5px;
+			background-color: var(--secondary-color);
 		}
 		.drawer ::content .drawer > *:before {
 			content: " ";
@@ -30,10 +30,11 @@
 		}
 		.topelement {
 			position: fixed;
-			height: 80%;
+			height: 80vh;
 			left: 0;
 			right: 0;
 			overflow-x: hidden;
+			background-color: var(--primary-color);
 		}
 
 		.centered {
@@ -129,13 +130,6 @@
 			c-7.614,9.729-16.815,10.576-20.728,10.576c-3.912,0-13.114-0.211-21.362-10.787C18.36,62.97,7.927,63.393,6.305,63.393
 			c0,2.68,0,6.345,0,6.345h333.288C339.672,67.622,339.8,65.499,339.827,63.383z"/>
 		</svg>
-		<iron-ajax
-			auto
-			id="weather-ajax"
-			url="http://api.wunderground.com/api/34e7943c5d7c759c/conditions/astronomy/q/Germany/Konstanz.json"
-			handle-as="json"
-			debounce-duration="300"
-			last-response="{{weather}}"></iron-ajax>
 		<a id="paging" href="/switchboard"><iron-icon icon="icons:menu" class="white"></iron-icon></a>
 		<div class="topelement">
 			<div class="centered">
@@ -181,10 +175,6 @@
 				<p>{{title}}</p>
 				<iron-icon icon="icons:chevron-right"></iron-icon>
 			</a>
-			<div id="weather-icon">
-				<img src="{{weather.current_observation.icon_url}}"></img>
-				<div>Ist es tag? {{isDay}}</div>
-			</div>
 		</div>
 		<div class="drawer">
 			<iron-icon icon="icons:expand-more" id="more"></iron-icon>
@@ -201,13 +191,6 @@
 				title: {
 					type: String,
 					value: 'Title'
-				},
-				weather: {
-					type: Object
-				},
-				isDay: {
-					type: Boolean,
-					computed: 'compIsDay(weather)'
 				}
 			},
 			ready: function() {
@@ -221,33 +204,11 @@
 						svg.appendChild(rect.cloneNode());
 						svg.style = "top: " + (-4.8 - (0.4*i)) + "vh";
 						svg.classList.add("wave");
-						svg.classList.add("style-scope");
-						svg.classList.add("htwg-image");
 						
-						var drawer = document.querySelector(".drawer");
+						var drawer = Polymer.dom(document.querySelector(".drawer"));
 						drawer.insertBefore(svg, drawer.firstChild);
 					}
 				});
-			},
-			compIsDay: function(weather) {
-				var sunrise = weather.sun_phase.sunrise;
-				var sunrise_hour = Number(sunrise.hour);
-				var sunrise_minute = Number(sunrise.minute);
-				
-				var sunset = weather.sun_phase.sunset;
-				var sunset_hour = Number(sunset.hour);
-				var sunset_minute = Number(sunset.minute);
-				
-				var cur = weather.moon_phase.current_time;
-				var cur_hour = Number(cur.hour);
-				var cur_minute = Number(cur.minute);
-				
-				if ((cur_hour > sunrise_hour || (cur_hour == sunrise_hour && cur_minute >= sunrise_minute)) &&
-					(cur_hour < sunset_hour || (cur_hour == sunset_hour && cur_minute <= sunset_minute))
-					) {
-					return true;
-				}
-				return false;
 			}
 		});
 	</script>

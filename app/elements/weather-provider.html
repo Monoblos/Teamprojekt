@@ -1,0 +1,104 @@
+<link rel="import" href="/bower_components/polymer/polymer.html">
+<link rel="import" href="/bower_components/iron-ajax/iron-ajax.html">
+
+<dom-module name="weather-provider" attributes="location">
+	<template id="weather-provider">
+		<iron-ajax
+			auto
+			id="weather-ajax"
+			url="http://api.wunderground.com/api/34e7943c5d7c759c/conditions/astronomy/q/[[location]].json"
+			handle-as="json"
+			debounce-duration="300"
+			last-response="{{data}}"></iron-ajax>
+	</template>
+
+	<script>
+		Polymer({
+			is: "weather-provider",
+			listeners: {
+			},
+			observers: [
+				'setStyles(weather, isDay, refreshStyles)'
+			],
+			properties: {
+				location: {
+					type: String,
+					value: "Germany/Konstanz"
+				},
+				weather: {
+					type: String,
+					computed: 'compWeatherType(data.current_observation)'
+				},
+				isDay: {
+					type: Boolean,
+					computed: 'compIsDay(data)'
+				},
+				data: {
+					type: Object
+				},
+				refreshStyles: {
+					type: Number,
+					value: 0
+				},
+				globalStyle: {
+					type: Object
+				}
+			},
+			ready: function() {
+			},
+			attached: function() {
+				console.log("Attached.");
+				this.globalStyle = document.createElement('style', 'custom-style');
+				document.querySelector("html").appendChild(this.globalStyle);
+				this.refreshStyles++;
+			},
+			detached: function() {
+				console.log("Detached.");
+				this.globalStyle.remove();
+				this.globalStyle = undefined;
+			},
+			refresh: function() {
+				weather-ajax.generateRequest();
+			},
+			compIsDay: function(weather) {
+				var sunrise = weather.sun_phase.sunrise;
+				var sunrise_hour = Number(sunrise.hour);
+				var sunrise_minute = Number(sunrise.minute);
+				
+				var sunset = weather.sun_phase.sunset;
+				var sunset_hour = Number(sunset.hour);
+				var sunset_minute = Number(sunset.minute);
+				
+				var cur = weather.moon_phase.current_time;
+				var cur_hour = Number(cur.hour);
+				var cur_minute = Number(cur.minute);
+				
+				if ((cur_hour > sunrise_hour || (cur_hour == sunrise_hour && cur_minute >= sunrise_minute)) &&
+					(cur_hour < sunset_hour || (cur_hour == sunset_hour && cur_minute <= sunset_minute))
+					) {
+					return true;
+				}
+				return false;
+			},
+			compWeatherType: function(weather) {
+				return "sunny";
+			},
+			setStyles: function(weatherType, isDay) {
+				var primColor = "#00a0ff";
+				var secColor = "#0088ff";
+				var highColor = "#ffff00";
+				var contColor = "white";
+			
+				var cssContent = ":root {\n";
+				cssContent += "--primary-color: " + primColor + ";\n";
+				cssContent += "--secondary-color: " + secColor + ";\n";
+				cssContent += "--highlite-color: " + highColor + ";\n";
+				cssContent += "--contrast-color: " + contColor + ";\n";
+				cssContent += "}";
+				this.globalStyle.innerHTML = cssContent;
+				Polymer.updateStyles();
+				console.log("Updated weather.");
+			}
+		});
+	</script>
+</dom-module>
