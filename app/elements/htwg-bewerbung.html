@@ -66,24 +66,42 @@
 			margin-right: 50%;
 			margin-left: 50%;
 			padding-top: 20px;
-			color: blue;
+			color: #2196f3;
 			font-family:'Arial';
 			font-weight: bold;
 		}
+
+        #text{
+            display:block;
+            width:100px;
+            height: 100%;
+            margin-right: 50%;
+            margin-left: 50%;
+            padding-top: 20px;
+            color: blue;
+            font-family:'Arial';
+        }
+
+        .test{
+            color: #2196f3;
+             margin-right: 50%;
+            margin-left: 50%;
+        }
+        }
+
+        .test2{
+            margin-right: 50%;
+            margin-left: 50%;
+        }
+
+
 
 
 	   </style>
 
 
 
-			<div class="menu" hidden$="{{showMenu1}}">
-
-
-					<!--<svg>
-						<g id="chevron-left"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></g>
-						<g id="close"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></g>
-					</svg> -->
-				
+			<div class="menu" hidden$="{{showMenu1}}">			
 
 
 				<span>Bewerbung</span>
@@ -92,112 +110,31 @@
 
 				<div id="bewerbungMenu1" class="flex-container">
 				   <paper-radio-group>
-						<paper-radio-button id="bachelorRadio" on-tap="showMenu2" class="radio" name="bachelor">Bachelor</paper-radio-button>
+						<paper-radio-button id="bachelorRadio" on-tap="bar" class="radio" name="bachelor">Bachelor</paper-radio-button>
 						<paper-radio-button id="masterRadio"   on-tap="showMenu2" class="radio" name="master">Master</paper-radio-button>
 					</paper-radio-group>
 				</div>
 				
 				<hr>
 
-			   <div id="bewerbungMenu2Bachelor" class="flex-container" hidden$="{{!Menu2}}">
+			   <div id="bewerbungMenu2" class="flex-container">
 					<paper-radio-group>
-						<paper-radio-button id="agRadio"  on-tap="showMenu3Bachelor" class="radio" name="ag">Architektur & Gestaltung</paper-radio-button>
-						<paper-radio-button id="biwRadio" class="radio" name="biw">Bauingenieurwesen</paper-radio-button>
-						<paper-radio-button id="eitRadio" class="radio" name="eit">Elektro- & Informationstechn.</paper-radio-button>
-						<paper-radio-button id="infRadio" class="radio" name="inf">Informatik</paper-radio-button>
-						<paper-radio-button id="mbRadio"  class="radio" name="mb">Maschienenbau</paper-radio-button>
-						<paper-radio-button id="bwlRadio" class="radio" name="bwl">Betriebswirtschaftslehre</paper-radio-button>
+						<paper-radio-button id="agRadio"  class="radio" name="ag"  on-tap="showArchitekturGestaltung">Architektur & Gestaltung</paper-radio-button>
+						<paper-radio-button id="biwRadio" class="radio" name="biw" on-tap="showBauingenieurwesen">Bauingenieurwesen</paper-radio-button>
+						<paper-radio-button id="eitRadio" class="radio" name="eit" on-tap="showElektroInformationstechnik">Elektro- & Informationstechn.</paper-radio-button>
+						<paper-radio-button id="infRadio" class="radio" name="inf" on-tap="showInformatik">Informatik</paper-radio-button>
+						<paper-radio-button id="mbRadio"  class="radio" name="mb"  on-tap="showMaschienenbau">Maschienenbau</paper-radio-button>
+						<paper-radio-button id="bwlRadio" class="radio" name="bwl" on-tap="showWirtschaftKulturRecht">Betriebswirtschaftslehre</paper-radio-button>
 					</paper-radio-group>
 				</div>
 
-				<hr hidden$="{{!Menu2}}">
+				<hr>
 
 
-
-
-				<div id="bewerbungMenu3Bachelor" class="flex-container"  hidden$="{{!Menu3Bachelor}}">
-					<paper-radio-group>
-						<paper-radio-button class="radio" name="bar">Bachelor Architektur</paper-radio-button>
-						<paper-radio-button class="radio" name="bkd">Bachelor Kommunikationsdesign</paper-radio-button>
-
-						<paper-radio-button class="radio" name="bib">Bauingeniuerswesen</paper-radio-button>
-						<paper-radio-button class="radio" name="wib">Wirtschaftsingenieurwesen Bau</paper-radio-button>
-						<paper-radio-button class="radio" name="urb">Umwelttechnik und Ressourcenmanagement</paper-radio-button>
-
-						<paper-radio-button class="radio" name="ait">Automobilinformationstechnik</paper-radio-button>
-						<paper-radio-button class="radio" name="eib">Elektrotechnik und Informationstechnik</paper-radio-button>
-						<paper-radio-button class="radio" name="eiw">Wirtschaftsingenieurwesen Elektrotechnik und Informationstechnik</paper-radio-button>
-
-						<paper-radio-button class="radio" name="ait">Automobilinformationstechnik</paper-radio-button>
-						<paper-radio-button class="radio" name="eib">Elektrotechnik und Informationstechnik</paper-radio-button>
-						<paper-radio-button class="radio" name="eiw">Wirtschaftsingenieurwesen Elektrotechnik und Informationstechnik</paper-radio-button>
-						<paper-radio-button class="radio" name="eiw">Wirtschaftsingenieurwesen Elektrotechnik und Informationstechnik</paper-radio-button>
-
-
-
-
-
-
-
-
-
-
-					</paper-radio-group>
-				</div>
-				 <hr hidden$="{{!Menu3Bachelor}}">
-
-
-
-
-
-				<div id="bewerbungMenu3Bachelor" class="flex-container"  hidden$="{{!Menu3BachelorAG}}">
-					<paper-radio-group>
-						<paper-radio-button class="radio" name="bar">Bachelor Architektur</paper-radio-button>
-						<paper-radio-button class="radio" name="bkd">Bachelor Kommunikationsdesign</paper-radio-button>
-					</paper-radio-group>
-				</div>
-				 <hr hidden$="{{!Menu3BachelorAG}}">
-
-
-				<div id="bewerbungMenu3Master" class="flex-container" hidden$="{{!Menu3MasterAG}}">
-					<paper-radio-group>
-						<paper-radio-button class="radio" name="mar">Master Architektur</paper-radio-button>
-						<paper-radio-button class="radio" name="mkd">Master Kommunikationsdesign</paper-radio-button>
-					</paper-radio-group>
-				</div>
-				 <hr hidden$="{{!Menu3MasterAG}}">
-
-
-				<div id="bewerbungMenu3Bachelor" class="flex-container"  hidden$="{{!Menu3Bachelor}}">
-					<paper-radio-group>
-						<paper-radio-button class="radio" name="bar">Bachelor Architektur</paper-radio-button>
-						<paper-radio-button class="radio" name="bkd">Bachelor Kommunikationsdesign</paper-radio-button>
-					</paper-radio-group>
-				</div>
-				<hr hidden$="{{!Menu3Bachelor}}">
-
-
-				<div id="bewerbungMenu3Master" class="flex-container" hidden$="{{!Menu3MasterAG}}">
-					<paper-radio-group>
-						<paper-radio-button class="radio" name="mar">Master Architektur</paper-radio-button>
-						<paper-radio-button class="radio" name="mkd">Master Kommunikationsdesign</paper-radio-button>
-					</paper-radio-group>
-				</div>
-				 <hr hidden$="{{!Menu3MasterAG}}">
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+				<template is="dom-repeat" items="{{studiengang}}">
+                    <div><span class="test">{{item.name}}</span></div>
+                </template>
+                <hr hidden$="{{!lastLine}}">
 
 		</div>
 
@@ -210,78 +147,252 @@
 		Polymer({
 			is: 'htwg-bewerbung',
 			properties: {
-				text1: {
-					type: String,
-					value: ""
-				},
-				Menu1: {
-					type: Boolean,
-					value: true
-				
-				,},
-				Menu2: {
-					type: Boolean,
-					value: false
-				},
-				 Menu3Bachelor: {
-					type: Boolean,
-					value: false
-				},
-				Menu3MasterAG: {
-					type: Boolean,
-					value: false
-				}
-
-			},
-			ready: function() {
-				console.log("Loading.");
-			},
+				Architektur_Gestaltung: {
+                    type: Boolean,
+                    value: false
+                },
+                Bauingenieurwesen: {
+                    type: Boolean,
+                    value: false
+                },
+                Elektro_Informationstechnik: {
+                    type: Boolean,
+                    value: false
+                },
+                Informatik: {
+                    type: Boolean,
+                    value: false
+                },
+                Maschinenbau: {
+                    type: Boolean,
+                    value: false
+                },
+                Wirtschaft_Kultur_Recht: {
+                    type: Boolean,
+                    value: false
+                },
+                lastLine: {
+                    type: Boolean,
+                    value: false
+                },
+            },
 			bar: function(e) {
 				var StudyType = e.currentTarget.name;
 
-				if(this.$.bachelorRadio.checked) {
-					alert("it's checked"); 
-				}
+				
 
 				this.$.bachelorRadio.checked = !this.$.bachelorRadio.checked
 				
 			},
-			init: function() {
-				console.log("init")
-				this.Menu2 = false;
-				this.Menu3MasterAG = false;
-				this.Menu3BachelorAG = false;
+			ready: function() {
+                this.studiengang = [];
+            },
+            showEndline: function() {
+                this.lastLine = true;
+            },
+            hideEndline: function() {
+                this.lastLine = false;
+            },
+            showUp: function() {
+                this.studiengang = [];
 
-				if(this.$.bachelorRadio.checked == false) {
-					console.log("radiocheck")
-					this.$.bachelorRadio.checked = false;
-					this.$.agRadio.checked = false;
-					this.$.biwRadio.checked = false;
-					this.$.eitRadio.checked = false;
-					this.$.infRadio.checked = false;
-					this.$.mbRadio.checked = false;
-					this.$.bwlRadio.checked = false;
-				}
-				
-			},
-			showMenu2: function() {
+                if(this.Architektur_Gestaltung) {
+                	this.push("studiengang", {
+                        name: 'Bachelor Architektur',
+                        fak: 'Architektur_Gestaltung'
+                    });
+                    this.push("studiengang", {
+                        name: 'Bachelor Kommunikationsdesign',
+                        fak: 'Architektur_Gestaltung'
+                    });
+                    //### master ###
+                    this.push("studiengang", {
+                        name: 'Master Kommunikationsdesign',
+                        fak: 'Architektur_Gestaltung'
+                    }); 
+                    this.push("studiengang", {
+                        name: 'Master Kommunikationsdesign',
+                        fak: 'Architektur_Gestaltung'
+                    });        
 
-				if(this.Menu2) {
-					this.init();
-					return;
-				}
 
-				this.Menu2 = true;
+                }
 
-			},
-			showMenu3Bachelor: function() {
-				this.Menu3BachelorAG = !this.Menu3BachelorAG;
-				 this.Menu3MasterAG = false;
-			},
-			showMenu3Master: function() {
-				this.Menu3MasterAG = !this.Menu3MasterAG;
-				this.Menu3BachelorAG = false;
-			}
-		});
-	</script>
+                if(this.Bauingenieurwesen) {
+                	this.push("studiengang", {
+                        name: 'Bachelor Bauingenieurwesen',
+                        fak: 'Bauingenieurwesen'
+                    });
+                    this.push("studiengang", {
+                        name: 'Bachelor Wirtschaftsingenieurwesen Bau',
+                        fak: 'Bauingenieurwesen'
+                    });
+                    this.push("studiengang", {
+                        name: 'Umwelttechnik und Ressourcenmanagement',
+                        fak: 'Bauingenieurwesen'
+                    });
+                    //#### master ###
+                    this.push("studiengang", {
+                        name: 'Master Bauingenieurwesen',
+                        fak: 'Bauingenieurwesen'
+                    });
+                    this.push("studiengang", {
+                        name: 'Master Wirtschaftsingenieurwesen Bau',
+                        fak: 'Bauingenieurwesen'
+                    });
+
+                }
+
+                if(this.Elektro_Informationstechnik) {
+                	this.push("studiengang", {
+                        name: 'Automobilinformationstechnik',
+                        fak: 'Elektro_Informationstechnik'
+                    });
+                    this.push("studiengang", {
+                        name: 'Elektrotechnik und Informationstechnik',
+                        fak: 'Elektro_Informationstechnik'
+                    });
+                    this.push("studiengang", {
+                        name: 'Wirtschaftsingenieurwesen Elektrotechnik und Informationstechnik',
+                        fak: 'Elektro_Informationstechnik'
+                    });
+                    //### master ###
+                    this.push("studiengang", {
+                        name: 'Elektrische Systeme',
+                        fak: 'Elektro_Informationstechnik'
+                    });
+                    this.push("studiengang", {
+                        name: 'Wirtschaftsingenieurwesen',
+                        fak: 'Elektro_Informationstechnik'
+                    });
+                    this.push("studiengang", {
+                        name: 'Systems Engineering',
+                        fak: 'Elektro_Informationstechnik'
+                    });
+                    this.push("studiengang", {
+                        name: 'International Project Engineering',
+                        fak: 'Elektro_Informationstechnik'
+                    });
+                }
+
+                if (this.Informatik) {
+                    this.push("studiengang", {
+                        name: 'Angewandte Informatik',
+                        fak: 'Informatik'
+                    });
+                    this.push("studiengang", {
+                        name: 'Wirtschaftsinformatik',
+                        fak: 'Informatik'
+                    });
+                    this.push("studiengang", {
+                        name: 'Gesundheitsinformatik',
+                        fak: 'Informatik'
+                    });
+                    //### master ###
+                    this.push("studiengang", {
+                        name: 'Master Informatik',
+                        fak: 'Informatik'
+                    });
+                    this.push("studiengang", {
+                        name: 'Business Information Technology',
+                        fak: 'Informatik'
+                    });
+                }
+
+                if(this.Maschinenbau) {
+                	this.push("studiengang", {
+                        name: 'Maschinenbau Konstruktion und Entwicklung',
+                        fak: 'Maschinenbau'
+                    });
+                    this.push("studiengang", {
+                        name: 'Maschinenbau Entwicklung und Produktion',
+                        fak: 'Maschinenbau'
+                    });
+                    this.push("studiengang", {
+                        name: 'Verfahrens- und Umwelttechnik',
+                        fak: 'Maschinenbau'
+                    });
+                    this.push("studiengang", {
+                        name: 'Wirtschaftsingenieurwesen Maschinenbau',
+                        fak: 'Maschinenbau'
+                    });
+                    //#### master ###
+                    this.push("studiengang", {
+                        name: 'Automotive Systems Engineering',
+                        fak: 'Maschinenbau'
+                    });
+                    this.push("studiengang", {
+                        name: 'Mechatronik',
+                        fak: 'Maschinenbau'
+                    });
+                    this.push("studiengang", {
+                        name: 'Mechanical Engineering and International Sales Management ',
+                        fak: 'Maschinenbau'
+                    });
+                    this.push("studiengang", {
+                        name: 'Umwelt- und Verfahrenstechnik',
+                        fak: 'Maschinenbau'
+                    });
+                    this.push("studiengang", {
+                        name: 'Wirtschaftsingenieurwesen',
+                        fak: 'Maschinenbau'
+                    });
+                }
+
+                if(this.Wirtschaft_Kultur_Recht) {
+                	this.push("studiengang", {
+                        name: 'Wirtschaftssprachen Asien und Management China | Südost- und Südasien',
+                        fak: 'Wirtschaft_Kultur_Recht'
+                    });
+                    this.push("studiengang", {
+                        name: 'Wirtschaftssprache Deutsch und Tourismusmanagement',
+                        fak: 'Wirtschaft_Kultur_Recht'
+                    });
+                    //#### master ###
+                    this.push("studiengang", {
+                        name: 'Internationales Management Asien',
+                        fak: 'Wirtschaft_Kultur_Recht'
+                    });
+                }
+
+                if((this.Architektur_Gestaltung || this.Bauingenieurwesen || this.Elektro_Informationstechnik || this.Informatik || this.Maschinenbau || Wirtschaft_Kultur_Recht) == false) {
+                    this.hideEndline();
+                }        
+
+            },
+        	showArchitekturGestaltung: function() {
+                this.Architektur_Gestaltung = !this.Architektur_Gestaltung;
+                this.hideEndline();
+                this.showUp();
+                this.showEndline();
+            },
+            showBauingenieurwesen: function() {
+                this.Bauingenieurwesen = !this.Bauingenieurwesen;
+                this.showUp();
+                this.showEndline();
+            },
+            showElektroInformationstechnik: function() {
+                this.Elektro_Informationstechnik = !this.Elektro_Informationstechnik;
+                this.showUp();
+                this.showEndline();
+            },
+            showInformatik: function() {
+                this.Informatik = !this.Informatik;
+                this.showUp();
+                this.showEndline();
+            },
+            showMaschienenbau: function() {
+                this.Maschinenbau = !this.Maschinenbau;
+                this.showUp();
+                this.showEndline();
+            },
+            showWirtschaftKulturRecht: function() {
+                this.Wirtschaft_Kultur_Recht = !this.Wirtschaft_Kultur_Recht;
+                this.showUp();
+                this.showEndline();
+                
+            },
+        });
+    </script>
+
 </dom-module>
