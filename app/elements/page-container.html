@@ -69,7 +69,7 @@
 				},
 				contentName: {
 					type: String,
-					computed: 'translateRoute(routeData.x)',
+					computed: 'translateRoute(routeData.x, routeDict)',
 					notify: true
 				},
 				jsonParams: {
@@ -80,16 +80,16 @@
 			ready: function() {
 				this.routeDict[""] = this.defaultPage;
 			},
-			translateRoute: function(page) {
-				if (page in this.routeDict) {
-					return this.routeDict[page];
+			translateRoute: function(page, dict) {
+				if (page in dict) {
+					return dict[page];
 				}
 				
 				console.log("No match for " + page);
 				
-				if (this.routeDict[""]) {
+				if (dict[""]) {
 					console.log("Using no-path page");
-					return this.routeDict[""];
+					return dict[""];
 				}
 				return "htwg-image";
 			},

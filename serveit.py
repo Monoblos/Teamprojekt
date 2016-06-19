@@ -10,6 +10,16 @@ class MyHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
         self.send_header("Cache-Control", "no-cache, no-store, must-revalidate")
         self.send_header("Pragma", "no-cache")
         self.send_header("Expires", "0")
+    
+    def do_GET(self):
+        if self.path.startswith("/app") or self.path.startswith("/bower"):
+            None
+        elif self.path == "/route-dict.json":
+            None
+        else:
+            self.path = "/main.html"
+        http.server.SimpleHTTPRequestHandler.do_GET(self)
+        
 
 
 if __name__ == '__main__':
