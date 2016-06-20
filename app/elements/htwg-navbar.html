@@ -41,13 +41,13 @@
 
     <template>
         <nav class="navbar">
-            <iron-icon icon="htwg:compass"></iron-icon>
+            <iron-icon icon="htwg:compass" on-tap="sendEvent"></iron-icon>
             <div><p>HTWG Konstanz</p></div>
             <iron-icon id="default" icon="htwg:toolbox" on-tap="toggle"></iron-icon>
             <div id="extended" class="collapsed" on-tap="toggle">
-                <iron-icon icon="htwg:magnifier"></iron-icon>
-                <iron-icon icon="htwg:pen"></iron-icon>
-                <iron-icon icon="htwg:wrench"></iron-icon>
+                <iron-icon icon="htwg:magnifier" on-tap="sendEvent"></iron-icon>
+                <iron-icon icon="htwg:pen" on-tap="sendEvent"></iron-icon>
+                <iron-icon icon="htwg:wrench" on-tap="sendEvent"></iron-icon>
             </div>
         </nav>
     </template>
@@ -58,6 +58,9 @@
             toggle: function(){
                 this.$.default.classList.toggle('collapsed');
                 this.$.extended.classList.toggle('collapsed');
+            },
+            sendEvent: function(event){
+                this.fire('navbar', {'element': event.target._iconName});
             }
         });
     </script>
