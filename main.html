@@ -3,8 +3,14 @@
 	<head>
 		<title>Element test Page</title>
 		<script src="/bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
+		<link href='https://fonts.googleapis.com/css?family=Oxygen' rel='stylesheet' type='text/css'>
 		<link rel="import" href="/app/elements/page-container.html"> <!-- -->
 		<link rel="import" href="/app/elements/weather-provider.html"> <!-- -->
+		<style>
+			body {
+				font-family: 'Oxygen', sans-serif;
+			}
+		</style>
 	</head>
 	<body>
 		<weather-provider location="Germandy/Konstanz"></weather-provider>
