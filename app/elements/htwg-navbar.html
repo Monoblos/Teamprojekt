@@ -30,18 +30,23 @@
             display: inline;
         }
 
+        .navbar > a {
+            color: var(--primary-color);
+        }
+
         .collapsed {
             display: none;
         }
 
         iron-icon {
             margin: 4px;
+            cursor: pointer;
         }
     </style>
 
     <template>
         <nav class="navbar">
-            <iron-icon icon="htwg:compass" on-tap="sendEvent"></iron-icon>
+            <a href="/switchboard"><iron-icon icon="htwg:compass"></iron-icon></a>
             <div><p>HTWG Konstanz</p></div>
             <iron-icon id="default" icon="htwg:toolbox" on-tap="toggle"></iron-icon>
             <div id="extended" class="collapsed" on-tap="toggle">
