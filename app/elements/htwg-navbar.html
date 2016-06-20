@@ -8,10 +8,14 @@
             width: 100vw;
             color: var(--primary-color);
             background-color: var(--contrast-color);
-            position: fixed;
             top: 0px;
             left: 0px;
             z-index: 99;
+        }
+
+        .fixed {
+            position: fixed;
+            background-color: var(--contrast-color);
         }
 
         .navbar {
@@ -42,27 +46,61 @@
             margin: 4px;
             cursor: pointer;
         }
+
+        #sizer {
+            height: 32px;
+            clear: both;
+        }
+
+        #searchbar {
+            border: 2px solid var(--primary-color);
+            width: 80vw;
+            margin: 0 auto;
+        }
+
+        #searchbar > input {
+            border: none;
+            outline: none;
+            width: calc(100% - 42px);
+        }
     </style>
 
     <template>
-        <nav class="navbar">
-            <a href="/switchboard"><iron-icon icon="htwg:compass"></iron-icon></a>
-            <div><p>HTWG Konstanz</p></div>
-            <iron-icon id="default" icon="htwg:toolbox" on-tap="toggle"></iron-icon>
-            <div id="extended" class="collapsed" on-tap="toggle">
-                <iron-icon icon="htwg:magnifier" on-tap="sendEvent"></iron-icon>
-                <iron-icon icon="htwg:pen" on-tap="sendEvent"></iron-icon>
-                <iron-icon icon="htwg:wrench" on-tap="sendEvent"></iron-icon>
+        <div class="fixed">
+            <nav class="navbar">
+                <a href="/switchboard"><iron-icon icon="htwg:compass"></iron-icon></a>
+                <div><p>HTWG Konstanz</p></div>
+                <iron-icon id="default" icon="htwg:toolbox" on-tap="toggle"></iron-icon>
+                <div id="extended" class="collapsed" on-tap="toggle">
+                    <iron-icon icon="htwg:magnifier" on-tap="toggle"></iron-icon>
+                    <iron-icon icon="htwg:pen" on-tap="sendEvent"></iron-icon>
+                    <iron-icon icon="htwg:wrench" on-tap="sendEvent"></iron-icon>
+                </div>
+            </nav>
+            <div id="searchbar" class="collapsed">
+                <iron-icon icon="htwg:magnifier"></iron-icon>
+                <input type="text" placeholder="Suche..."/>
             </div>
-        </nav>
+        </div>
+        <div id="sizer"></div>
     </template>
 
     <script>
         Polymer({
             is: "htwg-navbar",
-            toggle: function(){
-                this.$.default.classList.toggle('collapsed');
-                this.$.extended.classList.toggle('collapsed');
+            toggle: function(event){
+                if(event.target._iconName == 'magnifier') {
+                    this.$.default.setAttribute('icon', 'htwg:close');
+                    this.$.default.classList.remove('collapsed');
+                    this.$.extended.classList.add('collapsed');
+                    this.$.searchbar.classList.remove('collapsed');
+                } else if(event.target._iconName == 'close') {
+                    this.$.default.setAttribute('icon', 'htwg:toolbox');
+                    this.$.searchbar.classList.add('collapsed');
+                } else if(event.target._iconName == 'toolbox' || event.target.parentNode.getAttribute('id') == 'extended'){
+                    this.$.default.classList.toggle('collapsed');
+                    this.$.extended.classList.toggle('collapsed');
+                }
             },
             sendEvent: function(event){
                 this.fire('navbar', {'element': event.target._iconName});
