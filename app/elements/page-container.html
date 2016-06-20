@@ -4,17 +4,16 @@
 <link rel="import" href="/bower_components/iron-ajax/iron-ajax.html">
 
 <dom-module name="page-container" attributes="defaultPage">
-	<style>
-		#tofill > * {
-			position: fixed;
-			left: 0;
-			top: 0;
-			right: 0;
-			bottom: 0;
-		}
-	</style>
-
 	<template id="page-container">
+		<style>
+			#tofill > * {
+				position: absolute;
+				left: 0;
+				top: 0;
+				right: 0;
+				bottom: 0;
+			}
+		</style>
 		<app-location route="{{route}}"></app-location>
 		<app-route id="baseRoute"
 			route="{{route}}"
@@ -44,6 +43,7 @@
 		Polymer({
 			is: "page-container",
 			listeners: {
+				"text-dict-changed": "dictLoaded"
 			},
 			observers: [
 				'routeChanged(contentName, subrouteData.x, subroute.path, queryParams)'
@@ -51,11 +51,10 @@
 			properties: {
 				textDict: {
 					type: String,
-					value: '{"": "htwg-image"}'
+					notify: true
 				},
 				routeDict: {
-					type: Object,
-					computed: "jsonToOject(textDict)"
+					type: Object
 				},
 				routeData: {
 					type: Object,
@@ -72,13 +71,16 @@
 					computed: 'translateRoute(routeData.x, routeDict)',
 					notify: true
 				},
+				currentlyLoaded: {
+					type: String,
+					value: ""
+				},
 				jsonParams: {
 					type: String,
 					computed: 'stringifyParams(queryParams)'
 				}
 			},
 			ready: function() {
-				this.routeDict[""] = this.defaultPage;
 			},
 			translateRoute: function(page, dict) {
 				if (page in dict) {
@@ -94,13 +96,16 @@
 				return "htwg-image";
 			},
 			routeChanged: function(nodeName, arg, isVaildArg, options) {
-				this.debounce("insertNode", this.insertPolymerNode, 100);
+				if (nodeName != this.currentlyLoaded) {
+					this.debounce("insertNode", this.insertPolymerNode, 100);
+				} else {
+					this.cancelDebouncer("insertNode");
+				}
+				this.debounce("replaceArg", this.setChildArg);
 			},
 			insertPolymerNode: function() {
+				console.log("Replacing active node.");
 				var nodeName = this.contentName;
-				var arg = this.subrouteData.x;
-				var isVaildArg = this.subroute.path;
-				var options = this.queryParams;
 				
 				var el = document.createElement("link");
 				el.rel = "import";
@@ -108,15 +113,31 @@
 				Polymer.dom(this.root).appendChild(el);
 				
 				el = document.createElement(nodeName);
-				if (isVaildArg) {
-					el.arg = arg;
-				}
 				var cont = Polymer.dom(tofill);
 				cont._clear();
 				cont.appendChild(el);
+				this.currentlyLoaded = nodeName;
+				this.setChildArg();
+			},
+			setChildArg: function() {
+				var child = Polymer.dom(tofill).children[0];
+				if (child == undefined) {return;} //Child not yet inserted.
+				var arg = this.subrouteData.x;
+				var isVaildArg = this.subroute.path;
+				var options = this.queryParams;
+
+				if (isVaildArg) {
+					child.arg = arg;
+				} else {
+					child.arg = "";
+				}
 			},
 			stringifyParams: function(params) {
 				return JSON.stringify(params);
+			},
+			dictLoaded: function(e) {
+				this.routeDict = this.jsonToOject(e.detail.value);
+				console.log("Routes loaded.");
 			},
 			jsonToOject: function(text) {
 				return JSON.parse(text);

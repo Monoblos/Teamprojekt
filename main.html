@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>Element test Page</title>
+		<title>HTWG-Homepage</title>
 		<script src="/bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
 		<link href='https://fonts.googleapis.com/css?family=Oxygen' rel='stylesheet' type='text/css'>
 		<link rel="import" href="/app/elements/page-container.html"> <!-- -->
@@ -9,11 +9,17 @@
 		<style>
 			body {
 				font-family: 'Oxygen', sans-serif;
+				position: absolute;
+				top: 0;
+				bottom: 0;
+				left: 0;
+				right: 0;
+				margin: 0;
 			}
 		</style>
 	</head>
 	<body>
 		<weather-provider location="Germandy/Konstanz"></weather-provider>
-		<page-container default-page="htwg-image"></page-container>
+		<page-container default-page="htwg-switchboard"></page-container>
 	</body>
 </html>
