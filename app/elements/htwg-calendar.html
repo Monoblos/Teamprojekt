@@ -5,6 +5,11 @@
 
 <dom-module name="htwg-calendar">
     <style>
+        :host {
+            color: var(--primary-color);
+            background-color: var(--contrast-color);
+        }
+
         :host > section{
             display: flex;
             justify-content: flex-start;
@@ -40,12 +45,17 @@
         }
 
         .highlight{
-            color: #FFFF00 !important;
+            color: var(--highlite-color);
         }
 
         .selected {
-            background-color: #00a0ff;
-            color: #FFFFFF;
+            background-color: var(--primary-color);
+            color: var(--contrast-color);
+        }
+
+        .selected-highlight {
+            background-color: var(--highlite-color);
+            color: var(--contrast-color);
         }
 
         .bold {
@@ -53,12 +63,12 @@
         }
 
         hr {
-            border: 2px solid #00a0ff;
+            border: 2px solid var(--primary-color);
             width: 100%;
         }
 
         #calendar {
-            color: #00a0ff;
+            color: var(--primary-color);
             font-weight: bold;
         }
 
@@ -89,7 +99,7 @@
         }
 
         #days > div, #rows > div {
-            width: 12.6%;
+            width: calc((90vw - 40px) / 7.936507937);
             text-align: center;
             border: 1px solid transparent;
             margin-bottom: 3px;
@@ -98,7 +108,7 @@
         #rows > div.day {
             display: flex;
             border-radius: 100%;
-            height: calc((100vw - 40px) / 7.9365);
+            height: calc((90vw - 40px) / 7.936507937);
             border: 1px solid transparent;
             align-items: center;
             justify-content: center;
@@ -136,9 +146,9 @@
         </template>
         <section id="calendar">
             <header>
-                <iron-icon icon="icons:chevron-left"></iron-icon>
-                <div><p>{{calendar.month.name}}</p></div>
-                <iron-icon icon="icons:chevron-right"></iron-icon>
+                <iron-icon icon="htwg:arrow-left" on-tap="changeMonth"></iron-icon>
+                <div><p>{{calendar.month.name}} {{calendar.year}}</p></div>
+                <iron-icon icon="htwg:arrow-right" on-tap="changeMonth"></iron-icon>
             </header>
             <section id="days">
                 <template is="dom-repeat" items="{{calendar.days}}">
@@ -178,20 +188,34 @@
                 },
                 calendar: {
                     type: Object,
-                    value: function(){
-                        return {};
+                    value: {
+                        "months": [
+                            {"name":"Januar","max_day":31},
+                            {"name":"Februar","max_day":29},
+                            {"name":"März","max_day":31},
+                            {"name":"April","max_day":30},
+                            {"name":"Mai","max_day":31},
+                            {"name":"Juni","max_day":30},
+                            {"name":"Juli","max_day":31},
+                            {"name":"August","max_day":31},
+                            {"name":"September","max_day":30},
+                            {"name":"Oktober","max_day":31},
+                            {"name":"November","max_day":30},
+                            {"name":"Dezember","max_day":31}
+                        ],
+                        "days": ["Mo","Di","Mi","Do","Fr","Sa","So"]
                     }
                 }
             },
             ready: function(){
-                var date = new Date();
-                this.appointments = this.getAppointments(''+date.getFullYear(), ('0' + (1+date.getMonth())).slice(-2));
-                this.renderCalendar();
-                this.selected = date.getDate();
-                this.setFeed(date.getFullYear() + '-' + ('0' + (date.getMonth() + 1)).slice(-2) + '-' + ('0' + date.getDate()).slice(-2));
+                this.date = new Date();
+                this.appointments = this.getAppointments(''+this.date.getFullYear(), ('0' + (1+this.date.getMonth())).slice(-2));
+                this.selected = this.date.getDate();
+                this.renderCalendar(this.date);
+                this.setFeed(this.date.getFullYear() + '-' + ('0' + (this.date.getMonth() + 1)).slice(-2) + '-' + ('0' + this.date.getDate()).slice(-2));
             },
             getFeedClass: function(item, defaultClass){
-                return item.important ? 'highlight ' + defaultClass : defaultClass;
+                return item.important ? defaultClass + ' highlight' : defaultClass;
             },
             getDayClass: function(item){
                 var dayClass = 'day';
@@ -213,23 +237,7 @@
             hasDetails: function(item){
                 return item.time && item.room;
             },
-            renderCalendar: function(){
-                var date = new Date();
-                this.set('calendar.months', [
-                    {"name":"Januar","max_day":31},
-                    {"name":"Februar","max_day":29},
-                    {"name":"März","max_day":31},
-                    {"name":"April","max_day":30},
-                    {"name":"Mai","max_day":31},
-                    {"name":"Juni","max_day":30},
-                    {"name":"Juli","max_day":31},
-                    {"name":"August","max_day":31},
-                    {"name":"September","max_day":30},
-                    {"name":"Oktober","max_day":31},
-                    {"name":"November","max_day":30},
-                    {"name":"Dezember","max_day":31}
-                ]);
-                this.set('calendar.days', ["Mo","Di","Mi","Do","Fr","Sa","So"]);
+            renderCalendar: function(date){
                 this.set('calendar.month', {"name": this.calendar.months[date.getMonth()].name, "key": ('0' + (1+date.getMonth())).slice(-2)});
                 this.set('calendar.max_day', this.calendar.months[date.getMonth()].max_day);
                 date.setDate(1);
@@ -283,6 +291,24 @@
                         }
                     }
                 }
+            },
+            changeMonth: function(event){
+                if(event.target._iconName == 'arrow-right'){
+                    if(this.date.getMonth() == 11){
+                        this.date.setMonth(0);
+                        this.date.setFullYear(this.date.getFullYear() + 1);
+                    } else {
+                        this.date.setMonth(this.date.getMonth() + 1);
+                    }
+                } else if(event.target._iconName == 'arrow-left'){
+                    if(this.date.getMonth() == 0){
+                        this.date.setMonth(11);
+                        this.date.setFullYear(this.date.getFullYear() - 1);
+                    } else {
+                        this.date.setMonth(this.date.getMonth() - 1);
+                    }
+                }
+                this.renderCalendar(this.date);
             }
         });
     </script>
