@@ -27,7 +27,7 @@
 				},
 				weather: {
 					type: String,
-					computed: 'compWeatherType(data.current_observation)'
+					computed: 'compWeatherType(data.current_observation.weather)'
 				},
 				isDay: {
 					type: Boolean,
@@ -81,19 +81,49 @@
 				return false;
 			},
 			compWeatherType: function(weather) {
-				return "sunny";
+				weather = weather.toLowerCase();
+				weatherVar = weather;
+				//~string.indexOf(string) is simple contains...
+				if (~weather.indexOf("rain")) {
+					return "rain";
+				}
+				if (~weather.indexOf("cloud")) {
+					return "cloudy";
+				}
+				return "clear";
 			},
 			setStyles: function(weatherType, isDay) {
-				var primColor = "#00a0ff";
+				var primColor = "#000000";
+				var greyPrimColor = "#000000";
 				var secColor = "#0088ff";
-				var highColor = "#ffff00";
-				var contColor = "white";
+				var highColor = "#000000";
+				var contColor = "#ffffff";
+				
+				if (isDay) {
+					primColor = "#147ABE";
+					greyPrimColor = "#9DD1F1";
+					
+					if (weatherType == "clear") {
+						highColor = "#FCCB15";
+					}
+				} else {
+					primColor = "#313C7B";
+					greyPrimColor = "#0A7FD1";
+					
+					if (weatherType == "clear") {
+						highColor = "#C8B9B9";
+					}
+				}
+				if (weatherType == "snow" || weatherType == "cloudy") {
+					highColor = "#BEBEBE";
+				}
 			
 				var cssContent = ":root {\n";
-				cssContent += "--primary-color: " + primColor + ";\n";
-				cssContent += "--secondary-color: " + secColor + ";\n";
-				cssContent += "--highlite-color: " + highColor + ";\n";
-				cssContent += "--contrast-color: " + contColor + ";\n";
+				cssContent += "--weather-primary-color: " + primColor + ";\n";
+				cssContent += "--weather-greyed-primary-color: " + greyPrimColor + ";\n";
+				cssContent += "--weather-secondary-color: " + secColor + ";\n";
+				cssContent += "--weather-highlight-color: " + highColor + ";\n";
+				cssContent += "--weather-contrast-color: " + contColor + ";\n";
 				cssContent += "}";
 				this.globalStyle.innerHTML = cssContent;
 				Polymer.updateStyles();
