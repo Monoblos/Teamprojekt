@@ -2,7 +2,7 @@
 <link rel="import" href="/bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="htwg-iconset.html">
 
-<dom-module name="container-drawer" attributes="menuLink titleVar background logo">
+<dom-module name="container-drawer" attributes="menuLink titleVar imgUrl">
 	<template id="htwg-image">		
 		<style>
 			.hidden {
@@ -102,9 +102,9 @@
 			<iron-icon icon="htwg:toolbox"></iron-icon>
 		</a>
 		<div class="topelement">
-			<object data="/public/images/[[background]].svg" type="image/svg+xml">
+			<object data="/public/images/[[imgUrl]].svg" type="image/svg+xml">
 			<!-- Für Browser ohne SVG-Unterstützung -->
-				<img src="/public/images/[[background]].png" width="600" height="400" alt="Alternatives PNG-Bild">
+				<img src="/public/images/[[imgUrl]].png" width="600" height="400" alt="Alternatives PNG-Bild">
 			</object>
 		</div>
 		<div class="drawer">
@@ -127,9 +127,9 @@
 					type: String,
 					value: "/switchboard"
 				},
-				background: {
+				imgUrl: {
 					type: String,
-					value: "clear-day"
+					value: "thunder-day"
 				}
 			},
 			ready: function() {

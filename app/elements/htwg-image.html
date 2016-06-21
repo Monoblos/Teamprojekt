@@ -14,7 +14,7 @@
 				bottom: 0;
 			}
 		</style>
-		<container-drawer menu-link="/switchboard" title-var="HTWG-Konstanz">
+		<container-drawer menu-link="/switchboard" title-var="HTWG-Konstanz" img-url="{{imgUrl}}">
 			<div class="drawer">					
 				<container-news headline="Selbstverständnis">
 					Die Hochschule Konstanz Technik, Wirtschaft und Gestaltung (HTWG) ist eine moderne Hochschule mit
@@ -48,8 +48,20 @@
 			listeners: {
 			},
 			properties: {
+				options: {
+					type: Object,
+					value: {},
+					notify: true
+				},
+				imgUrl: {
+					type: String,
+					computed: "compImgUrl(options)"
+				}
 			},
 			ready: function() {
+			},
+			compImgUrl: function(options) {
+				return options.weatherType + "-" + options.dayType;
 			}
 		});
 	</script>

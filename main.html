@@ -22,4 +22,9 @@
 		<weather-provider location="Germandy/Konstanz"></weather-provider>
 		<page-container default-page="htwg-image"></page-container>
 	</body>
+	<script>
+		document.querySelector('weather-provider').addEventListener('weather-ready', function (e) {
+			document.querySelector('page-container').extraOptions = e.detail;
+		});
+	</script>
 </html>
