@@ -46,7 +46,7 @@
 				"text-dict-changed": "dictLoaded"
 			},
 			observers: [
-				'routeChanged(contentName, subrouteData.x, subroute.path, queryParams)'
+				'routeChanged(contentName, subrouteData.x, subroute.path, options)'
 			],
 			properties: {
 				textDict: {
@@ -78,9 +78,24 @@
 				jsonParams: {
 					type: String,
 					computed: 'stringifyParams(queryParams)'
+				},
+				extraOptions: {
+					type: Object,
+					value: {}
+				},
+				options: {
+					type: Object,
+					computed: "compOptions(queryParams, extraOptions, routeData.x)"
 				}
 			},
 			ready: function() {
+			},
+			compOptions: function(base, extra, pageLink) {
+				var res = { };
+				for (var attrname in base) { res[attrname] = base[attrname]; }
+				for (var attrname in extra) { res[attrname] = extra[attrname]; }
+				res.pageLink = pageLink;
+				return res;
 			},
 			translateRoute: function(page, dict) {
 				if (page in dict) {
@@ -124,13 +139,14 @@
 				if (child == undefined) {return;} //Child not yet inserted.
 				var arg = this.subrouteData.x;
 				var isVaildArg = this.subroute.path;
-				var options = this.queryParams;
+				var options = this.options;
 
 				if (isVaildArg) {
 					child.arg = arg;
 				} else {
 					child.arg = "";
 				}
+				child.options = options;
 			},
 			stringifyParams: function(params) {
 				return JSON.stringify(params);

@@ -12,7 +12,7 @@ class MyHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
         self.send_header("Expires", "0")
     
     def do_GET(self):
-        if self.path.startswith("/app") or self.path.startswith("/bower"):
+        if self.path.startswith("/app") or self.path.startswith("/bower") or self.path.startswith("/public"):
             None
         elif self.path == "/route-dict.json":
             None
