@@ -81,6 +81,7 @@
 				return false;
 			},
 			compWeatherType: function(weather) {
+				weather = weather.toLowerCase();
 				weatherVar = weather;
 				if (weather.contains("rain")) {
 					return "rain";

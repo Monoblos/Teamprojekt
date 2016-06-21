@@ -75,7 +75,7 @@
 			</template>
 			<template is="dom-repeat" items="[[customElements]]" as="el">
 				<paper-item class="removeable">
-					<iron-icon icon="htwg:close" blockhidden$="[[!isEdit]]" on-tap="removeTap" ident="[[el.index]]"></iron-icon>
+					<iron-icon icon="htwg:close" blockhidden$="[[!isEdit]]" on-tap="removeCustomTap" ident="[[el.index]]"></iron-icon>
 					<a href="[[el.link]]">[[el.name]]</a>
 				</paper-item>
 			</template>
@@ -155,37 +155,37 @@
 			},
 			removeTap: function(e) {
 				var src = Polymer.dom(e);
-				debugSrc = src;
 				var ident = src.rootTarget.ident;
-				var index = -1;
-				for (var i = 0; i < this.displayedElements.length; i++) {
-					if (this.displayedElements[i].index == ident) {
-						index = i;
-						break;
-					}
-				}
-				if (index == -1) { console.log("Invalid ident"); return; }
-				var elem = this.displayedElements[index];
-				this.splice("displayedElements", index, 1);
-				this.push("undisplayedElements", elem);
+				this.moveElement(ident, "displayedElements", "undisplayedElements");
 				console.log("Removed");
 			},
 			addTap: function(e) {
 				var src = Polymer.dom(e);
+				var ident = src.rootTarget.ident;
+				this.moveElement(ident, "undisplayedElements", "displayedElements");
+				console.log("Added");
+			},
+			removeCustomTap: function(e) {
+				var src = Polymer.dom(e);
 				debugSrc = src;
 				var ident = src.rootTarget.ident;
+				this.moveElement(ident, "customElements", "");
+				console.log("Removed custom");
+			},
+			moveElement: function(ident, src, dst) {
 				var index = -1;
-				for (var i = 0; i < this.undisplayedElements.length; i++) {
-					if (this.undisplayedElements[i].index == ident) {
+				for (var i = 0; i < this[src].length; i++) {
+					if (this[src][i].index == ident) {
 						index = i;
 						break;
 					}
 				}
-				if (index == -1) { console.log("Invalid ident"); return; }
-				var elem = this.undisplayedElements[index];
-				this.splice("undisplayedElements", index, 1);
-				this.push("displayedElements", elem);
-				console.log("Added");
+				if (index == -1) { console.log("Invalid ident '" + ident + "' in list '" + src + "'"); return; }
+				var elem = this[src][index];
+				this.splice(src, index, 1);
+				if (dst) {
+					this.push(dst, elem);
+				}
 			}
 		});
 	</script>
