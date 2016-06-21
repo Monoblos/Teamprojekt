@@ -81,11 +81,13 @@
 				return false;
 			},
 			compWeatherType: function(weather) {
+				weather = weather.toLowerCase();
 				weatherVar = weather;
-				if (weather.contains("rain")) {
+				//~string.indexOf(string) is simple contains...
+				if (~weather.indexOf("rain")) {
 					return "rain";
 				}
-				if (weather.contains("cloud")) {
+				if (~weather.indexOf("cloud")) {
 					return "cloudy";
 				}
 				return "clear";
