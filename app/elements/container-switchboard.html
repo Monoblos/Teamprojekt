@@ -128,27 +128,24 @@
 			},
 			getDisplayedElements: function() {
 				var res = []
-				res.push({name: "Bewerbung", link: "/bewerbung"});
-				res.push({name: "Schülerangebote", link: "#"});
-				res.push({name: "Promotion", link: "#"});
-				res.push({name: "International", link: "#"});
-				res.push({name: "Stellenbörse", link: "#"});
-				res.push({name: "Biblithek", link: "#"});
-				res.push({name: "Leben in Konstanz", link: "#"});
-				this.updateIndex(res);
+				res.push({name: "Bewerbung", link: "/bewerbung", index: "BEW"});
+				res.push({name: "Schülerangebote", link: "#", index: "SLA"});
+				res.push({name: "Promotion", link: "#", index: "PMT"});
+				res.push({name: "International", link: "#", index: "ITN"});
+				res.push({name: "Stellenbörse", link: "#", index: "SLB"});
+				res.push({name: "Biblithek", link: "#", index: "BLT"});
+				res.push({name: "Leben in Konstanz", link: "#", index: "LIK"});
 				return res;
 			},
 			getUndsiplayedElements: function() {
 				var res = []
-				res.push({name: "Bafög", link: "#"});
-				res.push({name: "Wohnungen", link: "#"});
-				this.updateIndex(res);
+				res.push({name: "Bafög", link: "#", index: "BAF"});
+				res.push({name: "Wohnungen", link: "#", index: "WHN"});
 				return res;
 			},
 			getCustomElements: function() {
 				var res = []
-				res.push({name: "KD Bewerbung", link: "/bewerbung/KD"});
-				this.updateIndex(res);
+				res.push({name: "KD Bewerbung", link: "/bewerbung/KD", index: "bewKD"});
 				return res;
 			},
 			updateIndex: function(list) {
@@ -159,7 +156,7 @@
 			removeTap: function(e) {
 				var src = Polymer.dom(e);
 				debugSrc = src;
-				var ident = parseInt(src.rootTarget.ident);
+				var ident = src.rootTarget.ident;
 				var index = -1;
 				for (var i = 0; i < this.displayedElements.length; i++) {
 					if (this.displayedElements[i].index == ident) {
@@ -176,7 +173,7 @@
 			addTap: function(e) {
 				var src = Polymer.dom(e);
 				debugSrc = src;
-				var ident = parseInt(src.rootTarget.ident);
+				var ident = src.rootTarget.ident;
 				var index = -1;
 				for (var i = 0; i < this.undisplayedElements.length; i++) {
 					if (this.undisplayedElements[i].index == ident) {
