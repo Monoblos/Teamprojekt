@@ -39,23 +39,9 @@
 				refreshStyles: {
 					type: Number,
 					value: 0
-				},
-				globalStyle: {
-					type: Object
 				}
 			},
 			ready: function() {
-			},
-			attached: function() {
-				console.log("Attached.");
-				this.globalStyle = document.createElement('style', 'custom-style');
-				document.querySelector("html").appendChild(this.globalStyle);
-				this.refreshStyles++;
-			},
-			detached: function() {
-				console.log("Detached.");
-				this.globalStyle.remove();
-				this.globalStyle = undefined;
 			},
 			refresh: function() {
 				weather-ajax.generateRequest();
@@ -126,18 +112,22 @@
 				if (weatherType == "snow" || weatherType == "cloudy") {
 					highColor = "#BEBEBE";
 				}
+				
+				var colorDict = {};
+				colorDict["--weather-primary-color"] = primColor;
+				colorDict["--weather-greyed-primary-color"] = greyPrimColor;
+				colorDict["--weather-secondary-color"] = secColor;
+				colorDict["--weather-highlite-color"] = highColor;
+				colorDict["--weather-contrast-color"] = contColor;
+				colorDict["--weather-splash-name"] = "\"" + splashName + "\"";
 			
-				var cssContent = ":root {\n";
-				cssContent += "--weather-primary-color: " + primColor + ";\n";
-				cssContent += "--weather-greyed-primary-color: " + greyPrimColor + ";\n";
-				cssContent += "--weather-secondary-color: " + secColor + ";\n";
-				cssContent += "--weather-highlite-color: " + highColor + ";\n";
-				cssContent += "--weather-contrast-color: " + contColor + ";\n";
-				cssContent += "--weather-splash-name: \"" + splashName + "\";\n";
+				cssContent = ":root {\n";
+				for (var attrName in colorDict) {
+					cssContent += attrName + ": " + colorDict[attrName] + ";\n";
+				}
 				cssContent += "}";
-				this.globalStyle.innerHTML = cssContent;
-				Polymer.updateStyles();
-				this.fire("weather-ready", {weatherType: weatherType, dayType: dayType});
+				Polymer.updateStyles(colorDict);
+				this.fire("weather-update", {weatherType: weatherType, dayType: dayType});
 				console.log("Updated weather.");
 			}
 		});

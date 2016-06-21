@@ -55,13 +55,13 @@
 				},
 				imgUrl: {
 					type: String,
-					computed: "compImgUrl(options)"
+					computed: "combine(options.weatherType, options.dayType)"
 				}
 			},
 			ready: function() {
 			},
-			compImgUrl: function(options) {
-				return options.weatherType + "-" + options.dayType;
+			combine: function(a, b) {
+				return a + "-" + b;
 			}
 		});
 	</script>

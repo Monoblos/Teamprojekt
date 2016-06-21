@@ -85,15 +85,16 @@
 				},
 				options: {
 					type: Object,
-					computed: "compOptions(queryParams, extraOptions)"
+					computed: "compOptions(queryParams, extraOptions, routeData.x)"
 				}
 			},
 			ready: function() {
 			},
-			compOptions: function(base, extra) {
+			compOptions: function(base, extra, pageLink) {
 				var res = { };
 				for (var attrname in base) { res[attrname] = base[attrname]; }
 				for (var attrname in extra) { res[attrname] = extra[attrname]; }
+				res.pageLink = pageLink;
 				return res;
 			},
 			translateRoute: function(page, dict) {
@@ -139,8 +140,6 @@
 				var arg = this.subrouteData.x;
 				var isVaildArg = this.subroute.path;
 				var options = this.options;
-				console.log("Options are:")
-				console.log(options);
 
 				if (isVaildArg) {
 					child.arg = arg;
