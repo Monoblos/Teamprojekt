@@ -82,12 +82,17 @@
 			},
 			compWeatherType: function(weather) {
 				weather = weather.toLowerCase();
-				weatherVar = weather;
 				if (weather.contains("rain")) {
 					return "rain";
 				}
 				if (weather.contains("cloud")) {
 					return "cloudy";
+				}
+				if (weather.contains("snow") || weather.contains("ice")) {
+					return "snow";
+				}
+				if (weather.contains("thunderstorm")) {
+					return "thunder";
 				}
 				return "clear";
 			},
@@ -97,8 +102,10 @@
 				var secColor = "#0088ff";
 				var highColor = "#000000";
 				var contColor = "#ffffff";
+				var splashName = "clear-day";
 				
 				if (isDay) {
+					splashName = "-day";
 					primColor = "#147ABE";
 					greyPrimColor = "#9DD1F1";
 					
@@ -106,6 +113,7 @@
 						highColor = "#FCCB15";
 					}
 				} else {
+					splashName = "-night";
 					primColor = "#313C7B";
 					greyPrimColor = "#0A7FD1";
 					
@@ -113,6 +121,7 @@
 						highColor = "#C8B9B9";
 					}
 				}
+				splashName = weatherType + splashName;
 				if (weatherType == "snow" || weatherType == "cloudy") {
 					highColor = "#BEBEBE";
 				}
@@ -123,6 +132,7 @@
 				cssContent += "--weather-secondary-color: " + secColor + ";\n";
 				cssContent += "--weather-highlite-color: " + highColor + ";\n";
 				cssContent += "--weather-contrast-color: " + contColor + ";\n";
+				cssContent += "--weather-splash-name: \"" + splashName + "\";\n";
 				cssContent += "}";
 				this.globalStyle.innerHTML = cssContent;
 				Polymer.updateStyles();
