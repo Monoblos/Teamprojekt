@@ -1,88 +1,25 @@
 <link rel="import" href="/bower_components/polymer/polymer.html">
-<link rel="import" href="/bower_components/paper-item/paper-item.html">
-<link rel="import" href="/bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="container-switchboard.html">
+<link rel="import" href="htwg-navbar.html">
 
-<dom-module name="htwg-switchboard" attributes="arg options title">
-	<style>
-		#paging {
-			position: fixed;
-			right: 0.2em;
-			top: 0.8em;
-			width: 3.5em;
-			z-index: 1000;
-		}
-		#edit {
-			position: fixed;
-			right: 50vw;
-			top: 0.8em;
-			width: 3.5em;
-			z-index: 1000;
-		}
-		#htwgMenuName {
-			position: absolute;
-			left: 0.8em;
-			top: 0.8em;
-			cursor: pointer;
-			color: black;
-		}
-		#htwgMenuName > p {
-			color: white;
-			background-color: #222222;
-			padding: 1px 5px;
-			font-weight: bold;
-			display: inline;
-		}
-		.menu {
-			background-color: white;
-			color: black;
-			min-height: 100%;
-		}
-		.menu paper-item {
-			font-weight: bold;
-			min-height: 36px;
-			font-size: 20px;
-		}
-		#menucontent {
-			top: 15vh;
-			position: relative;
-		}
-		.addable:before {
-			content: "+ ";
-		}
-		.addable {
-			color: #686868;
-		}
-		.removeable:before {
-			content: "- ";
-		}
-		a {
-			color: inherit;
-			text-decoration: inherit;
-		}
-	</style>
+<!-- Example: <template-element attr-a="not foo"><template-element> -->
 
-	<template>
-		<div class="menu">
-			<a id="paging" href="/"><iron-icon icon="icons:menu" class="white"></iron-icon></a>
-			<a id="htwgMenuName" href="/">
-				<p>[[title]]</p>
-				<iron-icon icon="social:person"></iron-icon>
-			</a>
-			<a id="edit" href="/switchboard/edit">
-				<iron-icon icon="icons:create"></iron-icon>
-			</a>
-			<div role="listbox" id="menucontent">
-				<template is="dom-repeat" items="[[displayedElements]]" as="el">
-					<a href="[[el.link]]"><paper-item class="removeable">[[el.name]]</paper-item></a>
-				</template>
-				<template is="dom-repeat" items="[[customElements]]" as="el">
-					<a href="[[el.link]]"><paper-item class="removeable">[[el.name]]</paper-item></a>
-				</template>
-				<template is="dom-repeat" items="[[undisplayedElements]]" as="el">
-					<a href="[[el.link]]" hidden$="[[!isEdit]]"><paper-item class="addable">[[el.name]]</paper-item></a>
-				</template>
-			</div>
-		</div>
+<dom-module name="htwg-switchboard" attributes="arg options">
+	<template>	
+		<style>
+			:host {
+				background-color: var(--weather-contrast-color);
+			}
+			container-switchboard {
+				position: relative;
+				left: 0;
+				right: 0;
+				top: 20px;
+				bottom: 0;
+			}
+		</style>
+		<htwg-navbar on-navbar="handleNavbar"></htwg-navbar>
+		<container-switchboard title="HTWG-Konstanz" is-edit="{{isEdit}}"></container-switchboard>
 	</template>
 
 	<script>
@@ -102,58 +39,29 @@
 				isEdit: {
 					type: Boolean,
 					computed: "compIsEdit(arg)"
-				},
-				title: {
-					type: String,
-					value: "Title"
-				},
-				displayedElements: {
-					type: Array,
-					value: []
-				},
-				undisplayedElements: {
-					type: Array,
-					value: []
-				},
-				customElements: {
-					type: Array,
-					value: []
 				}
 			},
 			ready: function() {
-				for (var option in this.options) {
-					console.log("Got parameter " + option + " with value: " + this.options[option]);
-				}
-				
-				this.displayedElements = this.getDisplayedElements();
-				this.undisplayedElements = this.getUndsiplayedElements();
-				this.customElements = this.getCustomElements();
 			},
 			compIsEdit: function(a) {
-				console.log("Edit mode is: " + a);
 				return a == "edit";
 			},
-			getDisplayedElements: function() {
-				var res = []
-				res.push({name: "Bewerbung", link: "/bewerbung"});
-				res.push({name: "Schülerangebote", link: "/missing"});
-				res.push({name: "Promotion", link: "/missing"});
-				res.push({name: "International", link: "/missing"});
-				res.push({name: "Stellenbörse", link: "/missing"});
-				res.push({name: "Biblithek", link: "/missing"});
-				res.push({name: "Leben in Konstanz", link: "/missing"});
-				return res;
+			handleNavbar: function(event, detail, sender){
+				if (detail.element == "pen") {
+					if (this.isEdit) {
+						this.navigate("/switchboard");
+					} else {
+						this.navigate(window.location.href + "/edit");
+					}
+				}
 			},
-			getUndsiplayedElements: function() {
-				var res = []
-				res.push({name: "Bafög", link: "/missing"});
-				res.push({name: "Wohnungen", link: "/missing"});
-				return res;
-			},
-			getCustomElements: function() {
-				var res = []
-				res.push({name: "KD Bewerbung", link: "/bewerbung/KD"});
-				return res;
+			navigate: function(target) {
+				var appLocation = document.querySelector("app-location");
+				if (appLocation == null) {
+					window.location.href = target;
+				} else {
+					appLocation.set("route.path", target);
+				}
 			}
 		});
 	</script>

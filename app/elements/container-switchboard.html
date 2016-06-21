@@ -1,0 +1,192 @@
+<link rel="import" href="/bower_components/polymer/polymer.html">
+<link rel="import" href="/bower_components/paper-item/paper-item.html">
+<link rel="import" href="/bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="htwg-iconset.html">
+
+<dom-module name="container-switchboard" attributes="isEdit title">
+	<template>
+		<style>
+			:host {
+				min-height: 100%;
+				padding-left: 8px;
+				padding-top: 12px;
+				padding-right: 8px;
+				position: static;
+			}
+			a {
+				color: inherit;
+				text-decoration: inherit;
+			}
+			paper-item {
+				font-weight: bold;
+				min-height: 60px;
+				font-size: 20px;
+			}
+			.addable {
+				color: var(--weather-greyed-primary-color, lightblue);
+			}
+			.removeable {
+				color: var(--weather-primary-color, blue);
+			}
+			paper-item > a:before {
+				content: " ";
+				display: block;
+				height: 1px;
+				border: 0;
+				border-top: 1px solid var(--weather-primary-color, blue);
+				margin-bottom: 14px;
+				padding: 0;
+			}
+			paper-item > a {
+				width: 100%;
+			}
+			paper-item > iron-icon {
+				padding-right: 8px;
+				padding-top: 18px;
+				cursor: pointer;
+			}
+			#headline {
+				color: var(--weather-primary-color, blue);
+				width: 100%;
+				text-align: center;
+				font-weight: bold;
+				font-size: 20px;
+				border-top: solid 3px;
+				margin: 0 16px;
+				margin-top: 4px;
+				padding-top: 8px;
+				text-align: center;
+				width: calc(100% - 32px);
+			}
+			[blockhidden] {
+				opacity: 0;
+				z-index: -1;
+			}
+		</style>
+		<div id="headline">
+			Vermittlung
+		</div>
+		<div role="listbox" id="menucontent">
+			<template is="dom-repeat" items="[[displayedElements]]" as="el">
+				<paper-item class="removeable">
+					<iron-icon icon="htwg:close" blockhidden$="[[!isEdit]]" on-tap="removeTap" ident="[[el.index]]"></iron-icon>
+					<a href="[[el.link]]">[[el.name]]</a>
+				</paper-item>
+			</template>
+			<template is="dom-repeat" items="[[customElements]]" as="el">
+				<paper-item class="removeable">
+					<iron-icon icon="htwg:close" blockhidden$="[[!isEdit]]" on-tap="removeCustomTap" ident="[[el.index]]"></iron-icon>
+					<a href="[[el.link]]">[[el.name]]</a>
+				</paper-item>
+			</template>
+			<template is="dom-repeat" items="[[undisplayedElements]]" as="el">
+				<paper-item class="addable" hidden$="[[!isEdit]]">
+					<iron-icon icon="htwg:plus" on-tap="addTap" ident="[[el.index]]"></iron-icon>
+					<a href="[[el.link]]">[[el.name]]</a>
+				</paper-item>
+			</template>
+		</div>
+	</template>
+
+	<script>
+		Polymer({
+			is: "container-switchboard",
+			listeners: {
+				
+			},
+			properties: {
+				isEdit: {
+					type: Boolean,
+					value: false
+				},
+				title: {
+					type: String,
+					value: "Title"
+				},
+				displayedElements: {
+					type: Array,
+					value: []
+				},
+				undisplayedElements: {
+					type: Array,
+					value: []
+				},
+				customElements: {
+					type: Array,
+					value: []
+				}
+			},
+			ready: function() {
+				for (var option in this.options) {
+					console.log("Got parameter " + option + " with value: " + this.options[option]);
+				}
+				
+				this.displayedElements = this.getDisplayedElements();
+				this.undisplayedElements = this.getUndsiplayedElements();
+				this.customElements = this.getCustomElements();
+				console.log("Switchboard loaded.")
+			},
+			getDisplayedElements: function() {
+				var res = []
+				res.push({name: "Bewerbung", link: "/bewerbung", index: "BEW"});
+				res.push({name: "Schülerangebote", link: "#", index: "SLA"});
+				res.push({name: "Promotion", link: "#", index: "PMT"});
+				res.push({name: "International", link: "#", index: "ITN"});
+				res.push({name: "Stellenbörse", link: "#", index: "SLB"});
+				res.push({name: "Biblithek", link: "#", index: "BLT"});
+				res.push({name: "Leben in Konstanz", link: "#", index: "LIK"});
+				return res;
+			},
+			getUndsiplayedElements: function() {
+				var res = []
+				res.push({name: "Bafög", link: "#", index: "BAF"});
+				res.push({name: "Wohnungen", link: "#", index: "WHN"});
+				return res;
+			},
+			getCustomElements: function() {
+				var res = []
+				res.push({name: "KD Bewerbung", link: "/bewerbung/KD", index: "bewKD"});
+				return res;
+			},
+			updateIndex: function(list) {
+				for (var i = 0; i < list.length; i++) {
+					list[i].index = i;
+				}
+			},
+			removeTap: function(e) {
+				var src = Polymer.dom(e);
+				var ident = src.rootTarget.ident;
+				this.moveElement(ident, "displayedElements", "undisplayedElements");
+				console.log("Removed");
+			},
+			addTap: function(e) {
+				var src = Polymer.dom(e);
+				var ident = src.rootTarget.ident;
+				this.moveElement(ident, "undisplayedElements", "displayedElements");
+				console.log("Added");
+			},
+			removeCustomTap: function(e) {
+				var src = Polymer.dom(e);
+				debugSrc = src;
+				var ident = src.rootTarget.ident;
+				this.moveElement(ident, "customElements", "");
+				console.log("Removed custom");
+			},
+			moveElement: function(ident, src, dst) {
+				var index = -1;
+				for (var i = 0; i < this[src].length; i++) {
+					if (this[src][i].index == ident) {
+						index = i;
+						break;
+					}
+				}
+				if (index == -1) { console.log("Invalid ident '" + ident + "' in list '" + src + "'"); return; }
+				var elem = this[src][index];
+				this.splice(src, index, 1);
+				if (dst) {
+					this.push(dst, elem);
+				}
+			}
+		});
+	</script>
+</dom-module>
