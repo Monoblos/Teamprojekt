@@ -1,0 +1,54 @@
+ {
+                    "ag": {
+                        "ba6": "Architektur6",
+                        "ba8": "Architektur8",
+                        "bkd": "Kommunikationsdesign",
+                        "mkd": "Kommunikationsdesign Master"
+                    },
+                    "bi": {
+                        "bib": "Bauingenieurwesen",
+                        "mib": "Bauingenieurwesen Master",
+                        "mwi": "Wirtschaftsingenieurwesen Studienrichtung Bauwesen Master",
+                        "urb": "Umwelttechnik und Ressourcenmanagement",
+                        "wib": "Wirtschaftsingenieurwesen Bau"
+                    },
+                    "ei": {
+                        "ait": "Automobilinformationstechnik",
+                        "eib": "Elekto- und Informationstechnik",
+                        "eim": "Elektrische Systeme Master",
+                        "ipe": "International Project Engineering Master",
+                        "eiw": "Wirtschaftsingenieurwesen Elektrotechnik und Informationstechnik",
+                        "mwi": "Wirtschaftsingenieurwesen Master",
+                        "sem": "System Engineering Master"
+
+
+                    },
+                    "in": {
+                        "ain": "Angewandte Informatik",
+                        "bit": "Buisness Information Technology",
+                        "gib": "Gesundheitsinformatik",
+                        "msi": "Master Informatics",
+                        "win": "Wirtschaftsinformatik"
+                    },
+                    "ma": {
+                        "ase": "Automotive Systems Engineering Master",
+                        "mep": "Machinenbau Entwicklung und Produktion",
+                        "mke": "Maschinenbau Konstruktion und Entwicklung",
+                        "mme": "Mechatronik Master",
+                        "mms": "Mechanical Engineering and International Sales Management Master",
+                        "mwi": "Wirtschaftsingenieurwesen Master",
+                        "uvt": "Umwelt- und Verfahrenstechnik Master",
+                        "vub": "Verfahrens- und Umwelttechnik",
+                        "wim": "Wirtschaftsingenieurwesen Maschinenbau"
+
+                    },
+                    "ws": {
+                        "asm": "Internationales Management Asien Master",
+                        "bac": "Wirtschaftssprachen Asien und Management China",
+                        "bas": "Wirtschaftssprachen Asien und Management Südost- und Südasien",
+                        "bwb": "Betriebswirtschaftslehre",
+                        "bwm": "Unternehmensführung Master",
+                        "wrb": "Wirtschaftsrecht",
+                        "wrm": "Legal Management Master"
+                    }
+}
