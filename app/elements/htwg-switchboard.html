@@ -1,20 +1,24 @@
 <link rel="import" href="/bower_components/polymer/polymer.html">
 <link rel="import" href="container-switchboard.html">
+<link rel="import" href="htwg-navbar.html">
 
 <!-- Example: <template-element attr-a="not foo"><template-element> -->
 
 <dom-module name="htwg-switchboard" attributes="arg options">
 	<template>	
 		<style>
-			:host > * {
+			:host {
+				background-color: var(--weather-contrast-color);
+			}
+			container-switchboard {
 				position: relative;
 				left: 0;
 				right: 0;
-				top: 0;
+				top: 20px;
 				bottom: 0;
 			}
 		</style>
-
+		<htwg-navbar on-navbar="handleNavbar"></htwg-navbar>
 		<container-switchboard title="HTWG-Konstanz" is-edit="{{isEdit}}"></container-switchboard>
 	</template>
 
@@ -40,8 +44,24 @@
 			ready: function() {
 			},
 			compIsEdit: function(a) {
-				console.log("Arg is: " + a);
 				return a == "edit";
+			},
+			handleNavbar: function(event, detail, sender){
+				if (detail.element == "pen") {
+					if (this.isEdit) {
+						this.navigate("/switchboard");
+					} else {
+						this.navigate(window.location.href + "/edit");
+					}
+				}
+			},
+			navigate: function(target) {
+				var appLocation = document.querySelector("app-location");
+				if (appLocation == null) {
+					window.location.href = target;
+				} else {
+					appLocation.set("route.path", target);
+				}
 			}
 		});
 	</script>
