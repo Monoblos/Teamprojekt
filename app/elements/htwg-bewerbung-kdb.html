@@ -1,0 +1,125 @@
+<link rel="import" href="/bower_components/polymer/polymer.html">
+<link rel="import" href="/bower_components/iron-collapse/iron-collapse.html">
+<link rel="import" href="/bower_components/paper-button/paper-button.html">
+<link rel="import" href="/app/elements/htwg-navbar.html">
+
+
+
+
+<dom-module id="htwg-bewerbung-kdb">
+    <template>
+
+        <style is="custom-style">
+
+            h1 {
+                margin-left: 50%;
+                margin-right: 50%;
+                width:50px;
+                color: var(--weather-primary-color);
+            }
+
+            h2 {
+                margin-left: 50%;
+                margin-right: 50%;
+                width:50px;
+                color: var(--weather-primary-color);
+            }
+
+            span {
+                display:relative;
+                margin-left: 50%;
+                margin-right: 50%;
+                color: var(--weather-primary-color);
+                font-family:'Arial';
+            }
+
+            hr {
+
+                height: 1px;
+
+                color: var(--weather-primary-color);
+                background: var(--weather-primary-color);
+            }
+
+            #block1 {
+            margin-left: 20%;
+            }
+
+
+            #bewerbenBtn {
+                background: var(--weather-highlight-color);;
+                width:300px;
+                margin-left: 50%;
+                margin-right: 50%;
+            }
+
+        </style>
+
+        <htwg-navbar></htwg-navbar>
+
+        <h2>KD</h2>
+
+       <h1 on-tap="toggle">Voraussetzungen</h1>
+
+            <iron-collapse id="collapse">
+              <div class="content">
+                <div id="block1">
+                    Die Voraussetzungen in Kürze:<br>
+                    Voraussetzungen für das Bachelorstudium sind: Abitur oder Fachhoschulreife und ein am Studiengang bestandenes zweistufiges Aufnahmeverfahren.
+                    <br>
+                    <br>
+                    Das Aufnahmeverfahren:<br>
+                    Die Aufnahmeprüfung zum Bachelorstudium Kommunikationsdesign an der HTWG Konstanz findet in einem zweistufigen Verfahren statt:<br>
+
+                    I) Die Mappen <br>[...]
+                </div>
+              </div>
+            </iron-collapse>
+         <hr>   
+         <h1 on-tap="toggle">Zulassung</h1>
+
+            <iron-collapse id="collapse2">
+              <div class="content">
+                <div id="block2">
+                    Test2
+                    
+                </div>
+              </div>
+            </iron-collapse>
+             <hr>
+         <h1 on-tap="toggle">Termine</h1>
+
+            <iron-collapse id="collapse3">
+              <div class="content">
+                <div id="block3">
+                    Test3
+                    
+                </div>
+              </div>
+            </iron-collapse>
+
+
+            <paper-button raised id="bewerbenBtn">Bewerben</paper-button>
+           
+        
+    </template>
+
+    <script>
+        Polymer({
+            is: 'htwg-bewerbung-kdb',
+            properties: {
+                text1: {
+                    type: String,
+                    value: ""
+                }
+
+            },
+            ready: function() {
+                console.log("Loading.");
+            },
+            toggle: function() {
+            this.$.collapse.toggle();
+            }
+        });
+    </script>
+</dom-module>

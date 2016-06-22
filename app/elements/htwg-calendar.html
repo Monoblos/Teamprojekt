@@ -1,288 +1,53 @@
 <link rel="import" href="/bower_components/polymer/polymer.html">
-<link rel="import" href="/bower_components/iron-icons/iron-icons.html">
-<link rel="import" href="/app/elements/htwg-navbar.html">
-<link rel="import" href="/app/elements/htwg-iconset.html">
+<link rel="import" href="/app/elements/container-calendar.html">
+<link rel="import" href="/app/elements/container-subscribe.html">
+<link rel="import" href="/app/elements/container-calendar-add.html">
 
-<dom-module name="htwg-calendar">
-    <style>
-        :host > section{
-            display: flex;
-            justify-content: flex-start;
-            flex-direction: column;
-            align-items: center;
-            padding: 0px 5vw;
-        }
+<!-- Example: <template-element attr-a="not foo"><template-element> -->
 
-        :host > header {
-            height: 32px;
-            width: calc(100vw - 40px);
-            padding: 0px 20px;
-            display: flex;
-            align-items: center;
-            justify-content: flex-end;
-            margin-top: 32px;
-        }
-
-        .entry {
-            display: flex;
-            width:100%;
-            justify-content: flex-start;
-            align-items: center;
-            margin: 10px 0px;
-        }
-
-        .entry > iron-icon {
-            margin-right: 10px;
-        }
-
-        .entry > div > p {
-            margin: 2px 0px;
-        }
-
-        .highlight{
-            color: #FFFF00 !important;
-        }
-
-        .selected {
-            background-color: #00a0ff;
-            color: #FFFFFF;
-        }
-
-        .bold {
-            font-weight: bold;
-        }
-
-        hr {
-            border: 2px solid #00a0ff;
-            width: 100%;
-        }
-
-        #calendar {
-            color: #00a0ff;
-            font-weight: bold;
-        }
-
-        #calendar > header {
-            height: 35px;
-            width: calc(100% - 40px);
-            padding: 0px 20px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 10px;
-        }
-
-        #days {
-            display: flex;
-            justify-content: space-between;
-            width: calc(100% - 40px);
-            padding: 0px 20px;
-            margin-bottom: 10px;
-        }
-
-        #rows {
-            display: flex;
-            flex-wrap: wrap;
-            width: calc(100% - 40px);
-            padding: 0px 20px;
-            justify-content: space-between;
-        }
-
-        #days > div, #rows > div {
-            width: 12.6%;
-            text-align: center;
-            border: 1px solid transparent;
-            margin-bottom: 3px;
-        }
-
-        #rows > div.day {
-            display: flex;
-            border-radius: 100%;
-            height: calc((100vw - 40px) / 7.9365);
-            border: 1px solid transparent;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-        }
-    </style>
-
+<dom-module name="htwg-calendar" attributes="arg options">
     <template>
-        <htwg-navbar></htwg-navbar>
-        <header>
-            <iron-icon icon="htwg:plus"></iron-icon>
-            <iron-icon icon="htwg:subscribe"></iron-icon>
-            <iron-icon icon="htwg:doctorate-plus"></iron-icon>
-        </header>
-        <template is="dom-if" if="{{selectedDayFeed.length}}">
-            <section name="entries">
-                <template is="dom-repeat" items="{{selectedDayFeed}}">
-                    <div class$="{{getFeedClass(item, 'entry')}}">
-                        <iron-icon icon="htwg:{{item.type}}"></iron-icon>
-                        <div>
-                            <template is="dom-if" if="{{item.author}}">
-                                <p>{{item.author}}:</p>
-                            </template>
-                            <template is="dom-if" if="{{hasDetails(item)}}">
-                                <p class="bold">{{item.time}} | {{item.room}}</p>
-                            </template>
-                            <template is="dom-if" if="{{item.text}}">
-                                <p class="bold">{{item.text}}</p>
-                            </template>
-                        </div>
-                    </div>
-                </template>
-                <hr />
-            </section>
+        <template is="dom-if" if="[[isCalendar]]">
+            <container-calendar></container-calendar>
         </template>
-        <section id="calendar">
-            <header>
-                <iron-icon icon="icons:chevron-left"></iron-icon>
-                <div><p>{{calendar.month.name}}</p></div>
-                <iron-icon icon="icons:chevron-right"></iron-icon>
-            </header>
-            <section id="days">
-                <template is="dom-repeat" items="{{calendar.days}}">
-                    <div>{{item}}</div>
-                </template>
-            </section>
-            <template is="dom-if" if="{{calendar.max_day}}">
-                <section id="rows">
-                        <template is="dom-repeat" items="{{createArray(calendar.offset)}}">
-                            <div name="spacer"></div>
-                        </template>
-                        <template is="dom-repeat" items="{{createArray(calendar.max_day)}}">
-                            <div class$="{{getDayClass(item)}}" on-tap="selectDay"><span>{{item}}</span></div>
-                        </template>
-                        <template is="dom-repeat" items="{{createArray(calendar.postset)}}">
-                            <div name="spacer"></div>
-                        </template>
-                    </div>
-                </section>
-            </template>
-        </section>
+
+        <template is="dom-if" if="[[isAdd]]">
+            <container-calendar-add></container-calendar-add>
+        </template>
+
+        <template is="dom-if" if="[[isSubscribe]]">
+            <container-subscribe></container-subscribe>
+        </template>
     </template>
 
     <script>
         Polymer({
             is: "htwg-calendar",
             properties: {
-                dates: {
+                arg: {
+                    type: String,
+                    value: '',
+                    notify: true
+                },
+                options: {
                     type: Object,
                     value: {}
                 },
-                selectedDayFeed: {
-                    type: Array,
-                    value: function(){
-                        return [];
-                    }
+                isCalendar: {
+                    type: Boolean,
+                    computed: 'comp(arg, "")'
                 },
-                calendar: {
-                    type: Object,
-                    value: function(){
-                        return {};
-                    }
+                isSubscribe: {
+                    type: Boolean,
+                    computed: 'comp(arg, "subscribe")'
+                },
+                isAdd: {
+                    type: Boolean,
+                    computed: 'comp(arg, "add")'
                 }
             },
-            ready: function(){
-                var date = new Date();
-                this.appointments = this.getAppointments(''+date.getFullYear(), ('0' + (1+date.getMonth())).slice(-2));
-                this.renderCalendar();
-                this.selected = date.getDate();
-                this.setFeed(date.getFullYear() + '-' + ('0' + (date.getMonth() + 1)).slice(-2) + '-' + ('0' + date.getDate()).slice(-2));
-            },
-            getFeedClass: function(item, defaultClass){
-                return item.important ? 'highlight ' + defaultClass : defaultClass;
-            },
-            getDayClass: function(item){
-                var dayClass = 'day';
-                if(this.selected == item) {
-                    dayClass += ' selected';
-                }
-                var date = this.calendar.year+'-'+this.calendar.month.key+'-'+('0' + item).slice(-2);
-                if(this.appointments.hasOwnProperty(date)){
-                    var appointments = this.appointments[date];
-                    for(var i = 0; i < appointments.length; i++){
-                        if(appointments[i].important){
-                            dayClass += ' highlight';
-                            break;
-                        }
-                    }
-                }
-                return dayClass;
-            },
-            hasDetails: function(item){
-                return item.time && item.room;
-            },
-            renderCalendar: function(){
-                var date = new Date();
-                this.set('calendar.months', [
-                    {"name":"Januar","max_day":31},
-                    {"name":"Februar","max_day":29},
-                    {"name":"März","max_day":31},
-                    {"name":"April","max_day":30},
-                    {"name":"Mai","max_day":31},
-                    {"name":"Juni","max_day":30},
-                    {"name":"Juli","max_day":31},
-                    {"name":"August","max_day":31},
-                    {"name":"September","max_day":30},
-                    {"name":"Oktober","max_day":31},
-                    {"name":"November","max_day":30},
-                    {"name":"Dezember","max_day":31}
-                ]);
-                this.set('calendar.days', ["Mo","Di","Mi","Do","Fr","Sa","So"]);
-                this.set('calendar.month', {"name": this.calendar.months[date.getMonth()].name, "key": ('0' + (1+date.getMonth())).slice(-2)});
-                this.set('calendar.max_day', this.calendar.months[date.getMonth()].max_day);
-                date.setDate(1);
-                this.set('calendar.offset', (date.getDay() + 6) % 7);
-                this.set('calendar.postset', 7 - ((this.calendar.offset + this.calendar.max_day) % 7));
-                this.set('calendar.year', date.getFullYear());
-            },
-            createArray: function(size){
-                var array = [];
-                for(var i = 1; i <= size; i++){
-                    array.push(i);
-                }
-                return array;
-            },
-            getAppointments: function(year, month){
-                return {
-                    "2016-06-01": [
-                        {"type":"balloon", "text":"Wie man ein Café aufbaut", "author":"Friedrich der Große", "time":"07:30", "room":"F033"}
-                    ],
-                    "2016-06-08": [
-                        {"type":"profile-filled", "text":"Mittagessen mitnehmen"}
-                    ],
-                    "2016-06-14": [
-                        {"type":"doctorate", "text":"Fällt aus! Bin Skifahren.", "author":"Liquid Layout - Jo Wickert"},
-                        {"type":"profile-filled", "text":"Mittagessen mitnehmen"},
-                        {"type":"exam", "text":"Abgabe Giraffe, jpg, HD", "author":"Philipp Finkbeiner", "important":true},
-                        {"type":"balloon", "text":"Wie man ein Café zerstört", "author":"Prof. Volker Friedrich", "time":"19:30", "room":"L202"}
-                    ],
-                    "2016-06-22": [
-                        {"type":"exam", "text":"Abgabe Affe svg", "author":"Orang Utan", "important":true}
-                    ]
-                };
-            },
-            selectDay: function(event){
-                var el = event.target;
-                if(el.tagName == 'DIV'){
-                    el = el.querySelector('span');
-                }
-                document.querySelector('div.day.selected').classList.remove('selected');
-                el.parentNode.classList.add('selected');
-                var day = el.innerText;
-                this.selected = day;
-                this.setFeed(this.calendar.year + '-' + this.calendar.month.key + '-' + ('0' + day).slice(-2));
-            },
-            setFeed: function(date){
-                this.selectedDayFeed = [];
-                if(this.appointments.hasOwnProperty(date)) {
-                    for(var i = 0; i < this.appointments[date].length; i++){
-                        if(localStorage.getItem(this.appointments[date][i].type)){
-                            this.push('selectedDayFeed', this.appointments[date][i]);
-                        }
-                    }
-                }
+            comp: function(arg, url){
+                return arg == url;
             }
         });
     </script>

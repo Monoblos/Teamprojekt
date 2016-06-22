@@ -20,8 +20,8 @@
 
         .navbar {
             height: 32px;
-            width: calc(100vw - 40px);
-            padding: 0px 20px;
+            width: calc(100vw - 32px);
+            padding: 16px;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -38,8 +38,14 @@
             color: var(--weather-primary-color);
         }
 
+        #extended {
+            display: flex;
+            justify-content: space-between;
+            width: 128px;
+        }
+
         .collapsed {
-            display: none;
+            display: none !important;
         }
 
         iron-icon {
@@ -48,7 +54,7 @@
         }
 
         #sizer {
-            height: 32px;
+            height: 64px;
             clear: both;
         }
 

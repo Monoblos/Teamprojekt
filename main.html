@@ -3,12 +3,12 @@
 	<head>
 		<title>HTWG-Homepage</title>
 		<script src="/bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
-		<link href='https://fonts.googleapis.com/css?family=Oxygen' rel='stylesheet' type='text/css'>
+		<link href='https://fonts.googleapis.com/css?family=Oxygen|Arimo' rel='stylesheet' type='text/css'>
 		<link rel="import" href="/app/elements/page-container.html"> <!-- -->
 		<link rel="import" href="/app/elements/weather-provider.html"> <!-- -->
 		<style>
 			body {
-				font-family: 'Oxygen', sans-serif;
+				font-family: 'Oxygen', 'Arimo', sans-serif;
 				position: absolute;
 				top: 0;
 				bottom: 0;
@@ -20,6 +20,11 @@
 	</head>
 	<body>
 		<weather-provider location="Germandy/Konstanz"></weather-provider>
-		<page-container default-page="htwg-switchboard"></page-container>
+		<page-container default-page="htwg-image"></page-container>
 	</body>
+	<script>
+		document.querySelector('weather-provider').addEventListener('weather-update', function (e) {
+			document.querySelector('page-container').extraOptions = e.detail;
+		});
+	</script>
 </html>

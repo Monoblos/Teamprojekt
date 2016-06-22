@@ -39,23 +39,9 @@
 				refreshStyles: {
 					type: Number,
 					value: 0
-				},
-				globalStyle: {
-					type: Object
 				}
 			},
 			ready: function() {
-			},
-			attached: function() {
-				console.log("Attached.");
-				this.globalStyle = document.createElement('style', 'custom-style');
-				document.querySelector("html").appendChild(this.globalStyle);
-				this.refreshStyles++;
-			},
-			detached: function() {
-				console.log("Detached.");
-				this.globalStyle.remove();
-				this.globalStyle = undefined;
 			},
 			refresh: function() {
 				weather-ajax.generateRequest();
@@ -81,14 +67,23 @@
 				return false;
 			},
 			compWeatherType: function(weather) {
+				console.log("Weather type resived was: " + weather);
 				weather = weather.toLowerCase();
-				weatherVar = weather;
 				//~string.indexOf(string) is simple contains...
+				if (weather == "Partly Cloudy") {
+					return "clear";
+				}
 				if (~weather.indexOf("rain")) {
 					return "rain";
 				}
 				if (~weather.indexOf("cloud")) {
 					return "cloudy";
+				}
+				if (~weather.indexOf("snow") || ~weather.indexOf("ice")) {
+					return "snow";
+				}
+				if (~weather.indexOf("thunderstorm")) {
+					return "thunder";
 				}
 				return "clear";
 			},
@@ -98,8 +93,11 @@
 				var secColor = "#0088ff";
 				var highColor = "#000000";
 				var contColor = "#ffffff";
+				var dayType = "day";
+				var splashName = "clear-day";
 				
 				if (isDay) {
+					dayType = "day";
 					primColor = "#147ABE";
 					greyPrimColor = "#9DD1F1";
 					
@@ -107,6 +105,7 @@
 						highColor = "#FCCB15";
 					}
 				} else {
+					dayType = "night";
 					primColor = "#313C7B";
 					greyPrimColor = "#0A7FD1";
 					
@@ -114,19 +113,20 @@
 						highColor = "#C8B9B9";
 					}
 				}
+				splashName = weatherType + "-" + dayType;
 				if (weatherType == "snow" || weatherType == "cloudy") {
 					highColor = "#BEBEBE";
 				}
-			
-				var cssContent = ":root {\n";
-				cssContent += "--weather-primary-color: " + primColor + ";\n";
-				cssContent += "--weather-greyed-primary-color: " + greyPrimColor + ";\n";
-				cssContent += "--weather-secondary-color: " + secColor + ";\n";
-				cssContent += "--weather-highlight-color: " + highColor + ";\n";
-				cssContent += "--weather-contrast-color: " + contColor + ";\n";
-				cssContent += "}";
-				this.globalStyle.innerHTML = cssContent;
-				Polymer.updateStyles();
+				
+				var colorDict = {};
+				colorDict["--weather-primary-color"] = primColor;
+				colorDict["--weather-greyed-primary-color"] = greyPrimColor;
+				colorDict["--weather-secondary-color"] = secColor;
+				colorDict["--weather-highlight-color"] = highColor;
+				colorDict["--weather-contrast-color"] = contColor;
+				colorDict["--weather-splash-name"] = "\"" + splashName + "\"";
+				Polymer.updateStyles(colorDict);
+				this.fire("weather-update", {weatherType: weatherType, dayType: dayType});
 				console.log("Updated weather.");
 			}
 		});
