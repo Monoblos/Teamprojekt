@@ -1,6 +1,7 @@
 <link rel="import" href="/bower_components/polymer/polymer.html">
 <link rel="import" href="/bower_components/paper-item/paper-item.html">
 <link rel="import" href="/bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="/bower_components/app-storage/app-localstorage/app-localstorage-document.html">
 <link rel="import" href="htwg-iconset.html">
 
 <dom-module name="container-switchboard" attributes="isEdit title">
@@ -9,7 +10,6 @@
 			:host {
 				min-height: 100%;
 				padding-left: 8px;
-				padding-top: 12px;
 				padding-right: 8px;
 				position: static;
 			}
@@ -46,15 +46,12 @@
 				cursor: pointer;
 			}
 			#headline {
-				color: var(--weather-primary-color, blue);
-				width: 100%;
-				text-align: center;
-				font-weight: bold;
-				font-size: 20px;
 				border-top: solid 3px;
-				margin: 0 16px;
-				margin-top: 4px;
-				padding-top: 8px;
+				color: var(--weather-primary-color, blue);
+				font-size: 20px;
+				font-weight: bold;
+				margin: -16px 16px 0;
+				padding-top: 6px;
 				text-align: center;
 				width: calc(100% - 32px);
 			}
@@ -63,6 +60,7 @@
 				z-index: -1;
 			}
 		</style>
+		<app-localstorage-document key="customLinks" data="{{customElements}}"></app-localstorage-document>
 		<div id="headline">
 			Vermittlung
 		</div>
@@ -117,13 +115,17 @@
 				}
 			},
 			ready: function() {
+				var storage = this.querySelector("app-localstorage-document");
+				if (storage) {
+					storage.initializeStoredValue();
+					console.log("Switchboard inizialized storage.")
+				}
 				for (var option in this.options) {
 					console.log("Got parameter " + option + " with value: " + this.options[option]);
 				}
 				
 				this.displayedElements = this.getDisplayedElements();
 				this.undisplayedElements = this.getUndsiplayedElements();
-				this.customElements = this.getCustomElements();
 				console.log("Switchboard loaded.")
 			},
 			getDisplayedElements: function() {
@@ -143,10 +145,9 @@
 				res.push({name: "Wohnungen", link: "#", index: "WHN"});
 				return res;
 			},
-			getCustomElements: function() {
-				var res = []
-				res.push({name: "KD Bewerbung", link: "/bewerbung/KD", index: "bewKD"});
-				return res;
+			fillCustomElements: function() {
+				this.push("customElements", {name: "KD Bewerbung", link: "/bewerbung/KD", index: "bewKD"});
+				this.push("customElements", {name: "AIN Bewerbung", link: "/bewerbung/AIN", index: "bewAIN"});
 			},
 			updateIndex: function(list) {
 				for (var i = 0; i < list.length; i++) {
