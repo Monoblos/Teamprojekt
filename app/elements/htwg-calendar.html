@@ -1,16 +1,22 @@
 <link rel="import" href="/bower_components/polymer/polymer.html">
 <link rel="import" href="/app/elements/container-calendar.html">
 <link rel="import" href="/app/elements/container-subscribe.html">
+<link rel="import" href="/app/elements/container-calendar-add.html">
 
 <!-- Example: <template-element attr-a="not foo"><template-element> -->
 
 <dom-module name="htwg-calendar" attributes="arg options">
     <template>
-        <template is="dom-if" if="[[isSubscribe]]">
-            <container-subscribe></container-subscribe>
-        </template>
         <template is="dom-if" if="[[isCalendar]]">
             <container-calendar></container-calendar>
+        </template>
+
+        <template is="dom-if" if="[[isAdd]]">
+            <container-calendar-add></container-calendar-add>
+        </template>
+
+        <template is="dom-if" if="[[isSubscribe]]">
+            <container-subscribe></container-subscribe>
         </template>
     </template>
 
@@ -34,10 +40,13 @@
                 isSubscribe: {
                     type: Boolean,
                     computed: 'comp(arg, "subscribe")'
+                },
+                isAdd: {
+                    type: Boolean,
+                    computed: 'comp(arg, "add")'
                 }
             },
             comp: function(arg, url){
-                console.log(arg == url);
                 return arg == url;
             }
         });

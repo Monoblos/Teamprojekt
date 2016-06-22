@@ -26,6 +26,16 @@
             justify-content: flex-end;
         }
 
+        #wrapper > header > div {
+            display: flex;
+            justify-content: space-between;
+            width: 128px;
+        }
+
+        #wrapper > header > div > a {
+            color: var(--weather-primary-color);
+        }
+
         iron-icon {
             margin: 4px;
         }
@@ -49,6 +59,7 @@
 
         h1 {
             width: 100%;
+            color: var(--weather-highlight-color);
         }
     </style>
 
@@ -56,9 +67,11 @@
         <htwg-navbar></htwg-navbar>
         <div id="wrapper">
         <header>
-            <iron-icon icon="htwg:plus"></iron-icon>
-            <iron-icon icon="htwg:subscribe"></iron-icon>
-            <iron-icon icon="htwg:doctorate-plus"></iron-icon>
+            <div>
+                <a href="/calendar/add"><iron-icon icon="htwg:plus"></iron-icon></a>
+                <a href="/calendar/subscribe"><iron-icon icon="htwg:subscribe"></iron-icon></a>
+                <a href="/course"><iron-icon icon="htwg:doctorate-plus"></iron-icon></a>
+            </div>
         </header>
         <app-localstorage-document id="storage" key="subscriptions" data="{{subscriptions}}"></app-localstorage-document>
         <h1>Termine abonnieren</h1>
