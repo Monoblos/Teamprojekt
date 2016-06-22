@@ -79,10 +79,10 @@
 				if (~weather.indexOf("cloud")) {
 					return "cloudy";
 				}
-				if (weather.contains("snow") || weather.contains("ice")) {
+				if (~weather.indexOf("snow") || ~weather.indexOf("ice")) {
 					return "snow";
 				}
-				if (weather.contains("thunderstorm")) {
+				if (~weather.indexOf("thunderstorm")) {
 					return "thunder";
 				}
 				return "clear";
