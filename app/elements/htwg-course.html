@@ -2,35 +2,50 @@
 <link rel="import" href="/bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="/bower_components/app-storage/app-localstorage/app-localstorage-document.html">
 <link rel="import" href="/app/elements/htwg-iconset.html">
+<link rel="import" href="/app/elements/htwg-navbar.html">
 <link rel="import" href="/bower_components/iron-ajax/iron-ajax.html">
 
 <dom-module name="htwg-course">
     <style>
 
         select {
-            border: 4px solid #009CDD;
+            border: 3px solid var(--weather-primary-color);
             background: white url(../svg/pfeil.svg) no-repeat right;
             font-size: 13pt;
             font-weight: bold;
-            width: 450px;
+            width: 100%;
             text-indent: 0.01px;
             text-overflow: "";
-            color: #009CDD;
+            color: var(--weather-primary-color);
             padding: 5px;
+            outline: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
         }
 
         :host > header {
             height: 35px;
-            width: calc(100vw - 40px);
-            padding: 0px 20px;
+            width: calc(100vw - 32px);
+            padding: 0px 16px;
             display: flex;
             align-items: center;
             justify-content: flex-end;
         }
 
+        :host > header > div {
+            display: flex;
+            justify-content: space-between;
+            width: 128px;
+        }
+
+        :host > header > div > a {
+            color: var(--weather-primary-color);
+        }
+
         h1 {
-            color: #f9af03;
-            padding-left: 10px;
+            color: var(--weather-highlight-color);
+            width: 100%;
         }
 
         .desc {
@@ -41,33 +56,40 @@
             -webkit-border-radius: 8;
             -moz-border-radius: 8;
             border-radius: 8px;
-            font-family: Arial;
-            color: #ffffff;
+            color: var(--weather-contrast-color);
             font-size: 20px;
-            background: #f9af03;
+            background-color: var(--weather-highlight-color);
             padding: 10px 40px 10px 40px;
             text-decoration: none;
             box-shadow: none;
-            margin-left: 138px;
+            margin: auto;
         }
 
         .btn:hover {
             background: #946c16;
             text-decoration: none;
         }
-        .icon{
-            color: #009CDD;
-        }
         .main_frame{
-            margin-left: 16px;
+            width: calc(100% - 32px);
+            padding: 0px 16px 16px;
+            color: var(--weather-primary-color)
+        }
+
+        .main_frame > p:last-child {
+            display:flex;
+            width: 100%;
+            justify-content: center;
         }
     </style>
 
     <template>
+        <htwg-navbar></htwg-navbar>
         <header>
-            <iron-icon class="icon" on-tap="navigate_add" icon="htwg:plus"></iron-icon>
-            <iron-icon class="icon" on-tap="navigate_subscribe" icon="htwg:subscribe"></iron-icon>
-            <iron-icon class="icon" on-tap="navigate_self"icon="htwg:doctorate-plus"></iron-icon>
+            <div>
+                <a href="/calendar/add"><iron-icon icon="htwg:plus"></iron-icon></a>
+                <a href="/calendar/subscribe"><iron-icon icon="htwg:subscribe"></iron-icon></a>
+                <a href="/course"><iron-icon icon="htwg:doctorate-plus"></iron-icon></a>
+            </div>
         </header>
 
         <div class="main_frame">
@@ -116,10 +138,6 @@
                     value: {faculty: null, path: null}
                 }
             },
-            ready: function(){
-
-            },
-
 
             content: function () {
                 var faculties = this.faculties;
@@ -233,38 +251,7 @@
             setDesc: function(e,d){
                 this.descriptions = d.response;
                 console.log(d.response);
-            },
-
-            navigate_add:function(){
-                this.navigate('/calendar')
-            },
-
-            navigate_subscribe:function(){
-                this.navigate('/calendar')
-            },
-            navigate_self:function(){
-                this.navigate('/course')
-            },
-
-
-            navigate: function(target) {
-
-            var appLocation = document.querySelector("app-location");
-
-            if (appLocation == null) {
-
-                window.location.href = target;
-
-            } else {
-
-                appLocation.set("route.path", target);
-
             }
-
-        }
-
-
-
         });
     </script>
 </dom-module>
