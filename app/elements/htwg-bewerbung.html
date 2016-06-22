@@ -1,5 +1,6 @@
 <link rel="import" href="/bower_components/polymer/polymer.html">
 <link rel="import" href="/bower_components/paper-radio-button/paper-radio-button.html">
+<link rel="import" href="/app/elements/htwg-navbar.html">
 
 
 
@@ -10,7 +11,11 @@
 
 
           paper-radio-button.radio {
-            color: var(--weather-primary-color);
+            --paper-radio-button-checked-color: var(--weather-primary-color);
+            --paper-radio-button-checked-ink-color: var(--weather-primary-color);
+            --paper-radio-button-unchecked-color: var(--weather-primary-color);
+            --paper-radio-button-unchecked-ink-color: var(--weather-primary-color);
+            --paper-radio-button-label-color: var(--weather-primary-color);
           }
 
         .bewerbungContainer {
@@ -19,17 +24,25 @@
 
 
         .flex-container {
-            display: flex;
-            margin-left: 50%;
-            margin-right: 50%;
+            display: block;
+            margin-left:    45%;
+            margin-right:   55%;
             padding: 5px;
         }
 
         hr {
-            width: 200px; 
+            width: 300px; 
             height: 1px;
-            margin-left: 50%;
-            margin-right: 50%;
+            margin-left: auto;
+            margin-right:  auto;
+            color: var(--weather-primary-color);
+            background: var(--weather-primary-color);
+
+        }
+
+        hr #cutline {
+            width: 200px; 
+            height: 0,5px;
             color: var(--weather-primary-color);
             background: var(--weather-primary-color);
 
@@ -37,20 +50,21 @@
 
         a {
             display:block;
-            width:100px;
+            width:150px;
             height: 100%;
-            margin-right: 50%;
-            margin-left: 50%;
+            margin-right: 55%;
+            margin-left:  45%;
             padding-top: 20px;
             color: var(--weather-primary-color);
         }
+
 
         span {
             display:block;
             width:100px;
             height: 100%;
-            margin-right: 50%;
-            margin-left: 50%;
+            margin-right: 55%;
+            margin-left: 45%;
             padding-top: 20px;
             color: var(--weather-primary-color);
             font-family:'Arial';
@@ -60,6 +74,7 @@
 
        </style>
 
+        <htwg-navbar></htwg-navbar>
 
 
             <div class="bewerbungContainer">          
@@ -70,10 +85,8 @@
 
 
                 <div class="flex-container">
-                   <paper-radio-group>
                         <paper-radio-button id="bachelorRadio" on-tap="showUp" class="radio">Bachelor</paper-radio-button>
                         <paper-radio-button id="masterRadio"   on-tap="showUp"    class="radio">Master</paper-radio-button>
-                    </paper-radio-group>
                 </div>
                 <hr>
 
@@ -93,6 +106,7 @@
 
                 <template is="dom-repeat" items="{{studiengang}}">
                     <a href="{{item.url}}">{{item.name}}</a>
+                    <hr id="cutline">
                 </template>
     
 
@@ -117,18 +131,18 @@
                 },
             },
             ready: function() {
-                
+                //window.location.href = "/home"
             },
             push_Arch_Gest_Bachelor: function() {
                 this.push("studiengang", {
                     name: 'Bachelor Architektur',
                     fak: 'Architektur_Gestaltung',
-                    url: '/home'
+                    url: '/bewerbung-kdb'
                 });
                 this.push("studiengang", {
                     name: 'Bachelor Kommunikationsdesign',
                     fak: 'Architektur_Gestaltung',
-                    url: '/home'
+                    url: '/bewerbung-kdb'
                 });
             },
             push_Arch_Gest_Master: function() {
