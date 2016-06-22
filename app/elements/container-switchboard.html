@@ -115,11 +115,7 @@
 				}
 			},
 			ready: function() {
-				var storage = this.querySelector("app-localstorage-document");
-				if (storage) {
-					storage.initializeStoredValue();
-					console.log("Switchboard inizialized storage.")
-				}
+				this.querySelector("app-localstorage-document").initializeStoredValue();
 				for (var option in this.options) {
 					console.log("Got parameter " + option + " with value: " + this.options[option]);
 				}

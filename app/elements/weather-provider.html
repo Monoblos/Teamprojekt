@@ -67,8 +67,12 @@
 				return false;
 			},
 			compWeatherType: function(weather) {
+				console.log("Weather type resived was: " + weather);
 				weather = weather.toLowerCase();
 				//~string.indexOf(string) is simple contains...
+				if (weather == "Partly Cloudy") {
+					return "clear";
+				}
 				if (~weather.indexOf("rain")) {
 					return "rain";
 				}
