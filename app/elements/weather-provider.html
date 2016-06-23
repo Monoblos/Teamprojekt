@@ -9,7 +9,8 @@
 			url="http://api.wunderground.com/api/34e7943c5d7c759c/conditions/astronomy/q/[[location]].json"
 			handle-as="json"
 			debounce-duration="300"
-			last-response="{{data}}"></iron-ajax>
+			last-response="{{data}}"
+			on-error="weatherUpdateFailed"></iron-ajax>
 	</template>
 
 	<script>
@@ -18,7 +19,7 @@
 			listeners: {
 			},
 			observers: [
-				'setStyles(weather, isDay, refreshStyles)'
+				'setStyles(weather, isDay)'
 			],
 			properties: {
 				location: {
@@ -35,10 +36,6 @@
 				},
 				data: {
 					type: Object
-				},
-				refreshStyles: {
-					type: Number,
-					value: 0
 				}
 			},
 			ready: function() {
@@ -47,6 +44,7 @@
 				weather-ajax.generateRequest();
 			},
 			compIsDay: function(weather) {
+				if (!weather) { return; }
 				var sunrise = weather.sun_phase.sunrise;
 				var sunrise_hour = Number(sunrise.hour);
 				var sunrise_minute = Number(sunrise.minute);
@@ -67,6 +65,7 @@
 				return false;
 			},
 			compWeatherType: function(weather) {
+				if (!weather) { return; }
 				console.log("Weather type resived was: " + weather);
 				weather = weather.toLowerCase();
 				//~string.indexOf(string) is simple contains...
@@ -87,6 +86,10 @@
 				}
 				return "clear";
 			},
+			weatherUpdateFailed: function() {
+				console.log("Weather error");
+				this.setStyles("clear", true);
+			},
 			setStyles: function(weatherType, isDay) {
 				var primColor = "#000000";
 				var greyPrimColor = "#000000";
@@ -94,7 +97,6 @@
 				var highColor = "#000000";
 				var contColor = "#ffffff";
 				var dayType = "day";
-				var splashName = "clear-day";
 				
 				if (isDay) {
 					dayType = "day";
@@ -113,7 +115,6 @@
 						highColor = "#C8B9B9";
 					}
 				}
-				splashName = weatherType + "-" + dayType;
 				if (weatherType == "snow" || weatherType == "cloudy") {
 					highColor = "#BEBEBE";
 				}
@@ -124,7 +125,6 @@
 				colorDict["--weather-secondary-color"] = secColor;
 				colorDict["--weather-highlight-color"] = highColor;
 				colorDict["--weather-contrast-color"] = contColor;
-				colorDict["--weather-splash-name"] = "\"" + splashName + "\"";
 				Polymer.updateStyles(colorDict);
 				this.fire("weather-update", {weatherType: weatherType, dayType: dayType});
 				console.log("Updated weather.");
