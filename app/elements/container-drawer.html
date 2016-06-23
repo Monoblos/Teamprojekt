@@ -2,7 +2,7 @@
 <link rel="import" href="/bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="htwg-iconset.html">
 
-<dom-module name="container-drawer" attributes="menuLink titleVar imgUrl">
+<dom-module name="container-drawer" attributes="menuLink titleVar logoName bgrName resourcePath">
 	<template id="htwg-image">		
 		<style>
 			.hidden {
@@ -10,9 +10,9 @@
 			}
 				
 			.drawer {
-				top: 80vh;
+				top: 0;
 				position: relative;
-				padding: 19vh 5px 5px;
+				padding: 14vh 5px 5px;
 				background-color: var(--weather-primary-color, blue);
 				color: var(--weather-contrast-color, white);
 			}
@@ -34,10 +34,11 @@
 				margin-right: auto;
 			}
 			.topelement {
-				position: fixed;
-				height: 80vh;
+				position: relative;
+				height: 85vh;
 				left: 0;
 				right: 0;
+				top: 0;
 				overflow: hidden;
 			}
 			.centered {
@@ -79,10 +80,11 @@
 				margin: 4px;
 			}
 			object {
-				height: 100%;
-				width: calc(100% + 2000px);
-				left: -1000px;
-				position: relative;
+				min-height: 100%;
+				max-width: 100%;
+				left: 0;
+				bottom: 0;
+				position: absolute;
 			}
 		</style>
 	
@@ -102,9 +104,7 @@
 			<iron-icon icon="htwg:toolbox"></iron-icon>
 		</a>
 		<div class="topelement">
-			<object data="/public/images/[[imgUrl]].svg" type="image/svg+xml">
-			<!-- Für Browser ohne SVG-Unterstützung -->
-				<img src="/public/images/[[imgUrl]].png" width="600" height="400" alt="Alternatives PNG-Bild">
+			<object data="[[resourcePath]][[bgrName]].png" type="image/png">
 			</object>
 		</div>
 		<div class="drawer">
@@ -133,6 +133,8 @@
 				}
 			},
 			ready: function() {
+				console.log(this.resourcePath + this.bgrName + ".png");
+			
 				this.async(function() {
 					var colors = ["#0088ff", "#0044EE", "#002288", "#0033AA", "#0000FF"];
 					for(i = 0; i < 3; i++) {

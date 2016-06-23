@@ -14,7 +14,7 @@
 				bottom: 0;
 			}
 		</style>
-		<container-drawer menu-link="/switchboard" title-var="HTWG-Konstanz" img-url="{{imgUrl}}">
+		<container-drawer menu-link="/switchboard" title-var="HTWG-Konstanz" logo-name="{{logoName}}" bgr-name="{{bgrName}}" resource-path="/public/images/">
 			<div class="drawer">					
 				<container-news headline="Selbstverständnis">
 					Die Hochschule Konstanz Technik, Wirtschaft und Gestaltung (HTWG) ist eine moderne Hochschule mit
@@ -56,12 +56,39 @@
 				imgUrl: {
 					type: String,
 					computed: "combine(options.weatherType, options.dayType)"
+				},
+				logoName: {
+					type: String,
+					computed: "compLogoName(options.weatherType, options.dayType)"
+				},
+				bgrName: {
+					type: String,
+					computed: "compBgrName(options.weatherType, options.dayType)"
 				}
 			},
 			ready: function() {
 			},
 			combine: function(a, b) {
 				return a + "-" + b;
+			},
+			compLogoName: function(a, b) {
+				var res = "logo_";
+				if (a == "clear") {
+					res += a + "-" + b
+				} else {
+					res += a;
+				}
+				console.log("Logo name: " + res);
+				return res;
+			},
+			compBgrName: function(a, b) {
+				var res = "back_";
+				res += b;
+				if (a == "clear" && b == "night") {
+					res += "-" + a;
+				}
+				console.log("Bgr name: " + res);
+				return res;
 			}
 		});
 	</script>
