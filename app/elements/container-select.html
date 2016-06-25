@@ -9,92 +9,77 @@
 <link rel="import" href="/bower_components/paper-item/paper-item.html">
 
 <dom-module name="container-select" attributes="url title">
-	<style>
-       select {
+    <style>
+        paper-dropdown-menu {
             border: 3px solid var(--weather-primary-color);
-
-            background: white url(../svg/pfeil.svg) no-repeat right; 
-            font-size: 13pt;
-            font-weight: bold;
-            width: 100%;
-            text-indent: 0.01px;
-            text-overflow: "";
-            color: var(--weather-primary-color);
-            padding: 5px;
-            outline: none;
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            appearance: none;
-        } 
-        
-    /*    paper-dropdown-menu.custom {
-            border:3px solid var(--weather-primary-color);
             --paper-input-container-label: {
             };
             --paper-input-container-input: {
-            color: var(--weather-primary-color);
+                color: var(--weather-primary-color);
 
             }
-    
+
         }
-        
-    }
     </style>
 
-   	<template>
-    <!--
-    <paper-dropdown-menu id="menu" class="custom" label="[[title]]" no-label-float>
-            <paper-listbox id="select"class="dropdown-content">
-                    <template is="dom-repeat" items="[[items]]" as="item">
-                        <paper-item value="[[item.name]]">[[item.value]]</paper-item>
-                    </template>
+    <template>
+        <paper-dropdown-menu id="menu" label="[[title]]" no-label-float>
+            <paper-listbox id="select" class="dropdown-content" on-iron-select="valueSelected">
+                <template is="dom-repeat" items="[[items]]" as="item">
+                    <paper-item value="[[item.value]]">[[item.name]]</paper-item>
+                </template>
             </paper-listbox>
         </paper-dropdown-menu>
-    -->
-		<select id="select" on-change="valueSelected">
-			<option>[[title]]</option>
-        	<template is="dom-repeat" items="[[items]]" as="item">
-    			<option value="[[item.name]]">[[item.value]]</option>
-			</template>
-		</select>
- 		<iron-ajax auto url="[[url]]" handle-as="json" on-response="setContent"></iron-ajax>
- 	</template>
+        <iron-ajax auto url="[[url]]" handle-as="json" on-response="setContent"></iron-ajax>
+    </template>
 
- 	<script type="text/javascript">
- 	 Polymer({
-        is: "container-select",
-        properties: {
-        	url: String,
-        	title: String,
-           	items: Array,
-           	value: String
-        },
-      listeners: {
-                "iron-select": "valueSelected",
+    <script type="text/javascript">
+        Polymer({
+            is: "container-select",
+            properties: {
+                url: String,
+                title: String,
+                items: Array,
+                value: String,
+                defItem: Array
             },
-        ready: function() {},
 
- 		setContent: function(e,d){
- 			this.data = d.response;
-			this.setItems(this.data);
- 		},
- 		setItems: function(items) {
-            console.log(items);
- 			this.items = this.toArray(items);
- 		},
- 		valueSelected: function() {
- 			this.value= this.$.select.selectedItem.value;
-            console.log(this.value);
-            this.fire('valueSelected');
- 		},
- 		toArray: function(obj){
- 			return Object.keys(obj).map(function(key) {
-                return {
-                    name: key,
-                    value: obj[key]
+            setContent: function (e, d) {
+                this.data = d.response;
+                this.setItems(this.data);
+            },
+            setItems: function (items) {
+                console.log(items);
+
+                if(!this.defItem) {
+                    this.items = this.toArray(items);
                 }
-            });
-        },
-    });
+            },
+            setDefault: function (defItem) {
+                console.log(defItem);
+                this.defItem = defItem;
+                this.items = [this.defItem];
 
- 	</script>
+                // wait 100ms
+                var select = this.$.select;
+                setTimeout(function () {
+                    select.selected = 0;
+                }, 100);
+            },
+            valueSelected: function () {
+                this.value = this.$.select.selectedItem.value;
+                console.log(this.value);
+                this.fire('value-selected');
+            },
+            toArray: function (obj) {
+                return Object.keys(obj).map(function (key) {
+                    return {
+                        value: key,
+                        name: obj[key]
+                    }
+                });
+            }
+        });
+
+    </script>
+</dom-module>
