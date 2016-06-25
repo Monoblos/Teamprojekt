@@ -13,6 +13,7 @@
         paper-dropdown-menu {
             border: 3px solid var(--weather-primary-color);
             padding: 0 5px;
+            width: calc(100% - 20px);
 
             --paper-input-container-label: {
                 font-size: 13pt;
@@ -32,10 +33,23 @@
                 color: var(--weather-primary-color);
             };
         }
+
+        paper-listbox {
+            color: var(--weather-primary-color);
+            border: 3px solid var(--weather-primary-color);
+        }
+        /*iron-dropdown.paper-menu-button {
+            margin-left: -8px;
+            margin-top: -3px;
+            right: 20px;
+        }
+        div.dropdown-content.paper-menu-button {
+            max-width: 100% !important;
+        }*/
     </style>
 
     <template>
-        <paper-dropdown-menu id="menu" label="[[title]]" no-label-float>
+        <paper-dropdown-menu id="menu" label="[[title]]" no-label-float vertical-align="top" horizontal-align="left">
             <paper-listbox id="select" class="dropdown-content" on-iron-select="valueSelected">
                 <template is="dom-repeat" items="[[items]]" as="item">
                     <paper-item value="[[item.value]]">[[item.name]]</paper-item>
@@ -54,6 +68,23 @@
                 items: Array,
                 value: String,
                 defItem: Array
+            },
+            ready: function () {
+                setTimeout(function () {
+                    var nodes = document.querySelectorAll("iron-dropdown.paper-menu-button");
+                    console.log(nodes);
+                    for (var i = 0; i < nodes.length; ++i) {
+                        nodes[i].style.marginLeft = "-8px";
+                        nodes[i].style.marginTop = "-8px";
+                        nodes[i].style.right = "20px";
+                    }
+
+                    var nodes = document.querySelectorAll("div.dropdown-content.paper-menu-button");
+                    console.log(nodes);
+                    for (var i = 0; i < nodes.length; ++i) {
+                        nodes[i].style.maxWidth = "100% !important";
+                    }
+                }, 100);
             },
 
             setContent: function (e, d) {

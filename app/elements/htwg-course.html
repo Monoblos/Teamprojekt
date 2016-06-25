@@ -5,6 +5,8 @@
 <link rel="import" href="/app/elements/htwg-navbar.html">
 <link rel="import" href="/app/elements/container-select.html">
 <link rel="import" href="/bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="/bower_components/paper-button/paper-button.html">
+<link rel="import" href="/bower_components/paper-ripple/paper-ripple.html">
 
 <dom-module name="htwg-course">
     <style>
@@ -38,26 +40,14 @@
         }
 
         .btn {
-            -webkit-border-radius: 8;
-            -moz-border-radius: 8;
-            border-radius: 8px;
             color: var(--weather-contrast-color);
-            font-size: 20px;
             background-color: var(--weather-highlight-color);
-            padding: 10px 40px 10px 40px;
-            text-decoration: none;
-            box-shadow: none;
-            margin: auto;
         }
 
         iron-icon {
             margin: 4px;
         }
 
-        .btn:hover {
-            background: #946c16;
-            text-decoration: none;
-        }
         .main_frame{
             width: calc(100% - 32px);
             padding: 0px 16px 16px;
@@ -68,6 +58,10 @@
             display:flex;
             width: 100%;
             justify-content: center;
+        }
+
+        .enroll {
+            left: calc(50% - 40px);
         }
     </style>
 
@@ -90,7 +84,8 @@
 
             <div id="descriptionContainer" style="display: none;">
                 <p class="desc" id="description"></p>
-                <button id="enroll" class="btn" on-tap="enrollCourse">Anmelden</button>
+                <paper-button id="enroll" class="enroll" on-tap="enrollCourse" raised>Anmelden<paper-ripple center></paper-ripple></paper-button>
+                <paper-button id="denroll" class="enroll" on-tap="enrollCourse" raised>Abmelden<paper-ripple center></paper-ripple></paper-button>
             </div>
         </div>
 
@@ -142,21 +137,38 @@
                 descriptionContainer.style.display = "block";
                 description.innerHTML = this.descriptions[studyPath.value][course.value];
 
+                var enroll = this.$.enroll;
+                var denroll = this.$.denroll;
                 var index = this.enrolledCourses.indexOf(course.value);
-                enroll.innerHTML = (index == -1) ? "Anmelden" : "Abmelden";
+                /*enroll.innerHTML = (index == -1) ?
+                        'Anmelden<paper-ripple center></paper-ripple>' :
+                        'Abmelden<paper-ripple center></paper-ripple>';*/
+
+                if(index > -1) {
+                    enroll.style.display = "none";
+                    denroll.style.display = "inline";
+                } else {
+                    enroll.style.display = "inline";
+                    denroll.style.display = "none";
+                }
             },
 
             enrollCourse: function () {
                 var course = this.$.course;
                 var enroll = this.$.enroll;
+                var denroll = this.$.denroll;
                 var index = this.enrolledCourses.indexOf(course.value);
 
                 if(index == -1) {
                     this.push('enrolledCourses', course.value);
-                    enroll.innerHTML = "Abmelden";
+                    enroll.style.display = "none";
+                    denroll.style.display = "inline";
+                    //enroll.innerHTML = 'Abmelden<paper-ripple center></paper-ripple>';
                 } else {
                     this.splice('enrolledCourses', index, 1);
-                    enroll.innerHTML = "Anmelden";
+                    enroll.style.display = "inline";
+                    denroll.style.display = "none";
+                    //enroll.innerHTML = 'Anmelden<paper-ripple center></paper-ripple>';
                 }
 
                 console.log(this.enrolledCourses);
