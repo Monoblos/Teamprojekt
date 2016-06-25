@@ -2,7 +2,7 @@
 <link rel="import" href="/bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="/app/elements/htwg-iconset.html">
 
-<dom-module name="htwg-navbar">
+<dom-module name="htwg-navbar" attributes="leftIcon leftLink">
     <style>
         :host{
             width: 100vw;
@@ -27,11 +27,13 @@
             justify-content: space-between;
         }
 
-        .navbar > div > p {
+        .navbar > div > a {
             border: 2px solid var(--weather-primary-color);
             padding: 1px 5px;
+			text-decoration: inherit;
             font-weight: bold;
             display: inline;
+			color: inherit;
         }
 
         .navbar > a {
@@ -74,8 +76,8 @@
     <template>
         <div class="fixed">
             <nav class="navbar">
-                <a href="/switchboard"><iron-icon icon="htwg:compass"></iron-icon></a>
-                <div><p>HTWG Konstanz</p></div>
+                <a href="[[leftLink]]"><iron-icon icon="[[leftIcon]]"></iron-icon></a>
+                <div><a href="/">HTWG Konstanz</a></div>
                 <iron-icon id="default" icon="htwg:toolbox" on-tap="toggle"></iron-icon>
                 <div id="extended" class="collapsed" on-tap="toggle">
                     <iron-icon icon="htwg:magnifier" on-tap="toggle"></iron-icon>
@@ -94,6 +96,16 @@
     <script>
         Polymer({
             is: "htwg-navbar",
+			properties: {
+				leftIcon: {
+					type: String,
+					value: "htwg:compass"
+				},
+				leftLink: {
+					type: String,
+					value: "/switchboard"
+				}
+			},
             toggle: function(event){
                 if(event.target._iconName == 'magnifier') {
                     this.$.default.setAttribute('icon', 'htwg:close');
