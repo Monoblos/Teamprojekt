@@ -84,8 +84,10 @@
 
             <div id="descriptionContainer" style="display: none;">
                 <p class="desc" id="description"></p>
-                <paper-button id="enroll" class="enroll" on-tap="enrollCourse" raised>Anmelden<paper-ripple center></paper-ripple></paper-button>
-                <paper-button id="denroll" class="enroll" on-tap="enrollCourse" raised>Abmelden<paper-ripple center></paper-ripple></paper-button>
+                <paper-button id="enroll" class="enroll" on-tap="enrollCourse" raised>
+                    <span class="title">Anmelden</span>
+                    <paper-ripple center></paper-ripple>
+                </paper-button>
             </div>
         </div>
 
@@ -132,43 +134,26 @@
                 var course = this.$.course;
                 var description = this.$.description;
                 var descriptionContainer = this.$.descriptionContainer;
-                var enroll = this.$.enroll;
 
                 descriptionContainer.style.display = "block";
                 description.innerHTML = this.descriptions[studyPath.value][course.value];
 
-                var enroll = this.$.enroll;
-                var denroll = this.$.denroll;
                 var index = this.enrolledCourses.indexOf(course.value);
-                /*enroll.innerHTML = (index == -1) ?
-                        'Anmelden<paper-ripple center></paper-ripple>' :
-                        'Abmelden<paper-ripple center></paper-ripple>';*/
-
-                if(index > -1) {
-                    enroll.style.display = "none";
-                    denroll.style.display = "inline";
-                } else {
-                    enroll.style.display = "inline";
-                    denroll.style.display = "none";
-                }
+                var enrollTitle = this.$$('#enroll .title');
+                enrollTitle.innerHTML = (index == -1) ? 'Anmelden' : 'Abmelden';
             },
 
             enrollCourse: function () {
                 var course = this.$.course;
-                var enroll = this.$.enroll;
-                var denroll = this.$.denroll;
+                var enrollTitle = this.$$('#enroll .title');
                 var index = this.enrolledCourses.indexOf(course.value);
 
                 if(index == -1) {
                     this.push('enrolledCourses', course.value);
-                    enroll.style.display = "none";
-                    denroll.style.display = "inline";
-                    //enroll.innerHTML = 'Abmelden<paper-ripple center></paper-ripple>';
+                    enrollTitle.innerHTML = 'Abmelden';
                 } else {
                     this.splice('enrolledCourses', index, 1);
-                    enroll.style.display = "inline";
-                    denroll.style.display = "none";
-                    //enroll.innerHTML = 'Anmelden<paper-ripple center></paper-ripple>';
+                    enrollTitle.innerHTML = 'Anmelden';
                 }
 
                 console.log(this.enrolledCourses);
