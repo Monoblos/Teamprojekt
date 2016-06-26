@@ -1,5 +1,6 @@
 <link rel="import" href="/bower_components/polymer/polymer.html">
 <link rel="import" href="/bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="/bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="/bower_components/app-storage/app-localstorage/app-localstorage-document.html">
 <link rel="import" href="/app/elements/htwg-navbar.html">
 <link rel="import" href="/app/elements/htwg-iconset.html">
@@ -147,52 +148,53 @@
                 </div>
             </header>
             <app-localstorage-document id="storage" key="subscriptions" data="{{subscriptions}}"></app-localstorage-document>
-                <template is="dom-if" if="{{selectedDayFeed.length}}">
-                    <section name="entries">
-                        <template is="dom-repeat" items="{{selectedDayFeed}}">
-                            <div class$="{{getFeedClass(item, 'entry')}}">
-                                <iron-icon icon="htwg:{{item.type}}"></iron-icon>
-                                <div>
-                                    <template is="dom-if" if="{{item.author}}">
-                                        <p>{{item.author}}:</p>
-                                    </template>
-                                    <template is="dom-if" if="{{hasDetails(item)}}">
-                                        <p class="bold">{{item.time}} | {{item.room}}</p>
-                                    </template>
-                                    <template is="dom-if" if="{{item.text}}">
-                                        <p class="bold">{{item.text}}</p>
-                                    </template>
-                                </div>
+            <iron-ajax id="appointments" auto handle-as="json" on-response="setAppointments" on-error="setAppointments"></iron-ajax>
+            <template is="dom-if" if="{{selectedDayFeed.length}}">
+                <section name="entries">
+                    <template is="dom-repeat" items="{{selectedDayFeed}}">
+                        <div class$="{{getFeedClass(item, 'entry')}}">
+                            <iron-icon icon="htwg:{{item.type}}"></iron-icon>
+                            <div>
+                                <template is="dom-if" if="{{item.author}}">
+                                    <p>{{item.author}}:</p>
+                                </template>
+                                <template is="dom-if" if="{{hasDetails(item)}}">
+                                    <p class="bold">{{item.time}} | {{item.room}}</p>
+                                </template>
+                                <template is="dom-if" if="{{item.text}}">
+                                    <p class="bold">{{item.text}}</p>
+                                </template>
                             </div>
-                        </template>
-                        <hr />
-                    </section>
-                </template>
-                <section id="calendar">
-                    <header>
-                        <iron-icon icon="htwg:arrow-left" on-tap="changeMonth"></iron-icon>
-                        <div><p>{{calendar.month.name}} {{calendar.year}}</p></div>
-                        <iron-icon icon="htwg:arrow-right" on-tap="changeMonth"></iron-icon>
-                    </header>
-                    <section id="days">
-                        <template is="dom-repeat" items="{{calendar.days}}">
-                            <div>{{item}}</div>
-                        </template>
-                    </section>
-                    <template is="dom-if" if="{{calendar.max_day}}">
-                        <section id="rows">
-                            <template is="dom-repeat" items="{{createArray(calendar.offset)}}">
-                                <div name="spacer"></div>
-                            </template>
-                            <template is="dom-repeat" items="{{createArray(calendar.max_day)}}">
-                                <div class$="{{getDayClass(calendar.month, item)}}" on-tap="selectDay"><span>{{item}}</span></div>
-                            </template>
-                            <template is="dom-repeat" items="{{createArray(calendar.postset)}}">
-                                <div name="spacer"></div>
-                            </template>
-                        </section>
+                        </div>
+                    </template>
+                    <hr />
+                </section>
+            </template>
+            <section id="calendar">
+                <header>
+                    <iron-icon icon="htwg:arrow-left" on-tap="changeMonth"></iron-icon>
+                    <div><p>{{calendar.month.name}} {{calendar.year}}</p></div>
+                    <iron-icon icon="htwg:arrow-right" on-tap="changeMonth"></iron-icon>
+                </header>
+                <section id="days">
+                    <template is="dom-repeat" items="{{calendar.days}}">
+                        <div>{{item}}</div>
                     </template>
                 </section>
+                <template is="dom-if" if="{{calendar.max_day}}">
+                    <section id="rows">
+                        <template is="dom-repeat" items="{{createArray(calendar.offset)}}">
+                            <div name="spacer"></div>
+                        </template>
+                        <template is="dom-repeat" items="{{createArray(calendar.max_day)}}">
+                            <div class$="{{getDayClass(calendar.month, item)}}" on-tap="selectDay"><span>{{item}}</span></div>
+                        </template>
+                        <template is="dom-repeat" items="{{createArray(calendar.postset)}}">
+                            <div name="spacer"></div>
+                        </template>
+                    </section>
+                </template>
+            </section>
         </div>
     </template>
 
@@ -233,15 +235,17 @@
                 subscriptions : {
                     type: Object,
                     value: {}
+                },
+                appointments : {
+                    type: Object,
+                    value: {}
                 }
             },
             ready: function(){
                 this.date = new Date();
-                this.appointments = this.getAppointments(''+this.date.getFullYear(), ('0' + (1+this.date.getMonth())).slice(-2));
                 this.selected = this.date.getDate();
-                this.renderCalendar(this.date);
+                this.getAppointments();
                 this.$.storage.initializeStoredValue();
-                //this.setFeed(this.date.getFullYear() + '-' + ('0' + (this.date.getMonth() + 1)).slice(-2) + '-' + ('0' + this.date.getDate()).slice(-2));
             },
             getFeedClass: function(item, defaultClass){
                 return this.subscriptions[item.type] == 2 ? defaultClass + ' highlight' : defaultClass;
@@ -290,15 +294,6 @@
                 }
                 return false;
             },
-            renderCalendar: function(date){
-                this.appointments = this.getAppointments(date.getFullYear(), ('0' + (1+date.getMonth())).slice(-2));
-                this.set('calendar.month', {"name": this.calendar.months[date.getMonth()].name, "key": ('0' + (1+date.getMonth())).slice(-2)});
-                this.set('calendar.max_day', this.calendar.months[date.getMonth()].max_day);
-                date.setDate(1);
-                this.set('calendar.offset', (date.getDay() + 6) % 7);
-                this.set('calendar.postset', 7 - ((this.calendar.offset + this.calendar.max_day) % 7));
-                this.set('calendar.year', date.getFullYear());
-            },
             createArray: function(size){
                 var array = [];
                 for(var i = 1; i <= size; i++){
@@ -306,16 +301,21 @@
                 }
                 return array;
             },
-            getAppointments: function(year, month){
-                var request = new XMLHttpRequest();
-                request.open('GET', '/public/data/appointments-' + year + '-' + month + '.json', false);
-                request.send(null);
-
-                if (request.status === 200) {
-                    return JSON.parse(request.responseText);
+            getAppointments: function(){
+                this.$.appointments.url = '/public/data/appointments-' + this.date.getFullYear() + '-' + ('0' + (1+this.date.getMonth())).slice(-2) + '.json';
+            },
+            setAppointments: function(event, data){
+                if(event.type != 'error'){
+                    this.appointments = data.response;
+                } else {
+                    this.appointments = {};
                 }
-
-                return {};
+                this.set('calendar.month', {"name": this.calendar.months[this.date.getMonth()].name, "key": ('0' + (1+this.date.getMonth())).slice(-2)});
+                this.set('calendar.max_day', this.calendar.months[this.date.getMonth()].max_day);
+                this.date.setDate(1);
+                this.set('calendar.offset', (this.date.getDay() + 6) % 7);
+                this.set('calendar.postset', 7 - ((this.calendar.offset + this.calendar.max_day) % 7));
+                this.set('calendar.year', this.date.getFullYear());
             },
             selectDay: function(event){
                 var el = event.target;
@@ -368,7 +368,7 @@
                     }
                     this.calendar.months[this.date.getMonth()].max_day = days;
                 }
-                this.renderCalendar(this.date);
+                this.getAppointments();
             }
         });
     </script>
