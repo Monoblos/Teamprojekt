@@ -107,6 +107,12 @@
     <script>
         Polymer({
             is: "container-subscribe",
+            properties: {
+                subscriptions: {
+                    type: Object,
+                    value: {}
+                }
+            },
             ready: function(){
                 this.$.storage.initializeStoredValue();
             },
