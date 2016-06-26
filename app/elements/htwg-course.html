@@ -3,6 +3,7 @@
 <link rel="import" href="/bower_components/app-storage/app-localstorage/app-localstorage-document.html">
 <link rel="import" href="/app/elements/htwg-iconset.html">
 <link rel="import" href="/app/elements/htwg-navbar.html">
+<link rel="import" href="/app/elements/htwg-subnavbar.html">
 <link rel="import" href="/bower_components/iron-ajax/iron-ajax.html">
 
 <dom-module name="htwg-course">
@@ -22,25 +23,6 @@
             -webkit-appearance: none;
             -moz-appearance: none;
             appearance: none;
-        }
-
-        :host > header {
-            height: 35px;
-            width: calc(100vw - 32px);
-            padding: 0px 16px;
-            display: flex;
-            align-items: center;
-            justify-content: flex-end;
-        }
-
-        :host > header > div {
-            display: flex;
-            justify-content: space-between;
-            width: 128px;
-        }
-
-        :host > header > div > a {
-            color: var(--weather-primary-color);
         }
 
         h1 {
@@ -84,15 +66,9 @@
 
     <template>
         <htwg-navbar></htwg-navbar>
-        <header>
-            <div>
-                <a href="/calendar/add"><iron-icon icon="htwg:plus"></iron-icon></a>
-                <a href="/calendar/subscribe"><iron-icon icon="htwg:subscribe"></iron-icon></a>
-                <a href="/course"><iron-icon icon="htwg:doctorate-plus"></iron-icon></a>
-            </div>
-        </header>
 
         <div class="main_frame">
+        <htwg-subnavbar></htwg-subnavbar>
         <h1>Kurs anmelden</h1>
         <p>
             <select id="faculty" on-change="facultySelected"></select>

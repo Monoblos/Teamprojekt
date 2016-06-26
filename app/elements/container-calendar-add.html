@@ -1,6 +1,7 @@
 <link rel="import" href="/bower_components/polymer/polymer.html">
 <link rel="import" href="/bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="/app/elements/htwg-navbar.html">
+<link rel="import" href="/app/elements/htwg-subnavbar.html">
 <link rel="import" href="/app/elements/htwg-iconset.html">
 
 <dom-module name="container-calendar-add">
@@ -54,13 +55,7 @@
     <template>
         <htwg-navbar></htwg-navbar>
         <div id="wrapper">
-            <header>
-                <div>
-                    <a href="/calendar/add"><iron-icon icon="htwg:plus"></iron-icon></a>
-                    <a href="/calendar/subscribe"><iron-icon icon="htwg:subscribe"></iron-icon></a>
-                    <a href="/course"><iron-icon icon="htwg:doctorate-plus"></iron-icon></a>
-                </div>
-            </header>
+            <htwg-subnavbar></htwg-subnavbar>
             <h1>Termin hinzufügen</h1>
             <input type="text" placeholder="Titel">
         </div>
