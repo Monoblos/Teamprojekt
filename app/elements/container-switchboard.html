@@ -116,9 +116,6 @@
 			},
 			ready: function() {
 				this.querySelector("app-localstorage-document").initializeStoredValue();
-				for (var option in this.options) {
-					console.log("Got parameter " + option + " with value: " + this.options[option]);
-				}
 				
 				this.displayedElements = this.getDisplayedElements();
 				this.undisplayedElements = this.getUndsiplayedElements();
