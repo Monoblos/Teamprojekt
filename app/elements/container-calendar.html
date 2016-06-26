@@ -185,7 +185,7 @@
                                 <div name="spacer"></div>
                             </template>
                             <template is="dom-repeat" items="{{createArray(calendar.max_day)}}">
-                                <div class$="{{getDayClass(item)}}" on-tap="selectDay"><span>{{item}}</span></div>
+                                <div class$="{{getDayClass(calendar.month, item)}}" on-tap="selectDay"><span>{{item}}</span></div>
                             </template>
                             <template is="dom-repeat" items="{{createArray(calendar.postset)}}">
                                 <div name="spacer"></div>
@@ -215,7 +215,7 @@
                     value: {
                         "months": [
                             {"name":"Januar","max_day":31},
-                            {"name":"Februar","max_day":29},
+                            {"name":"Februar","max_day":28},
                             {"name":"März","max_day":31},
                             {"name":"April","max_day":30},
                             {"name":"Mai","max_day":31},
@@ -246,7 +246,7 @@
             getFeedClass: function(item, defaultClass){
                 return this.subscriptions[item.type] == 2 ? defaultClass + ' highlight' : defaultClass;
             },
-            getDayClass: function(item){
+            getDayClass: function(month, item){
                 var dayClass = 'day';
                 if(this.selected == item) {
                     dayClass += ' selected';
@@ -291,6 +291,7 @@
                 return false;
             },
             renderCalendar: function(date){
+                this.appointments = this.getAppointments(date.getFullYear(), ('0' + (1+date.getMonth())).slice(-2));
                 this.set('calendar.month', {"name": this.calendar.months[date.getMonth()].name, "key": ('0' + (1+date.getMonth())).slice(-2)});
                 this.set('calendar.max_day', this.calendar.months[date.getMonth()].max_day);
                 date.setDate(1);
@@ -306,23 +307,15 @@
                 return array;
             },
             getAppointments: function(year, month){
-                return {
-                    "2016-06-01": [
-                        {"type":"balloon", "text":"Wie man ein Café aufbaut", "author":"Friedrich der Große", "time":"07:30", "room":"F033"}
-                    ],
-                    "2016-06-08": [
-                        {"type":"profile-filled", "text":"Mittagessen mitnehmen"}
-                    ],
-                    "2016-06-14": [
-                        {"type":"doctorate", "text":"Fällt aus! Bin Skifahren.", "author":"Liquid Layout - Jo Wickert"},
-                        {"type":"profile-filled", "text":"Mittagessen mitnehmen"},
-                        {"type":"exam", "text":"Abgabe Giraffe, jpg, HD", "author":"Philipp Finkbeiner"},
-                        {"type":"balloon", "text":"Wie man ein Café zerstört", "author":"Prof. Volker Friedrich", "time":"19:30", "room":"L202"}
-                    ],
-                    "2016-06-22": [
-                        {"type":"exam", "text":"Abgabe Affe svg", "author":"Orang Utan"}
-                    ]
-                };
+                var request = new XMLHttpRequest();
+                request.open('GET', '/public/data/appointments-' + year + '-' + month + '.json', false);
+                request.send(null);
+
+                if (request.status === 200) {
+                    return JSON.parse(request.responseText);
+                }
+
+                return {};
             },
             selectDay: function(event){
                 var el = event.target;
@@ -366,6 +359,14 @@
                     } else {
                         this.date.setMonth(this.date.getMonth() - 1);
                     }
+                }
+                if(this.date.getMonth() == 1){
+                    var days = 28;
+                    var year = this.date.getFullYear();
+                    if(((year % 4 == 0) && (year % 100 != 0)) || (year % 400 == 0)){
+                        days = 29;
+                    }
+                    this.calendar.months[this.date.getMonth()].max_day = days;
                 }
                 this.renderCalendar(this.date);
             }
