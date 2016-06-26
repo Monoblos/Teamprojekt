@@ -69,13 +69,13 @@
 				console.log("Weather type resived was: " + weather);
 				weather = weather.toLowerCase();
 				//~string.indexOf(string) is simple contains...
-				if (weather == "Partly Cloudy") {
+				if (weather == "partly cloudy") {
 					return "clear";
 				}
 				if (~weather.indexOf("rain")) {
 					return "rain";
 				}
-				if (~weather.indexOf("cloud")) {
+				if (~weather.indexOf("cloud") || weather == "overcast") {
 					return "cloudy";
 				}
 				if (~weather.indexOf("snow") || ~weather.indexOf("ice")) {

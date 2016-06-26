@@ -79,11 +79,33 @@
 				height: 24px;
 				margin: 4px;
 			}
-			object {
-				min-height: 100%;
-				max-width: 100%;
+			@media (max-aspect-ratio: 956/740) {
+				#bgr {
+					height: 100%;
+					left: -1000%;
+					right: -1000%;
+					margin: auto;
+					min-width: 100%;
+					top: 0;
+					position: absolute;
+				}
+			}
+			@media (min-aspect-ratio: 956/740) {
+				#bgr {
+					min-height: 100%;
+					width: 100%;
+					bottom: 0;
+					left: 0;
+					position: absolute;
+				}
+			}
+			#logo {
+				margin-right: auto;
+				margin-left: auto;
+				right: 0;
 				left: 0;
-				bottom: 0;
+				top: 16vh;
+				height: 26vh;
 				position: absolute;
 			}
 		</style>
@@ -104,8 +126,10 @@
 			<iron-icon icon="htwg:toolbox"></iron-icon>
 		</a>
 		<div class="topelement">
-			<object data="[[resourcePath]][[bgrName]].png" type="image/png">
-			</object>
+			<img src="[[resourcePath]][[bgrName]].png" alt="Background" id="bgr">
+			</img>
+			<img src="[[resourcePath]][[logoName]].png" alt="HTWG-Konstanz Logo" id="logo">
+			</img>
 		</div>
 		<div class="drawer">
 			<iron-icon icon="htwg:arrow-down" id="more"></iron-icon>
