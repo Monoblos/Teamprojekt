@@ -11,11 +11,7 @@
             top: 0px;
             left: 0px;
             z-index: 99;
-        }
-
-        .fixed {
             position: fixed;
-            background-color: var(--weather-contrast-color);
         }
 
         .navbar {
@@ -55,11 +51,6 @@
             cursor: pointer;
         }
 
-        #sizer {
-            height: 64px;
-            clear: both;
-        }
-
         #searchbar {
             border: 2px solid var(--weather-primary-color);
             width: 80vw;
@@ -74,23 +65,20 @@
     </style>
 
     <template>
-        <div class="fixed">
-            <nav class="navbar">
-                <a href="[[leftLink]]"><iron-icon icon="[[leftIcon]]"></iron-icon></a>
-                <div><a href="/">HTWG Konstanz</a></div>
-                <iron-icon id="default" icon="htwg:toolbox" on-tap="toggle"></iron-icon>
-                <div id="extended" class="collapsed" on-tap="toggle">
-                    <iron-icon icon="htwg:magnifier" on-tap="toggle"></iron-icon>
-                    <iron-icon icon="htwg:pen" on-tap="sendEvent"></iron-icon>
-                    <iron-icon icon="htwg:wrench" on-tap="sendEvent"></iron-icon>
-                </div>
-            </nav>
-            <div id="searchbar" class="collapsed">
-                <iron-icon icon="htwg:magnifier"></iron-icon>
-                <input type="text" placeholder="Suche..."/>
+        <nav class="navbar">
+            <a href="[[leftLink]]"><iron-icon icon="[[leftIcon]]"></iron-icon></a>
+            <div><a href="/">HTWG Konstanz</a></div>
+            <iron-icon id="default" icon="htwg:toolbox" on-tap="toggle"></iron-icon>
+            <div id="extended" class="collapsed" on-tap="toggle">
+                <iron-icon icon="htwg:magnifier" on-tap="toggle"></iron-icon>
+                <iron-icon icon="htwg:pen" on-tap="sendEvent"></iron-icon>
+                <iron-icon icon="htwg:wrench" on-tap="sendEvent"></iron-icon>
             </div>
+        </nav>
+        <div id="searchbar" class="collapsed">
+            <iron-icon icon="htwg:magnifier"></iron-icon>
+            <input type="text" placeholder="Suche..."/>
         </div>
-        <div id="sizer"></div>
     </template>
 
     <script>
