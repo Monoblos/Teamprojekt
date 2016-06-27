@@ -115,7 +115,11 @@
 				}
 			},
 			ready: function() {
-				this.querySelector("app-localstorage-document").initializeStoredValue();
+				//Init all storages
+				var storages = this.querySelectorAll("app-localstorage-document");
+				for (var i = 0; i < storages.lenght; i++) {
+					storages[i].initializeStoredValue();
+				}
 				
 				this.displayedElements = this.getDisplayedElements();
 				this.undisplayedElements = this.getUndsiplayedElements();
