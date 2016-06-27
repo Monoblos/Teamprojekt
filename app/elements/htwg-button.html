@@ -1,0 +1,28 @@
+<link rel="import" href="/bower_components/polymer/polymer.html">
+
+<dom-module name="htwg-button">
+    <style>
+        button {
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 13pt;
+            outline: none;
+            cursor: pointer;
+            margin: 0px auto;
+            padding: 8px 45px;
+            color: var(--weather-contrast-color);
+            background-color: var(--weather-highlight-color);
+        }
+    </style>
+
+    <template>
+        <button><content></content></button>
+    </template>
+
+    <script>
+        Polymer({
+            is: "htwg-button"
+        });
+    </script>
+</dom-module>
