@@ -4,7 +4,7 @@
 <link rel="import" href="/app/elements/htwg-iconset.html">
 <link rel="import" href="/app/elements/htwg-navbar.html">
 <link rel="import" href="/bower_components/iron-ajax/iron-ajax.html">
-<link rel="import" href="./paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="/bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
 <link rel="import" href="/bower_components/paper-listbox/paper-listbox.html">
 <link rel="import" href="/bower_components/paper-item/paper-item.html">
 
@@ -34,14 +34,33 @@
             };
         }
 
-        paper-listbox {
-            color: var(--weather-primary-color);
-            border: 3px solid var(--weather-primary-color);
+        paper-dropdown-menu {
+          /*  border: 3px solid var(--weather-primary-color); */
+            --paper-menu-button-dropdown: {
+                margin-left: -8px !important;
+                width: calc(100% - 36px);
+                border: 3px solid var(--weather-primary-color);
+            };
         }
+        paper-listbox{
+            --paper-listbox: {
+                color: var(--weather-primary-color);
+                border: 3px var(--weather-primary-color);
+                width: 100%;
+            }
+        }
+
+        .menu{
+            margin-left: -8px;
+            margin-top: -3px;
+            right: 20px;
+            left: 24px !important;
+            }
+   
     </style>
 
     <template>
-        <paper-dropdown-menu id="menu" label="[[title]]" no-label-float vertical-align="top" horizontal-align="left">
+        <paper-dropdown-menu id="menu" label="[[title]]" no-label-float vertical-align="top" horizontal-align="left" horizontal-offset="-8">
             <paper-listbox id="select" class="dropdown-content" on-iron-select="valueSelected">
                 <template is="dom-repeat" items="[[items]]" as="item">
                     <paper-item value="[[item.value]]">[[item.name]]</paper-item>

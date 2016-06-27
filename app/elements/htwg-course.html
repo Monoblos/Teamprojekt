@@ -110,7 +110,13 @@
                 var descriptionContainer = this.$.descriptionContainer;
 
                 descriptionContainer.style.display = "block";
-                description.innerHTML = this.descriptions[studyPath.value][course.value];
+                if(!this.descriptions[studyPath.value][course.value])
+                {
+                    description.innerHTML = "Keine Daten vorhanden";
+                }
+                else{
+                    description.innerHTML = this.descriptions[studyPath.value][course.value];
+                }
 
                 var index = this.enrolledCourses.indexOf(course.value);
                 var enrollTitle = this.$$('#enroll .title');
