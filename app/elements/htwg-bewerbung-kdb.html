@@ -2,106 +2,126 @@
 <link rel="import" href="/bower_components/iron-collapse/iron-collapse.html">
 <link rel="import" href="/bower_components/paper-button/paper-button.html">
 <link rel="import" href="/app/elements/htwg-navbar.html">
-
-
-
+<link rel="import" href="/app/elements/htwg-iconset.html">
 
 <dom-module id="htwg-bewerbung-kdb">
     <template>
 
         <style is="custom-style">
-
-            h1 {
-                margin-left: 50%;
-                margin-right: 50%;
-                width:50px;
+            :host {
+                background-color: var(--weather-contrast-color);
+            }
+            .block {
+                display: block;
+                margin-left: 30px;
+                margin-right: 30px;
                 color: var(--weather-primary-color);
+                font-family: 'Oxygen', 'Arimo', 'sans-serif';
+                font-size: 16px;
             }
-
-            h2 {
-                margin-left: 50%;
-                margin-right: 50%;
-                width:50px;
-                color: var(--weather-primary-color);
-            }
-
-            span {
-                display:relative;
-                margin-left: 50%;
-                margin-right: 50%;
-                color: var(--weather-primary-color);
-                font-family:'Arial';
-            }
-
-            hr {
-
-                height: 1px;
-
-                color: var(--weather-primary-color);
-                background: var(--weather-primary-color);
-            }
-
-            #block1 {
-            margin-left: 20%;
-            }
-
-
             #bewerbenBtn {
-                background: var(--weather-highlight-color);;
-                width:300px;
-                margin-left: 50%;
-                margin-right: 50%;
+                color: var(--weather-Highlight-color);
+                width: 300px;
+                margin: 0 auto;
             }
-
+            .smallLine {
+                margin-left: 30px;
+                margin-right: 16px;
+                background: var(--weather-primary-color);
+                height: 1px;
+            }
+            h1 {
+                margin-left: 30px;
+                margin-right: 30px;
+                width: 50px;
+                color: var(--weather-primary-color);
+            }
+            span {
+                color: var(--weather-primary-color);
+                font-family: 'Oxygen', 'Arimo', 'sans-serif';
+                font-weight: bold;
+                font-size: 18px;
+            }
+            .left {
+                float: left;
+                margin-left: 16px;
+            }
+            .center {
+                display: inline-block;
+                margin: 0 auto;
+            }
+            .right {
+                float: right;
+                margin-right: 16px;
+            }
+            .container {
+                position: fixed;
+                display: inline-block;
+                text-align: center;
+                z-index: 99;
+            }
+            .border-container {
+                padding-top: 50px;
+                padding-bottom: 16px;
+            }
+            iron-icon {
+                color: var(--weather-primary-color);
+                margin: 4px;
+                cursor: pointer;
+            }
         </style>
 
-        <htwg-navbar></htwg-navbar>
-
-        <h2>KD</h2>
-
-       <h1 on-tap="toggle">Voraussetzungen</h1>
-
-            <iron-collapse id="collapse">
-              <div class="content">
-                <div id="block1">
-                    Die Voraussetzungen in Kürze:<br>
-                    Voraussetzungen für das Bachelorstudium sind: Abitur oder Fachhoschulreife und ein am Studiengang bestandenes zweistufiges Aufnahmeverfahren.
-                    <br>
-                    <br>
-                    Das Aufnahmeverfahren:<br>
-                    Die Aufnahmeprüfung zum Bachelorstudium Kommunikationsdesign an der HTWG Konstanz findet in einem zweistufigen Verfahren statt:<br>
-
-                    I) Die Mappen <br>[...]
+        <div>
+            <div class="container">
+                <div class="left">
+                    <iron-icon on-tap="back" icon="htwg:arrow-left"></iron-icon>
                 </div>
-              </div>
+                <div class="center">
+                    <span>KD</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="border-container">
+            <h1 on-tap="toggle">Voraussetzungen</h1>
+            <iron-collapse id="collapse">
+                <div class="content">
+                    <div class="block" align="justify">
+                        Die Voraussetzungen in Kürze:
+                        <br> Voraussetzungen für das Bachelorstudium sind: Abitur oder Fachhoschulreife und ein am Studiengang bestandenes zweistufiges Aufnahmeverfahren.
+                        <br>
+                        <br> Das Aufnahmeverfahren:
+                        <br> Die Aufnahmeprüfung zum Bachelorstudium Kommunikationsdesign an der HTWG Konstanz findet in einem zweistufigen Verfahren statt:
+                        <br>
+                        <br> I) Die Mappen
+                        <br>[...]
+                    </div>
+                </div>
             </iron-collapse>
-         <hr>   
-         <h1 on-tap="toggle">Zulassung</h1>
+            <hr class="smallLine">
+            <h1 on-tap="toggle">Zulassung</h1>
 
             <iron-collapse id="collapse2">
-              <div class="content">
-                <div id="block2">
-                    Test2
-                    
+                <div class="content">
+                    <div class="block">
+                        Test2
+                    </div>
                 </div>
-              </div>
             </iron-collapse>
-             <hr>
-         <h1 on-tap="toggle">Termine</h1>
+            <hr class="smallLine">
+            <h1 on-tap="toggle">Termine</h1>
 
             <iron-collapse id="collapse3">
-              <div class="content">
-                <div id="block3">
-                    Test3
-                    
+                <div class="content">
+                    <div class="block">
+                        Test3
+                    </div>
                 </div>
-              </div>
             </iron-collapse>
+        </div>
 
+        <paper-button toggles raised id="bewerbenBtn">toggles</paper-button>
 
-            <paper-button raised id="bewerbenBtn">Bewerben</paper-button>
-           
-        
     </template>
 
     <script>
@@ -112,13 +132,24 @@
                     type: String,
                     value: ""
                 }
-
             },
             ready: function() {
                 console.log("Loading.");
             },
             toggle: function() {
-            this.$.collapse.toggle();
+                this.$.collapse.toggle();
+            },
+            navigate: function(target) {
+                var appLocation = document.querySelector("app-location");
+                if (appLocation == null) {
+                    window.location.href = target;
+                } else {
+                    appLocation.set("route.path", target);
+                }
+            },
+            back: function() {
+                this.navigate("/bewerbung/zero");
+                //this.navigate("/switchboard");
             }
         });
     </script>

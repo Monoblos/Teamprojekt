@@ -1,7 +1,8 @@
 <link rel="import" href="/bower_components/polymer/polymer.html">
 <link rel="import" href="/bower_components/paper-radio-button/paper-radio-button.html">
 <link rel="import" href="/app/elements/htwg-navbar.html">
-
+<link rel="import" href="/app/elements/htwg-iconset.html">
+<link rel="import" href="/app/elements/htwg-bewerbung-kdb.html">
 
 
 <dom-module id="htwg-bewerbung" attributes="arg options">
@@ -9,88 +10,142 @@
 
       <style is="custom-style">
 
+        :host {
+            background-color: var(--weather-contrast-color);
+        }
 
-          paper-radio-button.radio {
+        .border-container {
+            padding-left: 16px;
+            padding-top: 50px;
+            padding-bottom: 16px;
+        }
+
+        paper-radio-button.radio {
             --paper-radio-button-checked-color: var(--weather-primary-color);
             --paper-radio-button-checked-ink-color: var(--weather-primary-color);
             --paper-radio-button-unchecked-color: var(--weather-primary-color);
             --paper-radio-button-unchecked-ink-color: var(--weather-primary-color);
             --paper-radio-button-label-color: var(--weather-primary-color);
-          }
-
-        .bewerbungContainer {
-            padding-top: 20px;
         }
 
-
-        .flex-container {
-            display: block;
-            margin-left:    45%;
-            margin-right:   55%;
-            padding: 5px;
+        paper-radio-button {
+            margin: 6px;
+            content:' ';
+            display: block; 
+            font-family: 'Oxygen', 'Arimo', 'sans-serif';
+            font-weight: bold;
+            font-size: 15px;
         }
 
-        hr {
-            width: 300px; 
+        .bigLine {
+            margin-left: 8px;
+            margin-right: 16px;
+            color: var(--weather-primary-color);
+            background-color: var(--weather-primary-color);
+            height: 2px;
+        }
+
+        .smallLine {
+            margin-left: 50px;
+            margin-right: 16px;
+            background: var(--weather-primary-color);
             height: 1px;
-            margin-left: auto;
-            margin-right:  auto;
-            color: var(--weather-primary-color);
-            background: var(--weather-primary-color);
 
         }
 
-        hr #cutline {
-            width: 200px; 
-            height: 0,5px;
+        span {
             color: var(--weather-primary-color);
-            background: var(--weather-primary-color);
-
+            font-family: 'Oxygen', 'Arimo', 'sans-serif';
+            font-weight: bold;
+            font-size: 18px;
         }
 
         a {
-            display:block;
-            width:150px;
-            height: 100%;
-            margin-right: 55%;
-            margin-left:  45%;
-            padding-top: 20px;
             color: var(--weather-primary-color);
-        }
-
-
-        span {
             display:block;
-            width:100px;
-            height: 100%;
-            margin-right: 55%;
-            margin-left: 45%;
-            padding-top: 20px;
-            color: var(--weather-primary-color);
-            font-family:'Arial';
+            margin-top: -5px;
+            margin-bottom: 10px;
+            margin-left: 50px;
+            margin-right: 16px;
+            font-family: 'Oxygen', 'Arimo', 'sans-serif';
             font-weight: bold;
+            font-size: 15px;
         }
 
+        a:link {
+            text-decoration: none;
+            text-decoration-color: var(--weather-primary-color);
+        }
+
+        a:visited {
+            text-decoration: none;
+            text-decoration-color: var(--weather-primary-color);
+        }
+
+        a:hover {
+            text-decoration: none;
+        }
+
+        a:active {
+            text-decoration: none;
+        }
+
+        iron-icon {
+            color: var(--weather-primary-color);
+            margin: 4px;
+            cursor: pointer;
+        }
+
+        .left {
+            float:left;
+            margin-left: 16px;
+        }
+
+        .center {
+            display: inline-block;
+            margin:0 auto;
+
+        }
+
+        .right {
+            float:right;
+            margin-right: 16px;
+        }
+
+        .container {
+            position: fixed;
+            display: inline-block;
+            width:100%;
+            text-align:center;
+            z-index: 99;
+        }
+        
 
        </style>
 
         <htwg-navbar></htwg-navbar>
 
+    	<div hidden$="{{hidden}}">
+            <div class="container">          
+                <div class="left">
+                    <iron-icon on-tap="back" icon="htwg:arrow-left" ></iron-icon>
+                </div>
+                <div class="center"> 
+                    <span >Bewerbung</span>
+                </div>
+                <div class="right">
+                    <iron-icon on-tap="back" icon="htwg:close"></iron-icon>
+                </div>
+            </div>
 
-            <div class="bewerbungContainer">          
-
-
-                <span>Bewerbung</span>
-
-
-
-                <div class="flex-container">
+            <div class="border-container" >
+                <div>
                         <paper-radio-button id="bachelorRadio" on-tap="showUp" class="radio">Bachelor</paper-radio-button>
                         <paper-radio-button id="masterRadio"   on-tap="showUp"    class="radio">Master</paper-radio-button>
                 </div>
-                <hr>
+                <hr class="bigLine">
 
-               <div class="flex-container">
+               <div>
                     <paper-radio-group>
                         <paper-radio-button id="ag"  class="radio" on-tap="setFacultys">Architektur & Gestaltung</paper-radio-button>
                         <paper-radio-button id="biw" class="radio" on-tap="setFacultys">Bauingenieurwesen</paper-radio-button>
@@ -100,20 +155,20 @@
                         <paper-radio-button id="bwl" class="radio" on-tap="setFacultys">Betriebswirtschaftslehre</paper-radio-button>
                     </paper-radio-group>
                 </div>
+                <hr class="bigLine">
+            </div>
 
-                <hr>
-
-
-                <template is="dom-repeat" items="{{studiengang}}">
-                    <a href="{{item.url}}">{{item.name}}</a>
-                    <hr id="cutline">
-                </template>
-    
-
+            <template is="dom-repeat" items="{{studiengang}}">
+                <a href="{{item.url}}">{{item.name}}</a>
+                <hr class="smallLine">
+            </template>
     </div>
 
 
 
+    <div hidden$="{{!hidden}}">
+        <htwg-bewerbung-kdb></htwg-bewerbung-kdb>
+    </div>
 
     </template>
 
@@ -129,9 +184,36 @@
                     type: Array,
                     value: []
                 },
+                hidden: {
+                    type: Boolean,
+                    value: false
+                }
             },
             ready: function() {
-                //window.location.href = "/home"
+            	this.hidden = false;
+                this.showKDB();
+            },
+            showKDB: function() {
+
+                if (this.arg == "") {
+                    this.hidden = false;
+                    this.arg = "";
+                }
+                if (this.arg == "kdb") {
+                    this.hidden = true;
+                    this.arg = "";
+                }
+            },
+            back: function() {
+                this.navigate("/switchboard");
+            },
+            navigate: function(target) {
+                var appLocation = document.querySelector("app-location");
+                if (appLocation == null) {
+                    window.location.href = target;
+                } else {
+                    appLocation.set("route.path", target);
+                }
             },
             push_Arch_Gest_Bachelor: function() {
                 this.push("studiengang", {
@@ -454,6 +536,10 @@
                 }
 
                 if (this.$.bachelorRadio.checked == this.$.masterRadio.checked && this.facultys.length > 0) {
+                    this.showBachelorMaster();
+                }
+
+                if (this.$.bachelorRadio.checked == true && this.$.masterRadio.checked == true) {
                     this.showBachelorMaster();
                 }
 
