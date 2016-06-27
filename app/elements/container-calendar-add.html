@@ -58,11 +58,17 @@
         <div id="wrapper">
             <htwg-subnavbar></htwg-subnavbar>
             <h1>Termin hinzufügen</h1>
-            <input type="text" placeholder="Titel" class="row">
-            <container-select class="row" title="Kategorie"></container-select>
-            <input type="date" placeholder="Datum" class="row">
-            <input type="time" placeholder="Uhrzeit" class="row">
-            <textarea placeholder="Notiz" class="row"></textarea>
+            <input type="text" placeholder="Titel" class="row" value="{{title}}">
+            <container-select class="row" title="Kategorie" value="{{category}}"></container-select>
+            <template is="dom-if" if="{{category && title}}">
+                <input type="date" placeholder="Datum" class="row" value="{{date}}">
+            </template>
+            <template is="dom-if" if="{{date}}">
+                <input type="time" placeholder="Uhrzeit" class="row" value="{{time}}">
+            </template>
+            <template is="dom-if" if="{{time}}">
+                <textarea placeholder="Notiz" class="row" value="{{notice}}"></textarea>
+            </template>
             <div class="center">
                 <htwg-button on-tap="save">Speichern</htwg-button>
             </div>
@@ -72,8 +78,25 @@
     <script>
         Polymer({
             is: "container-calendar-add",
+            properties: {
+                title: {
+                    type: String
+                },
+                category: {
+                    type: String
+                },
+                date: {
+                    type: String
+                },
+                time: {
+                    type: String
+                },
+                notice: {
+                    type: String
+                }
+            },
             save: function(){
-                console.log('save');
+                console.log('save: %o | %o | %o | %o | %o', this.title, this.category, this.date, this.time, this.notice);
                 this.navigate('calendar');
             },
             navigate: function(target) {
