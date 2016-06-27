@@ -16,27 +16,26 @@
 		</style>
 		<container-drawer menu-link="/switchboard" title-var="HTWG-Konstanz" logo-name="{{logoName}}" bgr-name="{{bgrName}}" resource-path="/public/images/">
 			<div class="drawer">					
-				<container-news headline="Selbstverständnis">
+				<container-news headline='Strandbar Présente: "ALLEZ!"'>
+					Public Viewing der EURO 2016 in unserer geliebten Strandbar ab dem
+				</container-news>
+				<container-news headline="Selbstverständins">
 					Die Hochschule Konstanz Technik, Wirtschaft und Gestaltung (HTWG) ist eine moderne Hochschule mit
 					einem anwendungsorientierten Profil. Sie verfügt über ein breites Fächerspektrum und profitiert
-					von der Interdisziplinarität sowie der Verbindung von Theorie und Praxis. Dieser Text ist noch viel
-					länger aber wird passen abgeschnitten.
+					von der Interdisziplinarität sowie der Verbindung von Theorie und Praxis.
 				</container-news>
 				<container-fakultys></container-fakultys>
-				<container-news headline="Des weiteren">
-					ist das auch ein Artikel. Die Hochschule Konstanz Technik, Wirtschaft und Gestaltung (HTWG) ist eine moderne Hochschule mit
-					einem anwendungsorientierten Profil. Sie verfügt über ein breites Fächerspektrum und profitiert
-					von der Interdisziplinarität sowie der Verbindung von Theorie und Praxis.
+				<container-news headline="IBH: Internationale Bodenseehochschule">
+					Die Hochschule Konstanz ist seit ihrer Gründung aktives Mitglied der IBH. Rektor Prof. Olaf Harder
+					(1980 - 2006) hat wesentlich 
 				</container-news>
-				<container-news headline="One Pager">
-					Die Hochschule Konstanz Technik, Wirtschaft und Gestaltung (HTWG) ist eine moderne Hochschule mit
-					einem anwendungsorientierten Profil. Sie verfügt über ein breites Fächerspektrum und profitiert
-					von der Interdisziplinarität sowie der Verbindung von Theorie und Praxis.
+				<container-news headline="Weiterbildung an der HTWG">
+					Die HTWG Konstanz ist mit ihren beiden Institutionen für wissenschaftliche Weiterbildung - der
+					LCBS Lake Constance Business School GmbH und der TAK Technische Akademie Konstanz GmbH
 				</container-news>
-				<container-news headline="Das Ende">
-					Die Hochschule Konstanz Technik, Wirtschaft und Gestaltung (HTWG) ist eine moderne Hochschule mit
-					einem anwendungsorientierten Profil. Sie verfügt über ein breites Fächerspektrum und profitiert
-					von der Interdisziplinarität sowie der Verbindung von Theorie und Praxis.
+				<container-news headline="Werkschau">
+					Lorem Ipsum bla bläh blub.
+					KDler malen euch was vor! :P
 				</container-news>
 			</div>
 		</container-drawer>
@@ -78,7 +77,6 @@
 				} else {
 					res += a;
 				}
-				console.log("Logo name: " + res);
 				return res;
 			},
 			compBgrName: function(a, b) {
@@ -87,7 +85,6 @@
 				if (a == "clear" && b == "night") {
 					res += "-" + a;
 				}
-				console.log("Bgr name: " + res);
 				return res;
 			}
 		});
