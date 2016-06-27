@@ -2,6 +2,7 @@
 <link rel="import" href="/bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="/app/elements/htwg-navbar.html">
 <link rel="import" href="/app/elements/htwg-subnavbar.html">
+<link rel="import" href="/app/elements/htwg-button.html">
 <link rel="import" href="/app/elements/container-select.html">
 <link rel="import" href="/app/elements/htwg-iconset.html">
 
@@ -9,7 +10,7 @@
     <style>
         #wrapper {
             margin: 0px 16px 16px;
-            width: calc(100vw - 32px);
+            width: calc(100% - 32px);
         }
 
         iron-icon {
@@ -24,12 +25,29 @@
         input, textarea {
             border: 3px solid var(--weather-primary-color);
             outline: none;
-            font-size: 24px;
-            width: calc(100% - 10px);
+            font-size: 13pt;
+            line-height: 24px;
+            font-weight: bold;
+            padding: 8px 5px;
+            width: calc(100% - 20px);
         }
 
-        .element {
+        input::-webkit-input-placeholder,
+        textarea::-webkit-input-placeholder {
+            color: var(--weather-primary-color);
+        }
+
+        input::-moz-placeholder,
+        textarea::-moz-placeholder {
+            color: var(--weather-primary-color);
+        }
+
+        .row {
             margin-bottom: 10px;
+        }
+
+        .button{
+            width:100%;
         }
     </style>
 
@@ -38,18 +56,55 @@
         <div id="wrapper">
             <htwg-subnavbar></htwg-subnavbar>
             <h1>Termin hinzufügen</h1>
-            <input type="text" placeholder="Titel" class="element">
-            <container-select class="element" title="Kategorie"></container-select>
-            <input type="date" placeholder="Datum" class="element">
-            <input type="time" placeholder="Uhrzeit" class="element">
-            <container-select class="element" title="Uhrzeit"></container-select>
-            <textarea placeholder="Notiz" class="element"></textarea>
+            <input type="text" placeholder="Titel" class="row" value="{{title::input}}">
+            <container-select class="row" title="Kategorie" value="{{category}}"></container-select>
+            <template is="dom-if" if="{{title}}">
+                <input type="date" placeholder="Datum" class="row" value="{{date::input}}">
+            </template>
+            <template is="dom-if" if="{{date}}">
+                <input type="time" placeholder="Uhrzeit" class="row" value="{{time::input}}">
+            </template>
+            <template is="dom-if" if="{{time}}">
+                <textarea placeholder="Notiz" class="row" value="{{notice::input}}"></textarea>
+            </template>
+            <div class="button">
+                <htwg-button on-tap="save">Speichern</htwg-button>
+            </div>
         </div>
     </template>
 
     <script>
         Polymer({
-            is: "container-calendar-add"
+            is: "container-calendar-add",
+            properties: {
+                title: {
+                    type: String
+                },
+                category: {
+                    type: String
+                },
+                date: {
+                    type: String
+                },
+                time: {
+                    type: String
+                },
+                notice: {
+                    type: String
+                }
+            },
+            save: function(){
+                console.log('save: %o | %o | %o | %o | %o', this.title, this.category, this.date, this.time, this.notice);
+                this.navigate('calendar');
+            },
+            navigate: function(target) {
+                var appLocation = document.querySelector("app-location");
+                if (appLocation == null) {
+                    window.location.href = target;
+                } else {
+                    appLocation.set("route.path", target);
+                }
+            }
         });
     </script>
 </dom-module>
