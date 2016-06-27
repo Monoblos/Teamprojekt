@@ -10,7 +10,7 @@
     <style>
         #wrapper {
             margin: 0px 16px 16px;
-            width: calc(100vw - 32px);
+            width: calc(100% - 32px);
         }
 
         iron-icon {
@@ -46,10 +46,8 @@
             margin-bottom: 10px;
         }
 
-        .center{
+        .button{
             width:100%;
-            display: flex;
-            justify-content: center;
         }
     </style>
 
@@ -58,18 +56,18 @@
         <div id="wrapper">
             <htwg-subnavbar></htwg-subnavbar>
             <h1>Termin hinzufügen</h1>
-            <input type="text" placeholder="Titel" class="row" value="{{title}}">
+            <input type="text" placeholder="Titel" class="row" value="{{title::input}}">
             <container-select class="row" title="Kategorie" value="{{category}}"></container-select>
-            <template is="dom-if" if="{{category && title}}">
-                <input type="date" placeholder="Datum" class="row" value="{{date}}">
+            <template is="dom-if" if="{{title}}">
+                <input type="date" placeholder="Datum" class="row" value="{{date::input}}">
             </template>
             <template is="dom-if" if="{{date}}">
-                <input type="time" placeholder="Uhrzeit" class="row" value="{{time}}">
+                <input type="time" placeholder="Uhrzeit" class="row" value="{{time::input}}">
             </template>
             <template is="dom-if" if="{{time}}">
-                <textarea placeholder="Notiz" class="row" value="{{notice}}"></textarea>
+                <textarea placeholder="Notiz" class="row" value="{{notice::input}}"></textarea>
             </template>
-            <div class="center">
+            <div class="button">
                 <htwg-button on-tap="save">Speichern</htwg-button>
             </div>
         </div>
