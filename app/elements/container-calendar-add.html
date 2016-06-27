@@ -2,6 +2,7 @@
 <link rel="import" href="/bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="/app/elements/htwg-navbar.html">
 <link rel="import" href="/app/elements/htwg-subnavbar.html">
+<link rel="import" href="/app/elements/container-select.html">
 <link rel="import" href="/app/elements/htwg-iconset.html">
 
 <dom-module name="container-calendar-add">
@@ -11,33 +12,8 @@
             width: calc(100vw - 32px);
         }
 
-        #wrapper > section{
-            display: flex;
-            justify-content: flex-start;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        #wrapper > header {
-            height: 32px;
-            width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: flex-end;
-        }
-
         iron-icon {
             margin: 4px;
-        }
-
-        #wrapper > header > div {
-            display: flex;
-            justify-content: space-between;
-            width: 128px;
-        }
-
-        #wrapper > header > div > a {
-            color: var(--weather-primary-color);
         }
 
         h1 {
@@ -45,10 +21,15 @@
             color: var(--weather-highlight-color);
         }
 
-        input {
+        input, textarea {
             border: 3px solid var(--weather-primary-color);
             outline: none;
-            width: 100%;
+            font-size: 24px;
+            width: calc(100% - 10px);
+        }
+
+        .element {
+            margin-bottom: 10px;
         }
     </style>
 
@@ -57,7 +38,12 @@
         <div id="wrapper">
             <htwg-subnavbar></htwg-subnavbar>
             <h1>Termin hinzufügen</h1>
-            <input type="text" placeholder="Titel">
+            <input type="text" placeholder="Titel" class="element">
+            <container-select class="element" title="Kategorie"></container-select>
+            <input type="date" placeholder="Datum" class="element">
+            <input type="time" placeholder="Uhrzeit" class="element">
+            <container-select class="element" title="Uhrzeit"></container-select>
+            <textarea placeholder="Notiz" class="element"></textarea>
         </div>
     </template>
 

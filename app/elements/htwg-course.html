@@ -4,53 +4,32 @@
 <link rel="import" href="/app/elements/htwg-iconset.html">
 <link rel="import" href="/app/elements/htwg-navbar.html">
 <link rel="import" href="/app/elements/htwg-subnavbar.html">
+<link rel="import" href="/app/elements/container-select.html">
 <link rel="import" href="/bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="/bower_components/paper-button/paper-button.html">
+<link rel="import" href="/bower_components/paper-ripple/paper-ripple.html">
 
 <dom-module name="htwg-course">
     <style>
-
-        select {
-            border: 3px solid var(--weather-primary-color);
-            background: white url(../svg/pfeil.svg) no-repeat right;
-            font-size: 13pt;
-            font-weight: bold;
-            width: 100%;
-            text-indent: 0.01px;
-            text-overflow: "";
-            color: var(--weather-primary-color);
-            padding: 5px;
-            outline: none;
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            appearance: none;
-        }
-
         h1 {
             color: var(--weather-highlight-color);
             width: 100%;
         }
 
         .desc {
-            width: 450px;
+            width: 100%;
+            max-width:450px;
         }
 
         .btn {
-            -webkit-border-radius: 8;
-            -moz-border-radius: 8;
-            border-radius: 8px;
             color: var(--weather-contrast-color);
-            font-size: 20px;
             background-color: var(--weather-highlight-color);
-            padding: 10px 40px 10px 40px;
-            text-decoration: none;
-            box-shadow: none;
-            margin: auto;
         }
 
-        .btn:hover {
-            background: #946c16;
-            text-decoration: none;
+        iron-icon {
+            margin: 4px;
         }
+
         .main_frame{
             width: calc(100% - 32px);
             padding: 0px 16px 16px;
@@ -62,38 +41,35 @@
             width: 100%;
             justify-content: center;
         }
+
+        .enroll {
+            left: calc(50% - 40px);
+        }
     </style>
 
     <template>
         <htwg-navbar></htwg-navbar>
 
-        <div class="main_frame">
-        <htwg-subnavbar></htwg-subnavbar>
-        <h1>Kurs anmelden</h1>
-        <p>
-            <select id="faculty" on-change="facultySelected"></select>
-        </p>
-        <p>
-            <select style="display: none" id="studyPath" on-change="pathSelected"></select>
-        </p>
-        <p>
-            <select style="display: none" id="courses" on-change="courseSelected"></select>
-        </p>
-        <p class="desc" style="display: none;" id="description">
 
-        </p>
-        <p>
-            <button id="enroll" class="btn" on-tap="enrollCourse">Anmelden</button>
-        </p>
+        <div class="main_frame">
+            <htwg-subnavbar></htwg-subnavbar>
+            <h1>Kurs anmelden</h1>
+            <p><container-select id="faculty" url="/public/data/faculty.json" title="Fakultät" on-value-selected="facultySelected"></container-select></p>
+            <p><container-select id="studyPath" url="/public/data/path.json" title="Studiengang" on-value-selected="studyPathSelected" style="display: none"></container-select></p>
+            <p><container-select id="course" url="/public/data/course.json" title="Kurse" on-value-selected="courseSelected" style="display: none"></container-select></p>
+
+            <div id="descriptionContainer" style="display: none;">
+                <p class="desc" id="description"></p>
+                <paper-button id="enroll" class="enroll" on-tap="enrollCourse" raised>
+                    <span class="title">Anmelden</span>
+                    <paper-ripple center></paper-ripple>
+                </paper-button>
+            </div>
         </div>
 
         <app-localstorage-document key="enrolledCourses" data="{{enrolledCourses}}"></app-localstorage-document>
-        <iron-ajax auto url="/app/data/faculty.json" handle-as="json" on-response="setFaculties"></iron-ajax>
-        <iron-ajax auto url="/app/data/path.json" handle-as="json" on-response="setPaths"></iron-ajax>
-        <iron-ajax auto url="/app/data/course.json" handle-as="json" on-response="setCourses"></iron-ajax>
-        <iron-ajax auto url="/app/data/desc.json" handle-as="json" on-response="setDesc"></iron-ajax>
-        <iron-ajax auto url="/app/data/profile.json" handle-as="json" on-response="setProfile"></iron-ajax>
-
+        <iron-ajax auto url="/public/data/desc.json" handle-as="json" on-response="setDesc"></iron-ajax>
+        <iron-ajax auto url="/public/data/profile.json" handle-as="json" on-response="setProfile"></iron-ajax>
     </template>
 
     <script>
@@ -115,118 +91,63 @@
                 }
             },
 
-            content: function () {
-                var faculties = this.faculties;
-                if(this.profile.faculty == null){
-                    this.$.faculty.innerHTML = "<option>Fakultät</option>";
-                    for (var fac in faculties) {
-                        if (faculties.hasOwnProperty(fac)) {
-                            this.$.faculty.innerHTML += "<option value= \"" + fac + "\">" + faculties[fac] + "</option>";
-                        }
-
-                    }
-                }
-                else{
-                    this.$.faculty.innerHTML += "<option value= \"" + this.profile.faculty + "\">" + this.faculties[this.profile.faculty] + "</option>";
-                    this.facultySelected();
-                }
-            },
-
             facultySelected: function () {
-                var facs = this.$.faculty;
-                var curfac = facs.options[facs.selectedIndex].value;
-                var sps = this.paths[curfac];
+                var faculty = this.$.faculty;
+                var studyPath = this.$.studyPath;
 
                 studyPath.style.display = "block";
-                if(this.profile.path == null){
-
-                    this.$.studyPath.innerHTML = "<option>Studiengang</option>";
-
-                    for (var sp in sps) {
-                        if (sps.hasOwnProperty(sp)) {
-                            this.$.studyPath.innerHTML += "<option value= \"" + sp + "\">" + sps[sp] + "</option>";
-                        }
-
-                    }
-                }
-                else{
-                    this.$.studyPath.innerHTML += "<option value= \"" + this.profile.path + "\">" + sps[this.profile.path] + "</option>";
-                    this.pathSelected();
-                }
+                studyPath.setItems(studyPath.data[faculty.value]);
             },
-            pathSelected: function () {
+            studyPathSelected: function () {
                 var studyPath = this.$.studyPath;
-                var cursp = studyPath.options[studyPath.selectedIndex].value;
-                var cs = this.courses[cursp];
+                var course = this.$.course;
 
-                courses.style.display = "block";
-
-                this.$.courses.innerHTML = "<option>Kurse</option>";
-
-                for (var c in cs)
-                    if (cs.hasOwnProperty(c)) {
-                        this.$.courses.innerHTML += "<option value= \"" + c + "\">" + cs[c] + "</option>";
-                    }
+                course.style.display = "block";
+                course.setItems(course.data[studyPath.value]);
             },
             courseSelected: function () {
-                this.$.description.style.display = "block";
                 var studyPath = this.$.studyPath;
-                var curpath = studyPath.options[studyPath.selectedIndex].value;
-                var courses = this.$.courses;
-                var curcourse = courses.options[courses.selectedIndex].value;
-                var index = this.enrolledCourses.indexOf(curcourse);
-                var des = this.descriptions[curpath][curcourse];
+                var course = this.$.course;
+                var description = this.$.description;
+                var descriptionContainer = this.$.descriptionContainer;
 
-                this.$.description.innerHTML = des;
-                this.$.enroll.innerHTML = (index == -1) ? "Anmelden" : "Abmelden";
+                descriptionContainer.style.display = "block";
+                description.innerHTML = this.descriptions[studyPath.value][course.value];
+
+                var index = this.enrolledCourses.indexOf(course.value);
+                var enrollTitle = this.$$('#enroll .title');
+                enrollTitle.innerHTML = (index == -1) ? 'Anmelden' : 'Abmelden';
             },
 
             enrollCourse: function () {
-                var courses = this.$.courses;
-                var curcourse = courses.options[courses.selectedIndex].value;
-                var index = this.enrolledCourses.indexOf(curcourse);
-
-                console.log(curcourse);
-                console.log(this.enrolledCourses);
+                var course = this.$.course;
+                var enrollTitle = this.$$('#enroll .title');
+                var index = this.enrolledCourses.indexOf(course.value);
 
                 if(index == -1) {
-                    this.push('enrolledCourses', curcourse);
-                    this.$.enroll.innerHTML = "Abmelden";
+                    this.push('enrolledCourses', course.value);
+                    enrollTitle.innerHTML = 'Abmelden';
                 } else {
                     this.splice('enrolledCourses', index, 1);
-                    this.$.enroll.innerHTML = "Anmelden";
+                    enrollTitle.innerHTML = 'Anmelden';
                 }
 
                 console.log(this.enrolledCourses);
             },
-
             setProfile: function(e,d)
             {
-                if(d.response == null)
-                {
-
-                }
-                else{
+                if(d.response != null) {
+                    var faculty = this.$.faculty;
+                    var studyPath = this.$.studyPath;
                     this.profile = d.response;
+
+                    faculty.setDefault(this.profile.faculty);
+                    studyPath.setDefault(this.profile.path);
                 }
-                this.content();
-            },
-            
-            setFaculties: function(e,d){
-                this.faculties = d.response;
             },
 
-            setPaths: function(e,d){
-                this.paths = d.response;
-            },
-
-            setCourses: function(e,d){
-                this.courses = d.response;
-            },
-
-            setDesc: function(e,d){
+            setDesc: function(e,d) {
                 this.descriptions = d.response;
-                console.log(d.response);
             }
         });
     </script>
