@@ -1,0 +1,22 @@
+[
+  {
+    "value": "ain",
+    "name": "Angewandte Informatik"
+  },
+  {
+    "value": "bit",
+    "name": "Buisness Information Technology"
+  },
+  {
+    "value": "gib",
+    "name": "Gesundheitsinformatik"
+  },
+  {
+    "value": "msi",
+    "name": "Master Informatics"
+  },
+  {
+    "value": "win",
+    "name": "Wirtschaftsinformatik"
+  }
+]
