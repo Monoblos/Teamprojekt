@@ -74,6 +74,15 @@
             is: "container-calendar-add",
             save: function(){
                 console.log('save');
+                this.navigate('calendar');
+            },
+            navigate: function(target) {
+                var appLocation = document.querySelector("app-location");
+                if (appLocation == null) {
+                    window.location.href = target;
+                } else {
+                    appLocation.set("route.path", target);
+                }
             }
         });
     </script>
