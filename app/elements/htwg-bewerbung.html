@@ -123,8 +123,10 @@
         }
 
         .container {
-            position: fixed;
-            display: inline-block;
+        	background-color: var(--weather-contrast-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             width:100%;
             text-align:center;
             z-index: 99;
@@ -146,7 +148,7 @@
                 <div class="right">
                     <iron-icon on-tap="homeNavigate" id="close" icon="htwg:close"></iron-icon>
                 </div>
-            </div>
+        </div>
 
             <div class="border-container" >
                 <div>
@@ -184,7 +186,7 @@
 
 
     <div hidden$="{{!showKDB}}">
-        <htwg-bewerbung-template>{{arg}}</htwg-bewerbung-template>
+        <htwg-bewerbung-template url="{{arg}}"></htwg-bewerbung-template>
     </div>
 
     </template>
@@ -228,17 +230,6 @@
                     this.showKDB = true; 
                 	
                 }  
-            },
-            showKDB: function() {
-
-                if (this.arg == "") {
-                    this.hidden = false;
-                    this.arg = "";
-                }
-                if (this.arg == "kdb") {
-                    this.hidden = true;
-                    this.arg = "";
-                }
             },
             backNavigate: function() {
                 this.navigate("/switchboard");
