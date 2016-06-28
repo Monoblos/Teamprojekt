@@ -133,7 +133,10 @@
 					storages[i].initializeStoredValue();
 				}
 				this.staticElements = this.getAllElements();
-				this.undisplayedElements = JSON.parse(localStorage.getItem("undisplayedLinks"));
+				var storeVal = JSON.parse(localStorage.getItem("undisplayedLinks"));
+				if (storeVal) {
+					this.undisplayedElements = storeVal;
+				}
 			},
 			containsLink: function(index, list) {
 				for (var i = 0; i < list.length; i++) {
