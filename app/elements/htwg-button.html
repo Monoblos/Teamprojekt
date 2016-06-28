@@ -1,4 +1,6 @@
 <link rel="import" href="/bower_components/polymer/polymer.html">
+<link rel="import" href="/bower_components/paper-button/paper-button.html">
+<link rel="import" href="/bower_components/paper-ripple/paper-ripple.html">
 
 <dom-module name="htwg-button">
     <style>
@@ -8,7 +10,7 @@
             justify-content: center;
         }
 
-        button {
+        paper-button {
             border: none;
             border-radius: 6px;
             font-weight: bold;
@@ -20,12 +22,16 @@
             width: calc(100% - 4px);
             max-width: 600px;
             color: var(--weather-contrast-color);
-            background-color: var(--weather-highlight-color);
+            background: var(--weather-highlight-color);
+            text-transform: none;
         }
     </style>
 
     <template>
-        <button><content></content></button>
+        <paper-button>
+            <content></content>
+            <paper-ripple><paper-ripple>
+        </paper-button>
     </template>
 
     <script>
