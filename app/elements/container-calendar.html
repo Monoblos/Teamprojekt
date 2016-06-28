@@ -6,7 +6,7 @@
 <link rel="import" href="/app/elements/htwg-subnavbar.html">
 <link rel="import" href="/app/elements/htwg-iconset.html">
 
-<dom-module name="container-calendar">
+<dom-module name="container-calendar" attributes="arg options">
     <style>
         :host {
             color: var(--weather-primary-color);
@@ -124,7 +124,7 @@
     <template>
         <htwg-navbar on-navbar="subscribe"></htwg-navbar>
         <div id="wrapper">
-            <htwg-subnavbar></htwg-subnavbar>
+            <htwg-subnavbar arg="[[arg]]" options="[[options]]"></htwg-subnavbar>
             <app-localstorage-document id="storage" key="subscriptions" data="{{subscriptions}}"></app-localstorage-document>
             <iron-ajax id="appointments" auto handle-as="json" on-response="setAppointments" on-error="setAppointments"></iron-ajax>
             <template is="dom-if" if="{{selectedDayFeed.length}}">
@@ -215,6 +215,15 @@
                     value: {}
                 },
                 appointments : {
+                    type: Object,
+                    value: {}
+                },
+                arg: {
+                    type: String,
+                    value: '',
+                    notify: true
+                },
+                options: {
                     type: Object,
                     value: {}
                 }

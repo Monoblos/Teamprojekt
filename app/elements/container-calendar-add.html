@@ -6,7 +6,7 @@
 <link rel="import" href="/app/elements/container-select.html">
 <link rel="import" href="/app/elements/htwg-iconset.html">
 
-<dom-module name="container-calendar-add">
+<dom-module name="container-calendar-add" attributes="arg options">
     <style>
         #wrapper {
             margin: 0px 16px 16px;
@@ -54,7 +54,7 @@
     <template>
         <htwg-navbar></htwg-navbar>
         <div id="wrapper">
-            <htwg-subnavbar></htwg-subnavbar>
+            <htwg-subnavbar arg="[[arg]]" options="[[options]]"></htwg-subnavbar>
             <h1>Termin hinzufügen</h1>
             <input type="text" placeholder="Titel" class="row" value="{{title::input}}">
             <container-select class="row" title="Kategorie" value="{{category}}"></container-select>
@@ -91,6 +91,15 @@
                 },
                 notice: {
                     type: String
+                },
+                arg: {
+                    type: String,
+                    value: '',
+                    notify: true
+                },
+                options: {
+                    type: Object,
+                    value: {}
                 }
             },
             save: function(){
