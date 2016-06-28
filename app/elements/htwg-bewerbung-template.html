@@ -1,0 +1,164 @@
+<link rel="import" href="/bower_components/polymer/polymer.html">
+<link rel="import" href="/bower_components/iron-collapse/iron-collapse.html">
+<link rel="import" href="/bower_components/paper-button/paper-button.html">
+<link rel="import" href="/app/elements/htwg-navbar.html">
+<link rel="import" href="/app/elements/htwg-iconset.html">
+<link rel="import" href="/app/elements/htwg-button.html">
+
+<dom-module id="htwg-bewerbung-template">
+    <template>
+
+        <style is="custom-style">
+            :host {
+                background-color: var(--weather-contrast-color);
+            }
+            .block {
+                display: block;
+                margin-left: 30px;
+                margin-right: 30px;
+                color: var(--weather-primary-color);
+                font-family: 'Oxygen', 'Arimo', 'sans-serif';
+                font-size: 16px;
+            }
+            #bewerbenBtn {
+                color: var(--weather-Highlight-color);
+                width: 300px;
+                margin: 0 auto;
+            }
+            .smallLine {
+                margin-left: 30px;
+                margin-right: 16px;
+                background: var(--weather-primary-color);
+                height: 1px;
+            }
+            h1 {
+                margin-left: 30px;
+                margin-right: 30px;
+                width: 50px;
+                color: var(--weather-primary-color);
+            }
+            span {
+                color: var(--weather-primary-color);
+                font-family: 'Oxygen', 'Arimo', 'sans-serif';
+                font-weight: bold;
+                font-size: 18px;
+            }
+            .left {
+                float: left;
+                margin-left: 16px;
+            }
+            .center {
+                display: inline-block;
+                margin: 0 ;
+            }
+            .right {
+                float: right;
+                width: 32px;
+                margin-right: 16px;
+            }
+            .container {
+                position: fixed;
+                display: inline-block;
+                text-align: center;
+                z-index: 99;
+                width: 100%;
+            }
+            .border-container {
+                padding-top: 50px;
+                padding-bottom: 16px;
+            }
+            iron-icon {
+                color: var(--weather-primary-color);
+                margin: 4px;
+                cursor: pointer;
+            }
+        </style>
+
+        <div>
+            <div class="container">
+                <div class="left">
+                    <iron-icon on-tap="back" icon="htwg:arrow-left"></iron-icon>
+                </div>
+                <div class="center">
+                    <span><content></content></span>
+                </div>
+                <div class="right">&nbsp;</div>
+            </div>
+        </div>
+
+
+
+
+
+
+        <div class="border-container">
+            <h1 on-tap="toggle">Voraussetzungen</h1>
+            <iron-collapse id="collapse">
+                <div class="content">
+                    <div class="block" align="justify">
+                        Die Voraussetzungen in Kürze:
+                        <br> Voraussetzungen für das Bachelorstudium sind: Abitur oder Fachhoschulreife und ein am Studiengang bestandenes zweistufiges Aufnahmeverfahren.
+                        <br>
+                        <br> Das Aufnahmeverfahren:
+                        <br> Die Aufnahmeprüfung zum Bachelorstudium Kommunikationsdesign an der HTWG Konstanz findet in einem zweistufigen Verfahren statt:
+                        <br>
+                        <br> I) Die Mappen
+                        <br>[...]
+                    </div>
+                </div>
+            </iron-collapse>
+            <hr class="smallLine">
+            <h1 on-tap="toggle">Zulassung</h1>
+
+            <iron-collapse id="collapse2">
+                <div class="content">
+                    <div class="block">
+                        Test2
+                    </div>
+                </div>
+            </iron-collapse>
+            <hr class="smallLine">
+            <h1 on-tap="toggle">Termine</h1>
+
+            <iron-collapse id="collapse3">
+                <div class="content">
+                    <div class="block">
+                        Test3
+                    </div>
+                </div>
+            </iron-collapse>
+        </div>
+
+         <htwg-button>Bewerben</htwg-button>
+
+    </template>
+
+    <script>
+        Polymer({
+            is: 'htwg-bewerbung-template',
+            properties: {
+                text1: {
+                    type: String,
+                    value: ""
+                }
+            },
+            ready: function() {
+                console.log("Loading.");
+            },
+            toggle: function() {
+                this.$.collapse.toggle();
+            },
+            navigate: function(target) {
+                var appLocation = document.querySelector("app-location");
+                if (appLocation == null) {
+                    window.location.href = target;
+                } else {
+                    appLocation.set("route.path", target);
+                }
+            },
+            back: function() {
+                this.navigate("/bewerbung");
+            }
+        });
+    </script>
+</dom-module>
