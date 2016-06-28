@@ -51,6 +51,29 @@
             display: none !important;
         }
 
+        h1 {
+            margin-right: 16px;
+            margin-left: 16px;
+        }
+
+        a:link {
+            text-decoration: none;
+            text-decoration-color: var(--weather-primary-color);
+        }
+
+        a:visited {
+            text-decoration: none;
+            color: var(--weather-primary-color);
+        }
+
+        a:hover {
+            text-decoration: none;
+        }
+
+        a:active {
+            text-decoration: none;
+        }
+
         iron-icon {
             margin: 4px;
             cursor: pointer;
@@ -72,6 +95,27 @@
             outline: none;
             width: calc(100% - 42px);
         }
+
+        .resultcontainer {
+            height: 450px;
+            min-width: 300px;
+            max-width: 400px;
+            overflow-y: scroll;
+        }
+
+        .block {
+            height: 180px;
+            min-width: 300px;
+            max-width: 400px;
+            margin-left: 16px;
+            margin-right: 16px;
+            margin-top: 30px;
+            margin-bottom: 30px
+            color: var(--weather-primary-color);
+            font-size: 16px;
+            
+        }
+                
     </style>
 
     <template>
@@ -88,11 +132,27 @@
             </nav>
             <div id="searchbar" class="collapsed">
                 <iron-icon icon="htwg:magnifier"></iron-icon>
-                <input type="text" placeholder="Suche..."/>
+                <input on-keydown="checkForEnter" type="text" placeholder="Suche..." id="searchInput"/>
             </div>
+
+
+            <div class="resultcontainer" hidden$="{{!showSearchResult}}" id="searchResult">
+                <h1>{{searchString}}:</h1>
+            <div class="block" id="searchblock">  
+                <span on-tap="checkLink" id="wib">Wirtschafts<b>informatik</b> versteht sich als interdisziplinäres Fach zwischen <b>Informatik</b> und Betriebswirtschaftslehre. Viele ihrer technologischen und methodischen Grundlagen stammen aus der <b>Informatik</b>, während die Anwendungsfelder überwiegend im betrieblichen Bereich liegen.
+                Die Wirtschafts<b>informatik</b> [...]</span>
+            </div>
+            <div class="block">
+                <span on-tap="checkLink" id="ainb"><b>Informatik</b>systeme sind allgegenwärtig, vom Internet über Mobilfunk, Auto und Flugzeug, bis hin zu Geräten der Unterhaltungselektronik und Medizintechnik. Moderne Produktions- und Dienstleistungssysteme in Industrie und Wirtschaft und die zahlreichen internetbasierten [...]</span>
+            </div>
+            <div class="block">
+                <span on-tap="checkLink" id="gib">Das Studium Gesundheits<b>informatik</b> vermittelt Ihnen die Kenntnisse und Fähigkeiten, die Sie benötigen, um Informationssysteme (u.a mobile Anwendungen) für das Gesundheitswesen zu entwickeln, zu konfigurieren, zu betreiben und anzuwenden. Sie [...]</span>
+            </div>
+        </div>
         </div>
         <div id="sizer"></div>
     </template>
+
 
     <script>
         Polymer({
@@ -108,8 +168,63 @@
 				},
                 timeout: {
                     type: Object
+                },
+                showSearchResult: {
+                    type: Boolean,
+                    value: false
+                },
+                targetUrl: {
+                    type: String,
+                    value: ""
+                },
+                searchString: {
+                    text: String,
+                    value: ""
                 }
 			},
+            ready: function() {
+                
+            },
+            checkForEnter: function (e) {
+                if (e.keyCode === 13) {
+                    this.search();
+                }
+            },
+            search: function(e) {
+                if(this.$.searchInput.value.toLowerCase() == "informatik") {
+                   this.searchString = this.$.searchInput.value;
+                   this.showSearchResult = true;
+                } else {
+                    alert("keine Suche ");
+                    return;
+                }
+            },
+             checkLink: function(e) {
+                if(e.target.id == "wib") {
+                   this.navigate("/bewerbung/wib");
+                } 
+                if(e.target.id == "ainb") {
+                    this.navigate("/bewerbung/aib");
+                }
+                if(e.target.id == "gib") {
+                    this.navigate("/bewerbung/gib");
+                }
+            },
+            closeSearch: function() {
+      
+                console.log("in function");
+                this.showSearchResult = false;
+            },
+            navigate: function(target) {
+                var appLocation = document.querySelector("app-location");
+                if (appLocation == null) {
+                    window.location.href = target;
+                } else {
+                    this.showSearchResult = false;
+                    this.resetNavbar();
+                    appLocation.set("route.path", target);
+                }
+            },
             toggle: function(event){
                 if(event.target._iconName == 'magnifier') {
                     this.$.default.setAttribute('icon', 'htwg:close');
@@ -126,11 +241,15 @@
             },
             leaved: function(event){
                 this.timeout = setTimeout(() => {
-                    this.$.default.setAttribute('icon', 'htwg:toolbox');
-                    this.$.default.classList.remove('collapsed');
-                    this.$.searchbar.classList.add('collapsed');
-                    this.$.extended.classList.add('collapsed');
-                }, 5000);
+                    this.resetNavbar();
+                }, 5000);                                     
+            },
+            resetNavbar: function() {
+                this.$.default.setAttribute('icon', 'htwg:toolbox');
+                this.$.default.classList.remove('collapsed');
+                this.$.searchbar.classList.add('collapsed');
+                this.$.extended.classList.add('collapsed');
+                this.showSearchResult = false;
             },
             entered: function(){
                 clearTimeout(this.timeout);
