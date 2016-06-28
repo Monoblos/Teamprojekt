@@ -8,15 +8,15 @@
 <dom-module name="htwg-calendar" attributes="arg options">
     <template>
         <template is="dom-if" if="[[isCalendar]]">
-            <container-calendar></container-calendar>
+            <container-calendar arg="[[arg]]" options="[[options]]"></container-calendar>
         </template>
 
         <template is="dom-if" if="[[isAdd]]">
-            <container-calendar-add></container-calendar-add>
+            <container-calendar-add arg="[[arg]]" options="[[options]]"></container-calendar-add>
         </template>
 
         <template is="dom-if" if="[[isSubscribe]]">
-            <container-subscribe></container-subscribe>
+            <container-subscribe arg="[[arg]]" options="[[options]]"></container-subscribe>
         </template>
     </template>
 

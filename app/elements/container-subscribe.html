@@ -5,7 +5,7 @@
 <link rel="import" href="/app/elements/htwg-subnavbar.html">
 <link rel="import" href="/app/elements/htwg-iconset.html">
 
-<dom-module name="container-subscribe">
+<dom-module name="container-subscribe" attributes="arg options">
     <style>
         #wrapper {
             margin: 0px 16px 16px;
@@ -67,7 +67,7 @@
     <template>
         <htwg-navbar></htwg-navbar>
         <div id="wrapper">
-        <htwg-subnavbar></htwg-subnavbar>
+        <htwg-subnavbar arg="[[arg]]" options="[[options]]"></htwg-subnavbar>
         <app-localstorage-document id="storage" key="subscriptions" data="{{subscriptions}}"></app-localstorage-document>
         <h1>Termine abonnieren</h1>
         <template is="dom-if" if="subscriptions">
@@ -104,6 +104,15 @@
             is: "container-subscribe",
             properties: {
                 subscriptions: {
+                    type: Object,
+                    value: {}
+                },
+                arg: {
+                    type: String,
+                    value: '',
+                    notify: true
+                },
+                options: {
                     type: Object,
                     value: {}
                 }

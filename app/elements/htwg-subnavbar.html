@@ -2,7 +2,7 @@
 <link rel="import" href="/bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="/app/elements/htwg-iconset.html">
 
-<dom-module name="htwg-subnavbar">
+<dom-module name="htwg-subnavbar" attributes="arg options">
     <style>
         .subnavbar {
             height: 32px;
@@ -40,7 +40,7 @@
     <template>
         <nav class="subnavbar">
             <div class="left">
-                <a href="/calendar" class$="{{show()}}"><iron-icon icon="htwg:arrow-left"></iron-icon></a>
+                <a href="/calendar" hidden="{{!arg}}"><iron-icon icon="htwg:arrow-left"></iron-icon></a>
             </div>
             <div class="right">
                 <a href="/calendar/add"><iron-icon icon="htwg:plus"></iron-icon></a>
@@ -52,11 +52,16 @@
     <script>
         Polymer({
             is: "htwg-subnavbar",
-            show: function(){
-                /*if(check if route is /calendar){
-                    return 'hidden';
-                }*/
-                return "";
+            properties: {
+                arg: {
+                    type: String,
+                    value: '',
+                    notify: true
+                },
+                options: {
+                    type: Object,
+                    value: {}
+                }
             }
         });
     </script>
