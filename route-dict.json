@@ -6,5 +6,6 @@
 	"switchboard": "htwg-switchboard",
 	"bewerbung": "htwg-bewerbung",
 	"calendar": "htwg-calendar",
-	"course": "htwg-course"
+	"course": "htwg-course",
+	"login": "htwg-login"
 }

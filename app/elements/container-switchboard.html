@@ -19,7 +19,7 @@
 			}
 			paper-item {
 				font-weight: bold;
-				min-height: 60px;
+				min-height: 55px;
 				font-size: 20px;
 			}
 			.addable {
@@ -28,21 +28,22 @@
 			.removeable {
 				color: var(--weather-primary-color, blue);
 			}
-			paper-item > a:before {
+			.divider::before {
 				content: " ";
 				display: block;
 				height: 1px;
 				border: 0;
 				border-top: 1px solid var(--weather-primary-color, blue);
-				margin-bottom: 14px;
+				margin: 0 16px 0 48px;
 				padding: 0;
 			}
 			paper-item > a {
+				height: 100%;
 				width: 100%;
+				margin: auto 0;
 			}
 			paper-item > iron-icon {
 				padding-right: 8px;
-				padding-top: 18px;
 				cursor: pointer;
 			}
 			#headline {
@@ -51,7 +52,8 @@
 				font-size: 20px;
 				font-weight: bold;
 				margin: -16px 16px 0;
-				padding-top: 6px;
+				padding-top: 12px;
+				padding-bottom: 20px;
 				text-align: center;
 				width: calc(100% - 32px);
 			}
@@ -66,22 +68,28 @@
 		</div>
 		<div role="listbox" id="menucontent">
 			<template is="dom-repeat" items="[[displayedElements]]" as="el">
-				<paper-item class="removeable">
-					<iron-icon icon="htwg:close" blockhidden$="[[!isEdit]]" on-tap="removeTap" ident="[[el.index]]"></iron-icon>
-					<a href="[[el.link]]">[[el.name]]</a>
-				</paper-item>
+				<div class="divider">
+					<paper-item class="removeable">
+						<iron-icon icon="htwg:close" blockhidden$="[[!isEdit]]" on-tap="removeTap" ident="[[el.index]]"></iron-icon>
+						<a href="[[el.link]]">[[el.name]]</a>
+					</paper-item>
+				</div>
 			</template>
 			<template is="dom-repeat" items="[[customElements]]" as="el">
-				<paper-item class="removeable">
-					<iron-icon icon="htwg:close" blockhidden$="[[!isEdit]]" on-tap="removeCustomTap" ident="[[el.index]]"></iron-icon>
-					<a href="[[el.link]]">[[el.name]]</a>
-				</paper-item>
+				<div class="divider">
+					<paper-item class="removeable">
+						<iron-icon icon="htwg:close" blockhidden$="[[!isEdit]]" on-tap="removeCustomTap" ident="[[el.index]]"></iron-icon>
+						<a href="[[el.link]]">[[el.name]]</a>
+					</paper-item>
+				</div>
 			</template>
 			<template is="dom-repeat" items="[[undisplayedElements]]" as="el">
-				<paper-item class="addable" hidden$="[[!isEdit]]">
-					<iron-icon icon="htwg:plus" on-tap="addTap" ident="[[el.index]]"></iron-icon>
-					<a href="[[el.link]]">[[el.name]]</a>
-				</paper-item>
+				<div class="divider" hidden$="[[!isEdit]]">
+					<paper-item class="addable">
+						<iron-icon icon="htwg:plus" on-tap="addTap" ident="[[el.index]]"></iron-icon>
+						<a href="[[el.link]]">[[el.name]]</a>
+					</paper-item>
+				</div>
 			</template>
 		</div>
 	</template>
@@ -101,9 +109,13 @@
 					type: String,
 					value: "Title"
 				},
-				displayedElements: {
+				staticElements: {
 					type: Array,
 					value: []
+				},
+				displayedElements: {
+					type: Array,
+					computed: "negativStatics(staticElements, undisplayedElements)"
 				},
 				undisplayedElements: {
 					type: Array,
@@ -115,17 +127,36 @@
 				}
 			},
 			ready: function() {
-				this.querySelector("app-localstorage-document").initializeStoredValue();
-				for (var option in this.options) {
-					console.log("Got parameter " + option + " with value: " + this.options[option]);
+				//Init all storages
+				var storages = this.querySelectorAll("app-localstorage-document");
+				for (var i = 0; i < storages.lenght; i++) {
+					storages[i].initializeStoredValue();
 				}
-				
-				this.displayedElements = this.getDisplayedElements();
-				this.undisplayedElements = this.getUndsiplayedElements();
-				console.log("Switchboard loaded.")
+				this.staticElements = this.getAllElements();
+				var storeVal = JSON.parse(localStorage.getItem("undisplayedLinks"));
+				if (storeVal) {
+					this.undisplayedElements = storeVal;
+				}
 			},
-			getDisplayedElements: function() {
-				var res = []
+			containsLink: function(index, list) {
+				for (var i = 0; i < list.length; i++) {
+					if (list[i].index == index) {
+						return true;
+					}
+				}
+				return false;
+			},
+			negativStatics: function(statics, undisplayed) {
+				var res = [];
+				for (var i = 0; i < statics.length; i++) {
+					if (!this.containsLink(statics[i].index, undisplayed)) {
+						res.push(statics[i]);
+					}
+				}
+				return res;
+			},
+			getAllElements: function() {
+				var res = [];
 				res.push({name: "Bewerbung", link: "/bewerbung", index: "BEW"});
 				res.push({name: "Schülerangebote", link: "#", index: "SLA"});
 				res.push({name: "Promotion", link: "#", index: "PMT"});
@@ -133,10 +164,6 @@
 				res.push({name: "Stellenbörse", link: "#", index: "SLB"});
 				res.push({name: "Bibliothek", link: "#", index: "BLT"});
 				res.push({name: "Leben in Konstanz", link: "#", index: "LIK"});
-				return res;
-			},
-			getUndsiplayedElements: function() {
-				var res = []
 				res.push({name: "Bafög", link: "#", index: "BAF"});
 				res.push({name: "Wohnungen", link: "#", index: "WHN"});
 				return res;
@@ -154,20 +181,21 @@
 				var src = Polymer.dom(e);
 				var ident = src.rootTarget.ident;
 				this.moveElement(ident, "displayedElements", "undisplayedElements");
-				console.log("Removed");
+				localStorage.setItem("undisplayedLinks", JSON.stringify(this.undisplayedElements));
+				console.log("removeTap");
 			},
 			addTap: function(e) {
 				var src = Polymer.dom(e);
 				var ident = src.rootTarget.ident;
-				this.moveElement(ident, "undisplayedElements", "displayedElements");
-				console.log("Added");
+				this.moveElement(ident, "undisplayedElements", "");
+				localStorage.setItem("undisplayedLinks", JSON.stringify(this.undisplayedElements));
+				console.log("addTap");
 			},
 			removeCustomTap: function(e) {
 				var src = Polymer.dom(e);
-				debugSrc = src;
 				var ident = src.rootTarget.ident;
 				this.moveElement(ident, "customElements", "");
-				console.log("Removed custom");
+				console.log("removeCustomTap");
 			},
 			moveElement: function(ident, src, dst) {
 				var index = -1;

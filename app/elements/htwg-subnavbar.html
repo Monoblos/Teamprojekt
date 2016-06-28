@@ -1,0 +1,68 @@
+<link rel="import" href="/bower_components/polymer/polymer.html">
+<link rel="import" href="/bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="/app/elements/htwg-iconset.html">
+
+<dom-module name="htwg-subnavbar" attributes="arg options">
+    <style>
+        .subnavbar {
+            height: 32px;
+            width: 100%;
+            color: var(--weather-primary-color);
+            background-color: var(--weather-contrast-color);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .right {
+            width: 80px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .left {
+            width: 32px;
+        }
+
+        a {
+            color: var(--weather-primary-color);
+        }
+
+        iron-icon {
+            margin: 4px;
+            cursor: pointer;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+
+    <template>
+        <nav class="subnavbar">
+            <div class="left">
+                <a href="/calendar" hidden="{{!arg}}"><iron-icon icon="htwg:arrow-left"></iron-icon></a>
+            </div>
+            <div class="right">
+                <a href="/calendar/add"><iron-icon icon="htwg:plus"></iron-icon></a>
+                <a href="/calendar/register"><iron-icon icon="htwg:doctorate-plus"></iron-icon></a>
+            </div>
+        </nav>
+    </template>
+
+    <script>
+        Polymer({
+            is: "htwg-subnavbar",
+            properties: {
+                arg: {
+                    type: String,
+                    value: '',
+                    notify: true
+                },
+                options: {
+                    type: Object,
+                    value: {}
+                }
+            }
+        });
+    </script>
+</dom-module>

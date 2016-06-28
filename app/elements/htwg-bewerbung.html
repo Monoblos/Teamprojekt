@@ -1,7 +1,9 @@
 <link rel="import" href="/bower_components/polymer/polymer.html">
 <link rel="import" href="/bower_components/paper-radio-button/paper-radio-button.html">
+<link rel="import" href="/bower_components/paper-checkbox/paper-checkbox.html">
 <link rel="import" href="/app/elements/htwg-navbar.html">
-
+<link rel="import" href="/app/elements/htwg-iconset.html">
+<link rel="import" href="/app/elements/htwg-bewerbung-template.html">
 
 
 <dom-module id="htwg-bewerbung" attributes="arg options">
@@ -9,111 +11,183 @@
 
       <style is="custom-style">
 
+        :host {
+            background-color: var(--weather-contrast-color);
 
-          paper-radio-button.radio {
-            --paper-radio-button-checked-color: var(--weather-primary-color);
-            --paper-radio-button-checked-ink-color: var(--weather-primary-color);
-            --paper-radio-button-unchecked-color: var(--weather-primary-color);
-            --paper-radio-button-unchecked-ink-color: var(--weather-primary-color);
-            --paper-radio-button-label-color: var(--weather-primary-color);
-          }
-
-        .bewerbungContainer {
-            padding-top: 20px;
         }
 
-
-        .flex-container {
-            display: block;
-            margin-left:    45%;
-            margin-right:   55%;
-            padding: 5px;
+        .border-container {
+            padding-left: 16px;
+            padding-top: 50px;
+            padding-bottom: 16px;
         }
 
-        hr {
-            width: 300px; 
+        .border-container-mid {
+            padding-left: 16px;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+        }
+
+        paper-checkbox {
+            --paper-checkbox-checked-color: var(--weather-primary-color);
+            --paper-checkbox-checked-ink-color: var(--weather-primary-color);
+            --paper-checkbox-unchecked-color: var(--weather-primary-color);
+            --paper-checkbox-unchecked-ink-color: var(--weather-primary-color);
+            --paper-checkbox-label-color: var(--weather-primary-color);
+
+            margin-left: 6px;
+            margin-top: 10px;
+            margin-bottom: -30px;
+            content:' ';
+            display: block; 
+            font-family: 'Oxygen', 'Arimo', 'sans-serif';
+            font-weight: bold;
+            min-height: 60px;
+            font-size: 20px;
+        }
+
+        .bigLine {
+            margin-left: 18px;
+            margin-right: 16px;
+            color: var(--weather-primary-color);
+            background-color: var(--weather-primary-color);
+            height: 2px;
+        }
+
+        .smallLine {
+            margin-left: 50px;
+            margin-right: 16px;
+            background: var(--weather-primary-color);
             height: 1px;
-            margin-left: auto;
-            margin-right:  auto;
-            color: var(--weather-primary-color);
-            background: var(--weather-primary-color);
-
         }
 
-        hr #cutline {
-            width: 200px; 
-            height: 0,5px;
+        span {
             color: var(--weather-primary-color);
-            background: var(--weather-primary-color);
-
+           
+            font-family: 'Oxygen', 'Arimo', 'sans-serif';
+            font-weight: bold;
+            min-height: 60px;
+            font-size: 20px;
         }
 
         a {
-            display:block;
-            width:150px;
-            height: 100%;
-            margin-right: 55%;
-            margin-left:  45%;
-            padding-top: 20px;
             color: var(--weather-primary-color);
-        }
-
-
-        span {
             display:block;
-            width:100px;
-            height: 100%;
-            margin-right: 55%;
-            margin-left: 45%;
-            padding-top: 20px;
-            color: var(--weather-primary-color);
-            font-family:'Arial';
+           
+            margin-left: 50px;
+            margin-right: 16px;
+            font-family: 'Oxygen', 'Arimo', 'sans-serif';
             font-weight: bold;
+            min-height: 30px;
+            font-size: 20px;
         }
 
+        a:link {
+            text-decoration: none;
+            text-decoration-color: var(--weather-primary-color);
+        }
+
+        a:visited {
+            text-decoration: none;
+            text-decoration-color: var(--weather-primary-color);
+        }
+
+        a:hover {
+            text-decoration: none;
+        }
+
+        a:active {
+            text-decoration: none;
+        }
+
+        iron-icon {
+            color: var(--weather-primary-color);
+            margin: 4px;
+            cursor: pointer;
+        }
+
+        .left {
+            float:left;
+            margin-left: 16px;
+        }
+
+        .center {
+            display: inline-block;
+            margin:0 auto;
+
+        }
+
+        .right {
+            float:right;
+            margin-right: 16px;
+        }
+
+        .container {
+        	background-color: var(--weather-contrast-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width:100%;
+            text-align:center;
+            z-index: 99;
+        }
+        
 
        </style>
 
         <htwg-navbar></htwg-navbar>
 
-
-            <div class="bewerbungContainer">          
-
-
-                <span>Bewerbung</span>
-
-
-
-                <div class="flex-container">
-                        <paper-radio-button id="bachelorRadio" on-tap="showUp" class="radio">Bachelor</paper-radio-button>
-                        <paper-radio-button id="masterRadio"   on-tap="showUp"    class="radio">Master</paper-radio-button>
+        <div hidden$="{{!showMain}}">
+            <div class="container">          
+                <div class="left">
+                    <iron-icon on-tap="backNavigate" id="back" icon="htwg:arrow-left" ></iron-icon>
                 </div>
-                <hr>
+                <div class="center"> 
+                    <span >Bewerbung</span>
+                </div>
+                <div class="right">
+                    <iron-icon on-tap="homeNavigate" id="close" icon="htwg:close"></iron-icon>
+                </div>
+        </div>
 
-               <div class="flex-container">
+            <div class="border-container" >
+                <div>
+                        <paper-checkbox id="bachelorRadio"  on-tap="showUp" class="radio">Bachelor</paper-checkbox>
+                        <paper-checkbox id="masterRadio"    on-tap="showUp" class="radio">Master</paper-checkbox>
+                </div>
+            </div>
+            <hr class="bigLine">
+            <div class="border-container-mid">
+               <div >
                     <paper-radio-group>
-                        <paper-radio-button id="ag"  class="radio" on-tap="setFacultys">Architektur & Gestaltung</paper-radio-button>
-                        <paper-radio-button id="biw" class="radio" on-tap="setFacultys">Bauingenieurwesen</paper-radio-button>
-                        <paper-radio-button id="eit" class="radio" on-tap="setFacultys">Elektro- & Informationstechn.</paper-radio-button>
-                        <paper-radio-button id="inf" class="radio" on-tap="setFacultys">Informatik</paper-radio-button>
-                        <paper-radio-button id="mb"  class="radio" on-tap="setFacultys">Maschienenbau</paper-radio-button>
-                        <paper-radio-button id="bwl" class="radio" on-tap="setFacultys">Betriebswirtschaftslehre</paper-radio-button>
+                        <paper-checkbox id="ag"  on-tap="setFacultys">Architektur & Gestaltung</paper-checkbox>
+                        <paper-checkbox id="biw" on-tap="setFacultys">Bauingenieurwesen</paper-checkbox>
+                        <paper-checkbox id="eit" on-tap="setFacultys">Elektro- & Informationstechn.</paper-checkbox>
+                        <paper-checkbox id="inf" on-tap="setFacultys">Informatik</paper-checkbox>
+                        <paper-checkbox id="mb"  on-tap="setFacultys">Maschienenbau</paper-checkbox>
+                        <paper-checkbox id="bwl" on-tap="setFacultys">Betriebswirtschaftslehre</paper-checkbox>
                     </paper-radio-group>
                 </div>
-
-                <hr>
-
-
-                <template is="dom-repeat" items="{{studiengang}}">
-                    <a href="{{item.url}}">{{item.name}}</a>
-                    <hr id="cutline">
-                </template>
-    
-
+                
+            </div>
+            <hr class="bigLine">
+            <template is="dom-repeat" items="{{studiengang}}">
+            	<div>
+                	<a href="{{item.url}}">{{item.name}}</a>
+                </div>
+                <hr class="smallLine">
+            </template>
     </div>
 
 
+    <!--<template is="dom-if" if="{{!showKDB}}">
+        <htwg-bewerbung-kdb></htwg-bewerbung-kdb>
+    </template> -->
 
+
+    <div hidden$="{{!showKDB}}">
+        <htwg-bewerbung-template url="{{arg}}"></htwg-bewerbung-template>
+    </div>
 
     </template>
 
@@ -129,61 +203,99 @@
                     type: Array,
                     value: []
                 },
+                showKDB: {
+                    type: Boolean,
+                    value: false
+                },
+                showMain: {
+                    type: Boolean,
+                    value: true
+                },
+                checkURL: {
+                    type: Boolean,
+                    computed: "compURL(arg)"
+                }
             },
             ready: function() {
-                //window.location.href = "/home"
+
+            },
+            compURL: function(a) {
+                this.facultys = [];
+
+                if(a == "") {
+                	this.showMain = true;
+                    this.showKDB = false;
+                } else {
+                	this.showMain = false;
+                    this.showKDB = true; 
+                	
+                }  
+            },
+            backNavigate: function() {
+                this.navigate("/switchboard");
+            },
+            homeNavigate: function() {
+                this.navigate("/");
+            },
+            navigate: function(target) {
+                var appLocation = document.querySelector("app-location");
+                if (appLocation == null) {
+                    window.location.href = target;
+                } else {
+                    appLocation.set("route.path", target);
+                }
             },
             push_Arch_Gest_Bachelor: function() {
                 this.push("studiengang", {
                     name: 'Bachelor Architektur',
                     fak: 'Architektur_Gestaltung',
-                    url: '/bewerbung-kdb'
+                    url: '/bewerbung/arb'
                 });
                 this.push("studiengang", {
                     name: 'Bachelor Kommunikationsdesign',
                     fak: 'Architektur_Gestaltung',
-                    url: '/bewerbung-kdb'
+                    url: '/bewerbung/kdb'
                 });
             },
             push_Arch_Gest_Master: function() {
                 this.push("studiengang", {
                     name: 'Master Architektur',
                     fak: 'Architektur_Gestaltung',
-                    url: '/home'
+                    url: '/bewerbung/arm'
                 });
                 this.push("studiengang", {
                     name: 'Master Kommunikationsdesign',
                     fak: 'Architektur_Gestaltung',
-                    url: '/home'
+                    url: '/bewerbung/kdm'
                 });
             },
             push_Bauingenieurwesen_Bachelor: function() {
                 this.push("studiengang", {
                     name: 'Bachelor Bauingenieurwesen',
                     fak: 'Bauingenieurwesen',
-                    url: '/home'
+                    url: '/bewerbung/bib'
                 });
                 this.push("studiengang", {
                     name: 'Bachelor Wirtschaftsingenieurwesen Bau',
                     fak: 'Bauingenieurwesen',
-                    url: '/home'
+                    url: '/bewerbung/wib'
                 });
                 this.push("studiengang", {
                     name: 'Umwelttechnik und Ressourcenmanagement',
                     fak: 'Bauingenieurwesen',
-                    url: '/home'
+                    url: '/bewerbung/urb'
                 });
             },
             push_Bauingenieurwesen_Master: function() {
                 this.push("studiengang", {
                     name: 'Master Bauingenieurwesen',
                     fak: 'Bauingenieurwesen',
-                    url: '/home'
+                    url: '/bewerbung/bim'
                 });
                 this.push("studiengang", {
                     name: 'Master Wirtschaftsingenieurwesen Bau',
                     fak: 'Bauingenieurwesen',
-                    url: '/home'
+                    url: '/bewerbung/wim'
                 });
             },
 
@@ -191,17 +303,17 @@
                 this.push("studiengang", {
                     name: 'Automobilinformationstechnik',
                     fak: 'Elektro_Informationstechnik',
-                    url: '/home'
+                    url: '/bewerbung/eib'
                 });
                 this.push("studiengang", {
                     name: 'Elektrotechnik und Informationstechnik',
                     fak: 'Elektro_Informationstechnik',
-                    url: '/home'
+                    url: '/bewerbung/eitb'
                 });
                 this.push("studiengang", {
                     name: 'Wirtschaftsingenieurwesen Elektrotechnik und Informationstechnik',
                     fak: 'Elektro_Informationstechnik',
-                    url: '/home'
+                    url: '/bewerbung/weib'
                 });
             },
 
@@ -209,51 +321,51 @@
                 this.push("studiengang", {
                     name: 'Elektrische Systeme',
                     fak: 'Elektro_Informationstechnik',
-                    url: '/home'
+                    url: '/bewerbung/esb'
                 });
                 this.push("studiengang", {
                     name: 'Wirtschaftsingenieurwesen',
                     fak: 'Elektro_Informationstechnik',
-                    url: '/home'
+                    url: '/bewerbung/wib'
                 });
                 this.push("studiengang", {
                     name: 'Systems Engineering',
                     fak: 'Elektro_Informationstechnik',
-                    url: '/home'
+                    url: '/bewerbung/seb'
                 });
                 this.push("studiengang", {
                     name: 'International Project Engineering',
                     fak: 'Elektro_Informationstechnik',
-                    url: '/home'
+                    url: '/bewerbung/ipeb'
                 });
             },
             push_Informatik_Bachelor: function() {
                 this.push("studiengang", {
                     name: 'Angewandte Informatik',
                     fak: 'Informatik',
-                    url: '/home'
+                    url: '/bewerbung/ainb'
                 });
                 this.push("studiengang", {
                     name: 'Wirtschaftsinformatik',
                     fak: 'Informatik',
-                    url: '/home'
+                    url: '/bewerbung/wib'
                 });
                 this.push("studiengang", {
                     name: 'Gesundheitsinformatik',
                     fak: 'Informatik',
-                    url: '/home'
+                    url: '/bewerbung/gib'
                 });
             },
             push_Informatik_Master: function() {
                 this.push("studiengang", {
                     name: 'Master Informatik',
                     fak: 'Informatik',
-                    url: '/home'
+                    url: '/bewerbung/im'
                 });
                 this.push("studiengang", {
                     name: 'Business Information Technology',
                     fak: 'Informatik',
-                    url: '/home'
+                    url: '/bewerbung/bitm'
                 });
             },
 
@@ -261,68 +373,68 @@
                 this.push("studiengang", {
                     name: 'Maschinenbau Konstruktion und Entwicklung',
                     fak: 'Maschinenbau',
-                    url: '/home'
+                    url: '/bewerbung/mkeb'
                 });
                 this.push("studiengang", {
                     name: 'Maschinenbau Entwicklung und Produktion',
                     fak: 'Maschinenbau',
-                    url: '/home'
+                    url: '/bewerbung/mepb'
                 });
                 this.push("studiengang", {
                     name: 'Verfahrens- und Umwelttechnik',
                     fak: 'Maschinenbau',
-                    url: '/home'
+                    url: '/bewerbung/vub'
                 });
                 this.push("studiengang", {
                     name: 'Wirtschaftsingenieurwesen Maschinenbau',
                     fak: 'Maschinenbau',
-                    url: '/home'
+                    url: '/bewerbung/wimb'
                 });
             },
             push_Maschienenbau_Master: function() {
                 this.push("studiengang", {
                     name: 'Automotive Systems Engineering',
                     fak: 'Maschinenbau',
-                    url: '/home'
+                    url: '/bewerbung/aseb'
                 });
                 this.push("studiengang", {
                     name: 'Mechatronik',
                     fak: 'Maschinenbau',
-                    url: '/home'
+                    url: '/bewerbung/mb'
                 });
                 this.push("studiengang", {
                     name: 'Mechanical Engineering and International Sales Management ',
                     fak: 'Maschinenbau',
-                    url: '/home'
+                    url: '/bewerbung/meismb'
                 });
                 this.push("studiengang", {
                     name: 'Umwelt- und Verfahrenstechnik',
                     fak: 'Maschinenbau',
-                    url: '/home'
+                    url: '/bewerbung/uvtb'
                 });
                 this.push("studiengang", {
                     name: 'Wirtschaftsingenieurwesen',
                     fak: 'Maschinenbau',
-                    url: '/home'
+                    url: '/bewerbung/wib'
                 });
             },
             push_Wirtschaft_Kultur_Recht_Bachelor: function() {
                 this.push("studiengang", {
                     name: 'Wirtschaftssprachen Asien und Management China | Südost- und Südasien',
                     fak: 'Wirtschaft_Kultur_Recht',
-                    url: '/home'
+                    url: '/bewerbung/wiamb'
                 });
                 this.push("studiengang", {
                     name: 'Wirtschaftssprache Deutsch und Tourismusmanagement',
                     fak: 'Wirtschaft_Kultur_Recht',
-                    url: '/home'
+                    url: '/bewerbung/wdtb'
                 });
             },
             push_Wirtschaft_Kultur_Recht_Master: function() {
                 this.push("studiengang", {
                     name: 'Internationales Management Asien',
                     fak: 'Wirtschaft_Kultur_Recht',
-                    url: '/home'
+                    url: '/bewerbung/imam'
                 });
             },
             showBachelor: function() {
@@ -454,6 +566,10 @@
                 }
 
                 if (this.$.bachelorRadio.checked == this.$.masterRadio.checked && this.facultys.length > 0) {
+                    this.showBachelorMaster();
+                }
+
+                if (this.$.bachelorRadio.checked == true && this.$.masterRadio.checked == true) {
                     this.showBachelorMaster();
                 }
 

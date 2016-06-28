@@ -1,10 +1,12 @@
 <link rel="import" href="/bower_components/polymer/polymer.html">
 <link rel="import" href="/bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="/bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="/bower_components/app-storage/app-localstorage/app-localstorage-document.html">
 <link rel="import" href="/app/elements/htwg-navbar.html">
+<link rel="import" href="/app/elements/htwg-subnavbar.html">
 <link rel="import" href="/app/elements/htwg-iconset.html">
 
-<dom-module name="container-calendar">
+<dom-module name="container-calendar" attributes="arg options">
     <style>
         :host {
             color: var(--weather-primary-color);
@@ -13,7 +15,7 @@
 
         #wrapper {
             margin: 0px 16px 16px;
-            width: calc(100vw - 32px);
+            width: calc(100% - 32px);
         }
 
         #wrapper > section{
@@ -23,26 +25,9 @@
             align-items: center;
         }
 
-        #wrapper > header {
-            height: 32px;
-            width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: flex-end;
-        }
-
-        #wrapper > header > div {
-            display: flex;
-            justify-content: space-between;
-            width: 128px;
-        }
-
-        #wrapper > header > div > a {
-            color: var(--weather-primary-color);
-        }
-
         iron-icon {
             margin: 4px;
+            cursor: pointer;
         }
 
         .entry {
@@ -137,62 +122,57 @@
     </style>
 
     <template>
-        <htwg-navbar></htwg-navbar>
+        <htwg-navbar on-navbar="subscribe"></htwg-navbar>
         <div id="wrapper">
-            <header>
-                <div>
-                    <a href="/calendar/add"><iron-icon icon="htwg:plus"></iron-icon></a>
-                    <a href="/calendar/subscribe"><iron-icon icon="htwg:subscribe"></iron-icon></a>
-                    <a href="/course"><iron-icon icon="htwg:doctorate-plus"></iron-icon></a>
-                </div>
-            </header>
+            <htwg-subnavbar arg="[[arg]]" options="[[options]]"></htwg-subnavbar>
             <app-localstorage-document id="storage" key="subscriptions" data="{{subscriptions}}"></app-localstorage-document>
-                <template is="dom-if" if="{{selectedDayFeed.length}}">
-                    <section name="entries">
-                        <template is="dom-repeat" items="{{selectedDayFeed}}">
-                            <div class$="{{getFeedClass(item, 'entry')}}">
-                                <iron-icon icon="htwg:{{item.type}}"></iron-icon>
-                                <div>
-                                    <template is="dom-if" if="{{item.author}}">
-                                        <p>{{item.author}}:</p>
-                                    </template>
-                                    <template is="dom-if" if="{{hasDetails(item)}}">
-                                        <p class="bold">{{item.time}} | {{item.room}}</p>
-                                    </template>
-                                    <template is="dom-if" if="{{item.text}}">
-                                        <p class="bold">{{item.text}}</p>
-                                    </template>
-                                </div>
+            <iron-ajax id="appointments" auto handle-as="json" on-response="setAppointments" on-error="setAppointments"></iron-ajax>
+            <template is="dom-if" if="{{selectedDayFeed.length}}">
+                <section name="entries">
+                    <template is="dom-repeat" items="{{selectedDayFeed}}">
+                        <div class$="{{getFeedClass(item, 'entry')}}">
+                            <iron-icon icon="htwg:{{item.type}}"></iron-icon>
+                            <div>
+                                <template is="dom-if" if="{{item.author}}">
+                                    <p>{{item.author}}:</p>
+                                </template>
+                                <template is="dom-if" if="{{hasDetails(item)}}">
+                                    <p class="bold">{{item.time}} | {{item.room}}</p>
+                                </template>
+                                <template is="dom-if" if="{{item.text}}">
+                                    <p class="bold">{{item.text}}</p>
+                                </template>
                             </div>
-                        </template>
-                        <hr />
-                    </section>
-                </template>
-                <section id="calendar">
-                    <header>
-                        <iron-icon icon="htwg:arrow-left" on-tap="changeMonth"></iron-icon>
-                        <div><p>{{calendar.month.name}} {{calendar.year}}</p></div>
-                        <iron-icon icon="htwg:arrow-right" on-tap="changeMonth"></iron-icon>
-                    </header>
-                    <section id="days">
-                        <template is="dom-repeat" items="{{calendar.days}}">
-                            <div>{{item}}</div>
-                        </template>
-                    </section>
-                    <template is="dom-if" if="{{calendar.max_day}}">
-                        <section id="rows">
-                            <template is="dom-repeat" items="{{createArray(calendar.offset)}}">
-                                <div name="spacer"></div>
-                            </template>
-                            <template is="dom-repeat" items="{{createArray(calendar.max_day)}}">
-                                <div class$="{{getDayClass(item)}}" on-tap="selectDay"><span>{{item}}</span></div>
-                            </template>
-                            <template is="dom-repeat" items="{{createArray(calendar.postset)}}">
-                                <div name="spacer"></div>
-                            </template>
-                        </section>
+                        </div>
+                    </template>
+                    <hr />
+                </section>
+            </template>
+            <section id="calendar">
+                <header>
+                    <iron-icon icon="htwg:arrow-left" on-tap="changeMonth"></iron-icon>
+                    <div><p>{{calendar.month.name}} {{calendar.year}}</p></div>
+                    <iron-icon icon="htwg:arrow-right" on-tap="changeMonth"></iron-icon>
+                </header>
+                <section id="days">
+                    <template is="dom-repeat" items="{{calendar.days}}">
+                        <div>{{item}}</div>
                     </template>
                 </section>
+                <template is="dom-if" if="{{calendar.max_day}}">
+                    <section id="rows">
+                        <template is="dom-repeat" items="{{createArray(calendar.offset)}}">
+                            <div name="spacer"></div>
+                        </template>
+                        <template is="dom-repeat" items="{{createArray(calendar.max_day)}}">
+                            <div class$="{{getDayClass(calendar.month, item)}}" on-tap="selectDay"><span>{{item}}</span></div>
+                        </template>
+                        <template is="dom-repeat" items="{{createArray(calendar.postset)}}">
+                            <div name="spacer"></div>
+                        </template>
+                    </section>
+                </template>
+            </section>
         </div>
     </template>
 
@@ -215,7 +195,7 @@
                     value: {
                         "months": [
                             {"name":"Januar","max_day":31},
-                            {"name":"Februar","max_day":29},
+                            {"name":"Februar","max_day":28},
                             {"name":"März","max_day":31},
                             {"name":"April","max_day":30},
                             {"name":"Mai","max_day":31},
@@ -229,20 +209,48 @@
                         ],
                         "days": ["Mo","Di","Mi","Do","Fr","Sa","So"]
                     }
+                },
+                subscriptions : {
+                    type: Object,
+                    value: {}
+                },
+                appointments : {
+                    type: Object,
+                    value: {}
+                },
+                arg: {
+                    type: String,
+                    value: '',
+                    notify: true
+                },
+                options: {
+                    type: Object,
+                    value: {}
                 }
             },
             ready: function(){
                 this.date = new Date();
-                this.appointments = this.getAppointments(''+this.date.getFullYear(), ('0' + (1+this.date.getMonth())).slice(-2));
                 this.selected = this.date.getDate();
-                this.renderCalendar(this.date);
+                this.getAppointments();
                 this.$.storage.initializeStoredValue();
-                //this.setFeed(this.date.getFullYear() + '-' + ('0' + (this.date.getMonth() + 1)).slice(-2) + '-' + ('0' + this.date.getDate()).slice(-2));
+            },
+            subscribe: function(event){
+                if(event.detail.element == "pen"){
+                    this.navigate('/calendar/subscribe');
+                }
+            },
+            navigate: function(target) {
+                var appLocation = document.querySelector("app-location");
+                if (appLocation == null) {
+                    window.location.href = target;
+                } else {
+                    appLocation.set("route.path", target);
+                }
             },
             getFeedClass: function(item, defaultClass){
                 return this.subscriptions[item.type] == 2 ? defaultClass + ' highlight' : defaultClass;
             },
-            getDayClass: function(item){
+            getDayClass: function(month, item){
                 var dayClass = 'day';
                 if(this.selected == item) {
                     dayClass += ' selected';
@@ -286,14 +294,6 @@
                 }
                 return false;
             },
-            renderCalendar: function(date){
-                this.set('calendar.month', {"name": this.calendar.months[date.getMonth()].name, "key": ('0' + (1+date.getMonth())).slice(-2)});
-                this.set('calendar.max_day', this.calendar.months[date.getMonth()].max_day);
-                date.setDate(1);
-                this.set('calendar.offset', (date.getDay() + 6) % 7);
-                this.set('calendar.postset', 7 - ((this.calendar.offset + this.calendar.max_day) % 7));
-                this.set('calendar.year', date.getFullYear());
-            },
             createArray: function(size){
                 var array = [];
                 for(var i = 1; i <= size; i++){
@@ -301,24 +301,21 @@
                 }
                 return array;
             },
-            getAppointments: function(year, month){
-                return {
-                    "2016-06-01": [
-                        {"type":"balloon", "text":"Wie man ein Café aufbaut", "author":"Friedrich der Große", "time":"07:30", "room":"F033"}
-                    ],
-                    "2016-06-08": [
-                        {"type":"profile-filled", "text":"Mittagessen mitnehmen"}
-                    ],
-                    "2016-06-14": [
-                        {"type":"doctorate", "text":"Fällt aus! Bin Skifahren.", "author":"Liquid Layout - Jo Wickert"},
-                        {"type":"profile-filled", "text":"Mittagessen mitnehmen"},
-                        {"type":"exam", "text":"Abgabe Giraffe, jpg, HD", "author":"Philipp Finkbeiner"},
-                        {"type":"balloon", "text":"Wie man ein Café zerstört", "author":"Prof. Volker Friedrich", "time":"19:30", "room":"L202"}
-                    ],
-                    "2016-06-22": [
-                        {"type":"exam", "text":"Abgabe Affe svg", "author":"Orang Utan"}
-                    ]
-                };
+            getAppointments: function(){
+                this.$.appointments.url = '/public/data/appointments-' + this.date.getFullYear() + '-' + ('0' + (1+this.date.getMonth())).slice(-2) + '.json';
+            },
+            setAppointments: function(event, data){
+                if(event.type != 'error'){
+                    this.appointments = data.response;
+                } else {
+                    this.appointments = {};
+                }
+                this.set('calendar.month', {"name": this.calendar.months[this.date.getMonth()].name, "key": ('0' + (1+this.date.getMonth())).slice(-2)});
+                this.set('calendar.max_day', this.calendar.months[this.date.getMonth()].max_day);
+                this.date.setDate(1);
+                this.set('calendar.offset', (this.date.getDay() + 6) % 7);
+                this.set('calendar.postset', 7 - ((this.calendar.offset + this.calendar.max_day) % 7));
+                this.set('calendar.year', this.date.getFullYear());
             },
             selectDay: function(event){
                 var el = event.target;
@@ -363,7 +360,15 @@
                         this.date.setMonth(this.date.getMonth() - 1);
                     }
                 }
-                this.renderCalendar(this.date);
+                if(this.date.getMonth() == 1){
+                    var days = 28;
+                    var year = this.date.getFullYear();
+                    if(((year % 4 == 0) && (year % 100 != 0)) || (year % 400 == 0)){
+                        days = 29;
+                    }
+                    this.calendar.months[this.date.getMonth()].max_day = days;
+                }
+                this.getAppointments();
             }
         });
     </script>

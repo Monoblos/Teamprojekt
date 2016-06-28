@@ -1,0 +1,42 @@
+<link rel="import" href="/bower_components/polymer/polymer.html">
+<link rel="import" href="/bower_components/paper-button/paper-button.html">
+<link rel="import" href="/bower_components/paper-ripple/paper-ripple.html">
+
+<dom-module name="htwg-button">
+    <style>
+        :host {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+
+        paper-button {
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 13pt;
+            outline: none;
+            cursor: pointer;
+            text-align: center;
+            padding: 8px 0px;
+            width: calc(100% - 4px);
+            max-width: 600px;
+            color: var(--weather-contrast-color);
+            background: var(--weather-highlight-color);
+            text-transform: none;
+        }
+    </style>
+
+    <template>
+        <paper-button>
+            <content></content>
+            <paper-ripple><paper-ripple>
+        </paper-button>
+    </template>
+
+    <script>
+        Polymer({
+            is: "htwg-button"
+        });
+    </script>
+</dom-module>

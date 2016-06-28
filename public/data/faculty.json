@@ -1,0 +1,26 @@
+[
+  {
+    "value": "ag",
+    "name": "Architektur und Gestaltung"
+  },
+  {
+    "value": "bi",
+    "name": "Bauingenieurwesen"
+  },
+  {
+    "value": "ei",
+    "name": "Elektrotechnik und Informationstechnik"
+  },
+  {
+    "value": "in",
+    "name": "Informatik"
+  },
+  {
+    "value": "ma",
+    "name": "Machinenbau"
+  },
+  {
+    "value": "ws",
+    "name": "Wirtschafts-, Kultur- und Rechtswissenschaften"
+  }
+]

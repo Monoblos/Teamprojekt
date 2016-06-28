@@ -1,0 +1,155 @@
+<link rel="import" href="/bower_components/polymer/polymer.html">
+<link rel="import" href="/bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="/bower_components/app-storage/app-localstorage/app-localstorage-document.html">
+<link rel="import" href="/app/elements/htwg-iconset.html">
+<link rel="import" href="/app/elements/htwg-navbar.html">
+<link rel="import" href="/bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="/bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="/bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="/bower_components/paper-item/paper-item.html">
+
+<dom-module name="container-select" attributes="url title">
+    <style>
+        paper-dropdown-menu {
+            border: 3px solid var(--weather-primary-color);
+            padding: 0 5px;
+            width: calc(100% - 20px);
+
+            --paper-input-container-label: {
+                font-size: 13pt;
+                font-weight: bold;
+                color: var(--weather-primary-color);
+            };
+            --paper-input-container-input: {
+                cursor: pointer;
+                font-size: 13pt;
+                font-weight: bold;
+                color: var(--weather-primary-color);
+                height: 100%;
+                margin-bottom: 0px;
+            };
+            --paper-input-container-underline: {
+                display: none;
+            };
+
+            --paper-dropdown-menu-icon: {
+                color: var(--weather-primary-color);
+            };
+            --paper-input-container-underline-focus:{
+                height: 0px;
+            };
+        }
+
+        paper-dropdown-menu ::content #contentWrapper > div.dropdown-content.paper-menu-button {
+            margin-bottom: 10px;
+        }
+
+        paper-dropdown-menu {
+            /*  border: 3px solid var(--weather-primary-color); */
+            --paper-menu-button-dropdown: {
+                margin-left: -8px !important;
+                width: calc(100% - 41px);
+                border: 3px solid var(--weather-primary-color);
+            };
+        }
+
+        paper-listbox {
+            --paper-listbox: {
+                color: var(--weather-primary-color);
+                border: 3px var(--weather-primary-color);
+                width: 100%;
+                height: 100%;
+                padding-bottom: -30px;
+            }
+        }
+
+        .menu {
+            margin-left: -8px;
+            margin-top: -3px;
+            right: 20px;
+            left: 24px !important;
+        }
+
+    </style>
+
+    <template>
+        <paper-dropdown-menu id="menu" label="[[title]]" no-label-float vertical-align="top" horizontal-align="left"
+                             horizontal-offset="-8">
+            <paper-listbox class="dropdown-content" selected="{{selected}}" on-iron-activate="closeMenu">
+                <template is="dom-repeat" items="[[items]]" as="item">
+                    <paper-item value="[[item.value]]">[[item.name]]</paper-item>
+                </template>
+            </paper-listbox>
+        </paper-dropdown-menu>
+        <iron-ajax auto url="[[url]]" handle-as="json" last-response="{{items}}"></iron-ajax>
+    </template>
+
+    <script type="text/javascript">
+        Polymer({
+            is: "container-select",
+            properties: {
+                url: String,
+                title: String,
+                items: {
+                    type: Array,
+                    notify: true
+                },
+                selected: {
+                    type: Number,
+                    notify: true
+                },
+                value: {
+                    type: String,
+                    notify: true
+                }
+            },
+            listeners: {
+                "selected-changed": "onSelectedChanged",
+                "value-changed": "onValueChanged",
+                "items-changed": "onItemsChanged"
+            },
+            ready: function () {
+                // change paper-dropdown-menu icon
+                setTimeout(function () {
+                    var icons = document.querySelectorAll('container-select paper-dropdown-menu iron-icon svg path');
+                    for (var i = 0; i < icons.length; i++) {
+                        icons[i].setAttribute('d', 'M21.116,8.528c0.152,0.152,0.152,0.4,0,0.552l-5.952,5.955l-3.118,3.113L8.93,15.035L2.978,9.08 c-0.152-0.152-0.152-0.4,0-0.552L5.54,5.966c0.153-0.153,0.4-0.153,0.552,0l5.955,5.955l5.956-5.955 c0.152-0.153,0.399-0.153,0.552,0L21.116,8.528z');
+                    }
+                }, 200);
+            },
+
+            closeMenu: function (e, o) {
+                if (o.item.classList.contains('iron-selected')) {
+                    this.$.menu.close();
+                }
+            },
+
+            onSelectedChanged: function (e, o) {
+                if (this.items && this.selected >= 0 && this.selected < this.items.length && this.items[this.selected]) {
+                    this.value = this.items[this.selected].value;
+				}
+            },
+            onValueChanged: function (e, o) {
+                if (this.value && this.items) {
+                    for (var i = 0; i < this.items.length; i++) {
+                        if (this.items[i].value == this.value)
+                            this.selected = i;
+                    }
+                }
+            },
+            onItemsChanged: function () {
+                var value = this.value;
+                this.value = null;
+                this.selected = null;
+
+                if (value && this.items) {
+                    for (var i = 0; i < this.items.length; i++) {
+                        if (this.items[i].value == value)
+                            this.selected = i;
+                    }
+                }
+            }
+        });
+
+    </script>
+</dom-module>

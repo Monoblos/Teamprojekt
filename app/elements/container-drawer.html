@@ -52,16 +52,16 @@
 
 			#iconLeft {
 				position: fixed;
-				left: 10px;
-				top: 12px;
+				left: 16px;
+				top: 16px;
 				cursor: pointer;
 				color: var(--weather-contrast-color, white);
 				z-index: 5;
 			}
 			#iconRight {
 				position: fixed;
-				right: 10px;
-				top: 12px;
+				right: 16px;
+				top: 16px;
 				cursor: pointer;
 				color: var(--weather-contrast-color, white);
 				z-index: 5;
@@ -157,8 +157,6 @@
 				}
 			},
 			ready: function() {
-				console.log(this.resourcePath + this.bgrName + ".png");
-			
 				this.async(function() {
 					var colors = ["#0088ff", "#0044EE", "#002288", "#0033AA", "#0000FF"];
 					for(i = 0; i < 3; i++) {

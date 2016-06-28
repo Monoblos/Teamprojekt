@@ -5,22 +5,23 @@
 <dom-module name="htwg-navbar" attributes="leftIcon leftLink">
     <style>
         :host{
-            width: 100vw;
+            width: 100%;
             color: var(--weather-primary-color);
             background-color: var(--weather-contrast-color);
             top: 0px;
             left: 0px;
-            z-index: 99;
         }
 
         .fixed {
+            z-index: 99;
             position: fixed;
+            width: 100%;
             background-color: var(--weather-contrast-color);
         }
 
         .navbar {
             height: 32px;
-            width: calc(100vw - 32px);
+            width: calc(100% - 32px);
             padding: 16px;
             display: flex;
             align-items: center;
@@ -74,7 +75,7 @@
     </style>
 
     <template>
-        <div class="fixed">
+        <div class="fixed" on-mouseleave="leaved" on-mouseenter="entered">
             <nav class="navbar">
                 <a href="[[leftLink]]"><iron-icon icon="[[leftIcon]]"></iron-icon></a>
                 <div><a href="/">HTWG Konstanz</a></div>
@@ -104,7 +105,10 @@
 				leftLink: {
 					type: String,
 					value: "/switchboard"
-				}
+				},
+                timeout: {
+                    type: Object
+                }
 			},
             toggle: function(event){
                 if(event.target._iconName == 'magnifier') {
@@ -119,6 +123,17 @@
                     this.$.default.classList.toggle('collapsed');
                     this.$.extended.classList.toggle('collapsed');
                 }
+            },
+            leaved: function(event){
+                this.timeout = setTimeout(() => {
+                    this.$.default.setAttribute('icon', 'htwg:toolbox');
+                    this.$.default.classList.remove('collapsed');
+                    this.$.searchbar.classList.add('collapsed');
+                    this.$.extended.classList.add('collapsed');
+                }, 5000);
+            },
+            entered: function(){
+                clearTimeout(this.timeout);
             },
             sendEvent: function(event){
                 this.fire('navbar', {'element': event.target._iconName});
