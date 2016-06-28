@@ -1,0 +1,154 @@
+[
+  {
+    "value": "digi",
+    "name": "Digitaltechnik"
+  },
+  {
+    "value": "mathe1",
+    "name": "Mathematik1"
+  },
+  {
+    "value": "prog1",
+    "name": "Programmiertechnik1"
+  },
+  {
+    "value": "komko",
+    "name": "Kommunikationskompetenz"
+  },
+  {
+    "value": "sysmo",
+    "name": "Softwaremodellierung"
+  },
+  {
+    "value": "sysprog",
+    "name": "Systemprogrammierung"
+  },
+  {
+    "value": "mathe2",
+    "name": "Mathematik2"
+  },
+  {
+    "value": "rear",
+    "name": "Rechnerarchitekturen"
+  },
+  {
+    "value": "prog2",
+    "name": "Programmiertechnik2"
+  },
+  {
+    "value": "alda",
+    "name": "Algorithmen und Datenstrukturen"
+  },
+  {
+    "value": "bsys",
+    "name": "Betriebssysteme"
+  },
+  {
+    "value": "se",
+    "name": "Softwaretechnik"
+  },
+  {
+    "value": "dbsys",
+    "name": "Datenbanksysteme"
+  },
+  {
+    "value": "sss",
+    "name": "Signale, Systeme und Sensoren"
+  },
+  {
+    "value": "ti",
+    "name": "Theoretische Informatik"
+  },
+  {
+    "value": "versy",
+    "name": "Verteilte Systeme"
+  },
+  {
+    "value": "rn",
+    "name": "Rechnernetze"
+  },
+  {
+    "value": "en",
+    "name": "Englisch"
+  },
+  {
+    "value": "syso",
+    "name": "Systemsoftware"
+  },
+  {
+    "value": "webtech",
+    "name": "Web-Technologien"
+  },
+  {
+    "value": "swqs",
+    "name": "Softwarequalitätssicherung"
+  },
+  {
+    "value": "spko",
+    "name": "Sprachkonzepte"
+  },
+  {
+    "value": "sa",
+    "name": "Softwarearchitekturen"
+  },
+  {
+    "value": "itsec",
+    "name": "IT-Sicherheit"
+  },
+  {
+    "value": "kt",
+    "name": "Kommunikationstechnik"
+  },
+  {
+    "value": "shcd",
+    "name": "Software/Hardware Co-design"
+  },
+  {
+    "value": "mps",
+    "name": "Mikroprozessorsysteme"
+  },
+  {
+    "value": "md",
+    "name": "Mediendesign"
+  },
+  {
+    "value": "cg",
+    "name": "Computergraphik"
+  },
+  {
+    "value": "mm",
+    "name": "Multimedia"
+  },
+  {
+    "value": "resy",
+    "name": "Realzeitsysteme"
+  },
+  {
+    "value": "st",
+    "name": "Systemtechnik"
+  },
+  {
+    "value": "uc",
+    "name": "Ubiquitous computing"
+  },
+  {
+    "value": "kds",
+    "name": "Komponenten digitaler Systeme"
+  },
+  {
+    "value": "mr",
+    "name": "Mobile Robotik"
+  },
+  {
+    "value": "bv",
+    "name": "Bildverarbeitung"
+  },
+  {
+    "value": "tp",
+    "name": "Teamprojekt"
+  },
+  {
+    "value": "bwl",
+    "name": "Betriebswirtschaftslehre"
+  }
+]
