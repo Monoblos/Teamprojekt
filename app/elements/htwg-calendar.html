@@ -40,7 +40,8 @@
                 },
                 isCalendar: {
                     type: Boolean,
-                    computed: 'comp(arg, "")'
+                    computed: 'comp(arg, "")',
+                    notify: true
                 },
                 isSubscribe: {
                     type: Boolean,
@@ -55,8 +56,18 @@
                     computed: 'comp(arg, "add")'
                 }
             },
+            listeners: {
+                'is-calendar-changed': 'reloadSubscriptions'
+            },
             comp: function(arg, url){
                 return arg == url;
+            },
+            reloadSubscriptions: function(){
+                this.async(function(){
+                    if(this.querySelector('container-calendar')){
+                        this.querySelector('container-calendar').reloadSubcriptions();
+                    }
+                });
             }
         });
     </script>

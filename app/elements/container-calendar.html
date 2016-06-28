@@ -165,7 +165,7 @@
                             <div name="spacer"></div>
                         </template>
                         <template is="dom-repeat" items="{{createArray(calendar.max_day)}}">
-                            <div class$="{{getDayClass(calendar.month, item)}}" on-tap="selectDay"><span>{{item}}</span></div>
+                            <div class$="{{getDayClass(calendar.month, item, subscriptions.*)}}" on-tap="selectDay"><span>{{item}}</span></div>
                         </template>
                         <template is="dom-repeat" items="{{createArray(calendar.postset)}}">
                             <div name="spacer"></div>
@@ -186,10 +186,10 @@
                 },
                 selectedDayFeed: {
                     type: Array,
-                    computed: 'setFeed(calendar.month, selected)'
+                    computed: 'setFeed(selected)'
                 },
                 selected: {
-                    type: Number
+                    type: String
                 },
                 calendar: {
                     type: Object,
@@ -231,9 +231,12 @@
             },
             ready: function(){
                 this.date = new Date();
-                this.selected = this.date.getDate();
+                this.selected = this.date.getFullYear() + '-' + ('0' + (1+this.date.getMonth())).slice(-2) + '-' + ('0' + this.date.getDate()).slice(-2);
                 this.getAppointments();
                 this.$.storage.initializeStoredValue();
+            },
+            reloadSubcriptions: function(){
+                this.subscriptions = JSON.parse(localStorage.getItem('subscriptions'));
             },
             subscribe: function(event){
                 if(event.detail.element == "pen"){
@@ -253,13 +256,14 @@
             },
             getDayClass: function(month, item){
                 var dayClass = 'day';
+                item = this.date.getFullYear() + '-' + ('0' + (1+this.date.getMonth())).slice(-2) + '-' + ('0' + item).slice(-2);
                 if(this.selected == item) {
                     dayClass += ' selected';
                 }
-                if(this.hasAppointment(item) || this.hasHighlight(item)){
+                if(this.hasType(item, 1) || this.hasType(item, 2)){
                     dayClass += ' appointment';
                 }
-                if(this.hasHighlight(item)){
+                if(this.hasType(item, 2)){
                     if(this.selected == item){
                         dayClass.replace('selected', 'selected-highlight');
                     } else {
@@ -271,24 +275,14 @@
             hasDetails: function(item){
                 return item.time && item.room;
             },
-            hasHighlight: function(day){
-                var date = this.calendar.year+'-'+this.calendar.month.key+'-'+('0' + day).slice(-2);
-                if(this.appointments.hasOwnProperty(date)){
-                    var appointments = this.appointments[date];
-                    for(var i = 0; i < appointments.length; i++){
-                        if(this.subscriptions[appointments[i].type] == 2){
-                            return true;
-                        }
-                    }
+            hasType: function(date, type){
+                while(~date.indexOf('-')){
+                    date = date.replace('-', '.');
                 }
-                return false;
-            },
-            hasAppointment: function(day){
-                var date = this.calendar.year+'-'+this.calendar.month.key+'-'+('0' + day).slice(-2);
-                if(this.appointments.hasOwnProperty(date)){
-                    var appointments = this.appointments[date];
+                if(this.get('appointments.' + date)){
+                    var appointments = this.get('appointments.' + date);
                     for(var i = 0; i < appointments.length; i++){
-                        if(this.subscriptions[appointments[i].type] == 1){
+                        if(this.subscriptions[appointments[i].type] == type){
                             return true;
                         }
                     }
@@ -307,9 +301,14 @@
             },
             setAppointments: function(event, data){
                 if(event.type != 'error'){
-                    this.appointments = data.response;
-                } else {
-                    this.appointments = {};
+                    var year = ''+this.date.getFullYear();
+                    var month = ('0' + (1+this.date.getMonth())).slice(-2);
+                    var keys = Object.keys(data.response[year][month]);
+                    this.createPathIfNotExists('appointments.' + year + '.' + month);
+                    for(var i = 0; i < keys.length; i++){
+                        var path = 'appointments.' + year + '.' + month + '.' + keys[i];
+                        this.set(path, data.response[year][month][keys[i]]);
+                    }
                 }
                 this.set('calendar.month', {"name": this.calendar.months[this.date.getMonth()].name, "key": ('0' + (1+this.date.getMonth())).slice(-2)});
                 this.set('calendar.max_day', this.calendar.months[this.date.getMonth()].max_day);
@@ -318,15 +317,27 @@
                 this.set('calendar.postset', 7 - ((this.calendar.offset + this.calendar.max_day) % 7));
                 this.set('calendar.year', this.date.getFullYear());
             },
+            createPathIfNotExists: function(path){
+                if(this.get(path)){
+                    return;
+                } else {
+                    var new_path = path.substr(0, path.lastIndexOf('.'));
+                    this.createPathIfNotExists(new_path);
+                    this.set(path, {});
+                }
+            },
             selectDay: function(event){
                 var el = event.target;
                 if(el.tagName == 'DIV'){
                     el = el.querySelector('span');
                 }
-                document.querySelector('div.day.selected, div.day.selected-highlight').classList.remove('selected', 'selected-highlight');
+                var old = document.querySelector('div.day.selected, div.day.selected-highlight');
+                if(old){
+                    old.classList.remove('selected', 'selected-highlight');
+                }
 
-                var day = el.innerText;
-                if(this.hasHighlight(day)){
+                var day = this.date.getFullYear() + '-' + ('0' + (1+this.date.getMonth())).slice(-2) + '-' + ('0' + el.innerText).slice(-2);
+                if(this.hasType(day, 2)){
                     el.parentNode.classList.add('selected-highlight');
                 } else {
                     el.parentNode.classList.add('selected');
@@ -334,13 +345,16 @@
 
                 this.selected = day;
             },
-            setFeed: function(month, day){
+            setFeed: function(date){
                 var result = [];
-                var date = this.date.getFullYear() + '-' + ('0' + (1+this.date.getMonth())).slice(-2) + '-' + day;
-                if(this.appointments.hasOwnProperty(date)) {
-                    for(var i = 0; i < this.appointments[date].length; i++){
-                        if(this.subscriptions[this.appointments[date][i].type]){
-                            result.push(this.appointments[date][i]);
+                while(~date.indexOf('-')){
+                    date = date.replace('-', '.');
+                }
+                var appointments = this.get('appointments.' + date);
+                if(appointments) {
+                    for(var i = 0; i < appointments.length; i++){
+                        if(this.subscriptions[appointments[i].type]){
+                            result.push(appointments[i]);
                         }
                     }
                 }

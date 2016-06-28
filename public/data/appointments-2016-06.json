@@ -1,17 +1,21 @@
 {
-  "2016-06-01": [
-    {"type":"balloon", "text":"Wie man ein Café aufbaut", "author":"Friedrich der Große", "time":"07:30", "room":"F033"}
-  ],
-  "2016-06-08": [
-    {"type":"profile-filled", "text":"Mittagessen mitnehmen"}
-  ],
-  "2016-06-14": [
-    {"type":"doctorate", "text":"Fällt aus! Bin Skifahren.", "author":"Liquid Layout - Jo Wickert"},
-    {"type":"profile-filled", "text":"Mittagessen mitnehmen"},
-    {"type":"exam", "text":"Abgabe Giraffe, jpg, HD", "author":"Philipp Finkbeiner"},
-    {"type":"balloon", "text":"Wie man ein Café zerstört", "author":"Prof. Volker Friedrich", "time":"19:30", "room":"L202"}
-  ],
-  "2016-06-22": [
-    {"type":"exam", "text":"Abgabe Affe svg", "author":"Orang Utan"}
-  ]
+  "2016": {
+    "06": {
+      "01": [
+        {"type":"balloon", "text":"Wie man ein Café aufbaut", "author":"Friedrich der Große", "time":"07:30", "room":"F033"}
+      ],
+      "08": [
+        {"type":"profile-filled", "text":"Mittagessen mitnehmen"}
+      ],
+      "14": [
+        {"type":"doctorate", "text":"Fällt aus! Bin Skifahren.", "author":"Liquid Layout - Jo Wickert"},
+        {"type":"profile-filled", "text":"Mittagessen mitnehmen"},
+        {"type":"exam", "text":"Abgabe Giraffe, jpg, HD", "author":"Philipp Finkbeiner"},
+        {"type":"balloon", "text":"Wie man ein Café zerstört", "author":"Prof. Volker Friedrich", "time":"19:30", "room":"L202"}
+      ],
+      "22": [
+        {"type":"exam", "text":"Abgabe Affe svg", "author":"Orang Utan"}
+      ]
+    }
+  }
 }
