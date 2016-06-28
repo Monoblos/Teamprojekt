@@ -57,14 +57,18 @@
                 <container-select url="/public/data/faculty.json" title="Fakultät"
                                   value="{{faculty}}"></container-select>
             </p>
-            <p hidden$="[[!faculty]]">
-                <container-select url="/public/data/path/[[faculty]].json" title="Studiengang"
-                                  value="{{studyPath}}"></container-select>
-            </p>
-            <p hidden$="[[!studyPath]]">
-                <container-select url="/public/data/course/[[studyPath]].json" title="Kurse" value="{{course}}"
-                                  on-value-changed="courseSelected"></container-select>
-            </p>
+			<template is="dom-if" if="[[faculty]]">
+				<p>
+					<container-select url="/public/data/path/[[faculty]].json" title="Studiengang"
+									  value="{{studyPath}}"></container-select>
+				</p>
+			</template>
+			<template is="dom-if" if="[[studyPath]]">
+				<p>
+					<container-select url="/public/data/course/[[studyPath]].json" title="Kurse" value="{{course}}"
+									  on-value-changed="courseSelected"></container-select>
+				</p>
+			</template>
 
             <div hidden$="[[!course]]">
                 <p id="description" class="desc"></p>
@@ -88,7 +92,10 @@
                 },
                 faculty: String,
                 studyPath: String,
-                course: String,
+                course: {
+					type: String,
+					value: ""
+				},
                 title: String,
                 description: String,
                 descriptions: Object,
@@ -117,7 +124,6 @@
             },
             courseSelected: function (e, o) {
                 var course = o.value;
-                console.log(course);
 
                 if (this.descriptions && this.descriptions[this.studyPath] && this.descriptions[this.studyPath][course]) {
                     this.$.description.innerHTML = this.descriptions[this.studyPath][course];
@@ -139,8 +145,6 @@
                     this.splice('enrolledCourses', index, 1);
                     this.title = 'Anmelden';
                 }
-
-                console.log(this.enrolledCourses);
             },
             setProfile: function (e, d) {
                 if (d.response != null) {

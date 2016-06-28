@@ -125,8 +125,9 @@
             },
 
             onSelectedChanged: function (e, o) {
-                if (this.items && this.selected >= 0 && this.selected < this.items.length)
+                if (this.items && this.selected >= 0 && this.selected < this.items.length && this.items[this.selected]) {
                     this.value = this.items[this.selected].value;
+				}
             },
             onValueChanged: function (e, o) {
                 if (this.value && this.items) {
