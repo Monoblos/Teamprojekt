@@ -8,7 +8,7 @@
 <link rel="import" href="/app/elements/container-select.html">
 <link rel="import" href="/bower_components/iron-ajax/iron-ajax.html">
 
-<dom-module name="htwg-course">
+<dom-module name="htwg-course" arg="[[arg]]" options="[[options]]">
     <style>
         h1 {
             color: var(--weather-highlight-color);
@@ -47,11 +47,11 @@
     </style>
 
     <template>
-        <htwg-navbar></htwg-navbar>
+        <htwg-navbar on-navbar="subscribe"></htwg-navbar>
 
 
         <div class="main_frame">
-            <htwg-subnavbar></htwg-subnavbar>
+            <htwg-subnavbar arg="[[arg]]" options="[[options]]"></htwg-subnavbar>
             <h1>Kurs anmelden</h1>
             <p>
                 <container-select url="/public/data/faculty.json" title="Fakultät"
@@ -91,9 +91,30 @@
                 course: String,
                 title: String,
                 description: String,
-                descriptions: Object
+                descriptions: Object,
+                arg: {
+                    type: String,
+                    value: '',
+                    notify: true
+                },
+                options: {
+                    type: Object,
+                    value: {}
+                }
             },
-
+            subscribe: function(event){
+                if(event.detail.element == "pen"){
+                    this.navigate('/calendar/subscribe');
+                }
+            },
+            navigate: function(target) {
+                var appLocation = document.querySelector("app-location");
+                if (appLocation == null) {
+                    window.location.href = target;
+                } else {
+                    appLocation.set("route.path", target);
+                }
+            },
             courseSelected: function (e, o) {
                 var course = o.value;
                 console.log(course);

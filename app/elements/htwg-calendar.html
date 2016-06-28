@@ -2,6 +2,7 @@
 <link rel="import" href="/app/elements/container-calendar.html">
 <link rel="import" href="/app/elements/container-subscribe.html">
 <link rel="import" href="/app/elements/container-calendar-add.html">
+<link rel="import" href="/app/elements/htwg-course.html">
 
 <!-- Example: <template-element attr-a="not foo"><template-element> -->
 
@@ -17,6 +18,10 @@
 
         <template is="dom-if" if="[[isSubscribe]]">
             <container-subscribe arg="[[arg]]" options="[[options]]"></container-subscribe>
+        </template>
+
+        <template is="dom-if" if="[[isRegister]]">
+            <htwg-course arg="[[arg]]" options="[[options]]"></htwg-course>
         </template>
     </template>
 
@@ -40,6 +45,10 @@
                 isSubscribe: {
                     type: Boolean,
                     computed: 'comp(arg, "subscribe")'
+                },
+                isRegister: {
+                    type: Boolean,
+                    computed: 'comp(arg, "register")'
                 },
                 isAdd: {
                     type: Boolean,
