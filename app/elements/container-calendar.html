@@ -186,9 +186,10 @@
                 },
                 selectedDayFeed: {
                     type: Array,
-                    value: function(){
-                        return [];
-                    }
+                    computed: 'setFeed(calendar.month, selected)'
+                },
+                selected: {
+                    type: Number
                 },
                 calendar: {
                     type: Object,
@@ -332,17 +333,18 @@
                 }
 
                 this.selected = day;
-                this.setFeed(this.calendar.year + '-' + this.calendar.month.key + '-' + ('0' + day).slice(-2));
             },
-            setFeed: function(date){
-                this.selectedDayFeed = [];
+            setFeed: function(month, day){
+                var result = [];
+                var date = this.date.getFullYear() + '-' + ('0' + (1+this.date.getMonth())).slice(-2) + '-' + day;
                 if(this.appointments.hasOwnProperty(date)) {
                     for(var i = 0; i < this.appointments[date].length; i++){
                         if(this.subscriptions[this.appointments[date][i].type]){
-                            this.push('selectedDayFeed', this.appointments[date][i]);
+                            result.push(this.appointments[date][i]);
                         }
                     }
                 }
+                return result;
             },
             changeMonth: function(event){
                 if(event.target._iconName == 'arrow-right'){
