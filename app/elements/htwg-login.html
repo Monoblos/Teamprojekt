@@ -1,49 +1,35 @@
 <link rel="import" href="/bower_components/polymer/polymer.html">
 <link rel="import" href="/bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="/app/elements/htwg-navbar.html">
+<link rel="import" href="/app/elements/htwg-subnavbar.html">
+<link rel="import" href="/app/elements/htwg-button.html">
 <link rel="import" href="/app/elements/htwg-iconset.html">
 
 <dom-module name="htwg-login">
     <style>
-        :host > section{
+        section{
             display: flex;
             justify-content: flex-start;
             flex-direction: column;
             align-items: center;
-            padding: 0px 5vw;
-        }
-
-        :host > header {
-            height: 35px;
-            width: calc(100vw - 40px);
-            padding: 0px 20px;
-            display: flex;
-            align-items: center;
-            justify-content: flex-end;
+            width: calc(100% - 32px);
+            margin: 0 auto;
         }
 
         .input {
-            color: #00a0ff;
-            border: 2px solid #00a0ff;
+            line-height: 24px;
+            font-size: 13pt;
+            padding: 8px 5px;
+            color: var(--weather-primary-color);
+            border: 3px solid var(--weather-primary-color);
+            margin-top: 20px;
+            font-size: 20px;
+            width: calc(100% - 16px);
+            outline: none;
         }
 
         .input::-webkit-input-placeholder {
-            color: #00a0ff;
-        }
-
-        .button {
-            background-color: #FFFF00;
-            color: #FFFFFF;
-            border: none;
-            border-radius: 10px;
-            padding: 5px 0px;
-        }
-
-        .input,
-        .button {
-            margin-top: 20px;
-            font-size: 20px;
-            width: 100%;
+            color: var(--weather-primary-color);
         }
 
         #logo {
@@ -51,15 +37,14 @@
             height: calc(10em + 15vw);
             display: block;
         }
+
+        htwg-button {
+            margin-top: 20px;
+        }
     </style>
 
     <template>
         <htwg-navbar></htwg-navbar>
-        <header>
-            <iron-icon icon="htwg:plus"></iron-icon>
-            <iron-icon icon="htwg:subscribe"></iron-icon>
-            <iron-icon icon="htwg:doctorate-plus"></iron-icon>
-        </header>
         <section>
             <svg
                     xmlns:svg="http://www.w3.org/2000/svg"
@@ -95,9 +80,9 @@
                     </g>
                 </g>
             </svg>
-            <input class="input" type="text" placeholder="Benutzername">
-            <input class="input" type="password" placeholder="Passwort">
-            <button class="button" on-tap="login">Einloggen</button>
+            <input id="username" class="input" type="text" placeholder="Benutzername">
+            <input id="password" class="input" type="password" placeholder="Passwort">
+            <htwg-button on-tap="login">Einloggen</htwg-button>
         </section>
     </template>
 
@@ -105,7 +90,17 @@
         Polymer({
             is: "htwg-login",
             login: function(){
-                alert("Logged in!");
+                if(this.$.username.value == this.$.password.value && this.$.username.value != '') {
+                    this.navigate('/calendar');
+                }
+            },
+            navigate: function(target) {
+                var appLocation = document.querySelector("app-location");
+                if (appLocation == null) {
+                    window.location.href = target;
+                } else {
+                    appLocation.set("route.path", target);
+                }
             }
         });
     </script>

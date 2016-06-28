@@ -1,0 +1,36 @@
+<link rel="import" href="/bower_components/polymer/polymer.html">
+
+<dom-module name="htwg-button">
+    <style>
+        :host {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+
+        button {
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 13pt;
+            outline: none;
+            cursor: pointer;
+            text-align: center;
+            padding: 8px 0px;
+            width: calc(100% - 4px);
+            max-width: 600px;
+            color: var(--weather-contrast-color);
+            background-color: var(--weather-highlight-color);
+        }
+    </style>
+
+    <template>
+        <button><content></content></button>
+    </template>
+
+    <script>
+        Polymer({
+            is: "htwg-button"
+        });
+    </script>
+</dom-module>

@@ -1,0 +1,22 @@
+[
+  {
+    "value": "bib",
+    "name": "Bauingenieurwesen"
+  },
+  {
+    "value": "mib",
+    "name": "Bauingenieurwesen Master"
+  },
+  {
+    "value": "mwi",
+    "name": "Wirtschaftsingenieurwesen Studienrichtung Bauwesen Master"
+  },
+  {
+    "value": "urb",
+    "name": "Umwelttechnik und Ressourcenmanagement"
+  },
+  {
+    "value": "wib",
+    "name": "Wirtschaftsingenieurwesen Bau"
+  }
+]

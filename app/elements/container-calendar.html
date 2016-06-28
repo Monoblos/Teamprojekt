@@ -15,7 +15,7 @@
 
         #wrapper {
             margin: 0px 16px 16px;
-            width: calc(100vw - 32px);
+            width: calc(100% - 32px);
         }
 
         #wrapper > section{
@@ -25,26 +25,9 @@
             align-items: center;
         }
 
-        #wrapper > header {
-            height: 32px;
-            width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: flex-end;
-        }
-
-        #wrapper > header > div {
-            display: flex;
-            justify-content: space-between;
-            width: 128px;
-        }
-
-        #wrapper > header > div > a {
-            color: var(--weather-primary-color);
-        }
-
         iron-icon {
             margin: 4px;
+            cursor: pointer;
         }
 
         .entry {
@@ -139,7 +122,7 @@
     </style>
 
     <template>
-        <htwg-navbar></htwg-navbar>
+        <htwg-navbar on-navbar="subscribe"></htwg-navbar>
         <div id="wrapper">
             <htwg-subnavbar></htwg-subnavbar>
             <app-localstorage-document id="storage" key="subscriptions" data="{{subscriptions}}"></app-localstorage-document>
@@ -241,6 +224,19 @@
                 this.selected = this.date.getDate();
                 this.getAppointments();
                 this.$.storage.initializeStoredValue();
+            },
+            subscribe: function(event){
+                if(event.detail.element == "pen"){
+                    this.navigate('/calendar/subscribe');
+                }
+            },
+            navigate: function(target) {
+                var appLocation = document.querySelector("app-location");
+                if (appLocation == null) {
+                    window.location.href = target;
+                } else {
+                    appLocation.set("route.path", target);
+                }
             },
             getFeedClass: function(item, defaultClass){
                 return this.subscriptions[item.type] == 2 ? defaultClass + ' highlight' : defaultClass;
