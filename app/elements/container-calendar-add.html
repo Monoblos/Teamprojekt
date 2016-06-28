@@ -52,7 +52,7 @@
     </style>
 
     <template>
-        <htwg-navbar></htwg-navbar>
+        <htwg-navbar on-navbar="subscribe"></htwg-navbar>
         <div id="wrapper">
             <htwg-subnavbar arg="[[arg]]" options="[[options]]"></htwg-subnavbar>
             <h1>Termin hinzufügen</h1>
@@ -100,6 +100,11 @@
                 options: {
                     type: Object,
                     value: {}
+                }
+            },
+            subscribe: function(event){
+                if(event.detail.element == "pen"){
+                    this.navigate('/calendar/subscribe');
                 }
             },
             save: function(){
