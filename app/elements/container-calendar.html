@@ -135,7 +135,7 @@
             <template is="dom-if" if="{{selectedDayFeed.length}}">
                 <section name="entries">
                     <template is="dom-repeat" items="{{selectedDayFeed}}">
-                        <div class$="{{getFeedClass(item, 'entry')}}" on-tap="removeAppointment">
+                        <div class$="{{getFeedClass(item, 'entry')}}">
                             <iron-icon icon="htwg:{{item.type}}"></iron-icon>
                             <div>
                                 <template is="dom-if" if="{{item.author}}">
@@ -191,10 +191,7 @@
                 },
                 selectedDayFeed: {
                     type: Array,
-                    computed: 'setFeed(selected, appointments.*)'
-                },
-                selected: {
-                    type: String
+                    computed: 'setFeed(selected, appointments.*, subscriptions.*)'
                 },
                 calendar: {
                     type: Object,
@@ -236,11 +233,9 @@
             },
             ready: function(){
                 this.date = new Date();
-                if(localStorage.getItem('appointments')){
-                    this.appointments = JSON.parse(localStorage.getItem('appointments'));
-                }
-                this.getAppointments();
                 this.selected = this.date.getFullYear() + '-' + ('0' + (1+this.date.getMonth())).slice(-2) + '-' + ('0' + this.date.getDate()).slice(-2);
+                this.reloadSubcriptions();
+                this.getAppointments();
             },
             reloadSubcriptions: function(){
                 if(localStorage.getItem('subscriptions')){
@@ -323,7 +318,6 @@
                     var year = ''+this.date.getFullYear();
                     var month = ('0' + (1+this.date.getMonth())).slice(-2);
                     var keys = Object.keys(data.response[year][month]);
-                    console.log(keys);
                     this.createPathIfNotExists('appointments.' + year + '.' + month);
                     for(var i = 0; i < keys.length; i++){
                         var path = 'appointments.' + year + '.' + month + '.' + keys[i];
@@ -442,17 +436,15 @@
                 // If we made it this far, objects
                 // are considered equivalent
                 return true;
-            },
+            }/*,
             removeAppointment: function(event){
                 var target = event.target;
-                console.log(event);
                 while(!~target.className.indexOf("entry")){
                     target = target.parentNode;
                 }
                 if(~target.className.indexOf('custom')){
-                    console.log(target)//has to be removed
                 }
-            }
+            }*/
         });
     </script>
 </dom-module>

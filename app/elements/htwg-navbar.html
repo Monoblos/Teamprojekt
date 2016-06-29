@@ -216,7 +216,6 @@
             },
              checkLink: function(e) {
                 var target = this.$.default.baseURI.split("/");
-                console.log(target[target.length-1]);
                 if(target[target.length-1] == "wib" || e.target.id == "wib") {
                    this.navigate("/bewerbung/wib");
                 } 
@@ -229,7 +228,6 @@
             },
             closeSearch: function() {
       
-                console.log("in function");
                 this.showSearchResult = false;
             },
             navigate: function(target) {
