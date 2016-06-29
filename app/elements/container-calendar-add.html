@@ -30,6 +30,7 @@
             font-weight: bold;
             padding: 8px 5px;
             width: calc(100% - 20px);
+            color: var(--weather-primary-color);
         }
 
         input::-webkit-input-placeholder,
@@ -43,7 +44,7 @@
         }
 
         .row {
-            margin-bottom: 10px;
+            margin-bottom: 16px;
         }
 
         .button{
@@ -56,18 +57,22 @@
         <div id="wrapper">
             <htwg-subnavbar arg="[[arg]]" options="[[options]]"></htwg-subnavbar>
             <h1>Termin hinzufügen</h1>
-            <input type="text" placeholder="Titel" class="row" value="{{title::input}}">
-            <container-select class="row" title="Kategorie" value="{{category}}"></container-select>
-            <template is="dom-if" if="{{title}}">
-                <input type="date" placeholder="Datum" class="row" value="{{date::input}}">
-            </template>
-            <template is="dom-if" if="{{date}}">
+            <input type="text" placeholder="Titel" value="{{title::input}}">
+            <p>
+                <container-select url="/public/data/categories.json" title="Kategorie"
+                                  value="{{category}}" tag="categories"></container-select>
+            </p>
+            <input type="date" placeholder="Datum" class="row" value="{{date::input}}">
+            <template is="dom-if" if="{{requiredFields}}">
                 <input type="time" placeholder="Uhrzeit" class="row" value="{{time::input}}">
             </template>
-            <template is="dom-if" if="{{time}}">
+            <template is="dom-if" if="{{requiredFields}}">
+                <input type="text" placeholder="Raum" class="row" value="{{room::input}}">
+            </template>
+            <template is="dom-if" if="{{requiredFields}}">
                 <textarea placeholder="Notiz" class="row" value="{{notice::input}}"></textarea>
             </template>
-            <div class="button">
+            <div class="button" hidden$="{{!requiredFields}}">
                 <htwg-button on-tap="save">Speichern</htwg-button>
             </div>
         </div>
@@ -92,12 +97,24 @@
                 notice: {
                     type: String
                 },
+                room: {
+                    type: String
+                },
                 arg: {
                     type: String,
                     value: '',
                     notify: true
                 },
                 options: {
+                    type: Object,
+                    value: {}
+                },
+                requiredFields: {
+                    type: Boolean,
+                    value: false,
+                    computed: 'required(title, category, date)'
+                },
+                appointments : {
                     type: Object,
                     value: {}
                 }
@@ -108,8 +125,38 @@
                 }
             },
             save: function(){
-                console.log('save: %o | %o | %o | %o | %o', this.title, this.category, this.date, this.time, this.notice);
-                this.navigate('calendar');
+                if(this.requiredFields){
+                    var date = this.date.split('-');
+                    var path = 'appointments.' + date[0] + '.' + date[1];
+                    this.createPathIfNotExists(path);
+                    var appointment = {};
+                    appointment.type = this.category;
+                    appointment.text = this.title;
+                    appointment.custom = true;
+                    if(this.time){
+                        appointment.time = this.time;
+                    }
+                    if(this.room){
+                        appointment.room = this.room;
+                    }
+                    if(this.notice){
+                        appointment.notice = this.notice;
+                    }
+                    if(!this.get(path + '.' + date[2])){
+                        this.set(path + '.' + date[2], []);
+                        this.push(path + '.' + date[2], appointment);
+                    } else {
+                        for(var i = 0; i < this.get(path + '.' + date[2]).length; i++){
+                            if(this.isEquivalent(this.get(path + '.' + date[2])[i], appointment)){
+                                break;
+                            } else if(i + 1 == this.get(path + '.' + date[2]).length){
+                                this.push(path + '.' + date[2], appointment);
+                            }
+                        }
+                    }
+                    localStorage.setItem('appointments', JSON.stringify(this.appointments));
+                    this.navigate('calendar');
+                }
             },
             navigate: function(target) {
                 var appLocation = document.querySelector("app-location");
@@ -118,7 +165,49 @@
                 } else {
                     appLocation.set("route.path", target);
                 }
+            },
+            required: function(title, category, date){
+                return title && category && date;
+            },
+            createPathIfNotExists: function(path){
+                if(this.get(path)){
+                    return;
+                } else {
+                    var new_path = path.substr(0, path.lastIndexOf('.'));
+                    this.createPathIfNotExists(new_path);
+                    this.set(path, {});
+                }
+            },
+            ready: function(){
+                if(localStorage.getItem('appointments')){
+                    this.appointments = JSON.parse(localStorage.getItem('appointments'));
+                }
+            },
+            isEquivalent: function(a, b) {
+            // Create arrays of property names
+            var aProps = Object.getOwnPropertyNames(a);
+            var bProps = Object.getOwnPropertyNames(b);
+
+            // If number of properties is different,
+            // objects are not equivalent
+            if (aProps.length != bProps.length) {
+                return false;
             }
+
+            for (var i = 0; i < aProps.length; i++) {
+                var propName = aProps[i];
+
+                // If values of same property are not equal,
+                // objects are not equivalent
+                if (a[propName] !== b[propName]) {
+                    return false;
+                }
+            }
+
+            // If we made it this far, objects
+            // are considered equivalent
+            return true;
+        }
         });
     </script>
 </dom-module>

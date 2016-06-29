@@ -1,7 +1,6 @@
 <link rel="import" href="/bower_components/polymer/polymer.html">
 <link rel="import" href="/bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="/bower_components/iron-ajax/iron-ajax.html">
-<link rel="import" href="/bower_components/app-storage/app-localstorage/app-localstorage-document.html">
 <link rel="import" href="/app/elements/htwg-navbar.html">
 <link rel="import" href="/app/elements/htwg-subnavbar.html">
 <link rel="import" href="/app/elements/htwg-iconset.html">
@@ -27,7 +26,6 @@
 
         iron-icon {
             margin: 4px;
-            cursor: pointer;
         }
 
         .entry {
@@ -87,6 +85,10 @@
             margin-bottom: 10px;
         }
 
+        #calendar > header > iron-icon {
+            cursor: pointer;
+        }
+
         #days {
             display: flex;
             justify-content: space-between;
@@ -119,18 +121,21 @@
             color: var(--weather-primary-color);
             opacity: 0.3;
         }
+
+        .custom {
+            cursor: pointer;
+        }
     </style>
 
     <template>
         <htwg-navbar on-navbar="subscribe"></htwg-navbar>
         <div id="wrapper">
             <htwg-subnavbar arg="[[arg]]" options="[[options]]"></htwg-subnavbar>
-            <app-localstorage-document id="storage" key="subscriptions" data="{{subscriptions}}"></app-localstorage-document>
             <iron-ajax id="appointments" auto handle-as="json" on-response="setAppointments" on-error="setAppointments"></iron-ajax>
             <template is="dom-if" if="{{selectedDayFeed.length}}">
                 <section name="entries">
                     <template is="dom-repeat" items="{{selectedDayFeed}}">
-                        <div class$="{{getFeedClass(item, 'entry')}}">
+                        <div class$="{{getFeedClass(item, 'entry')}}" on-tap="removeAppointment">
                             <iron-icon icon="htwg:{{item.type}}"></iron-icon>
                             <div>
                                 <template is="dom-if" if="{{item.author}}">
@@ -165,7 +170,7 @@
                             <div name="spacer"></div>
                         </template>
                         <template is="dom-repeat" items="{{createArray(calendar.max_day)}}">
-                            <div class$="{{getDayClass(calendar.month, item, subscriptions.*)}}" on-tap="selectDay"><span>{{item}}</span></div>
+                            <div class$="{{getDayClass(calendar.month, item, subscriptions.*, appointments.*)}}" on-tap="selectDay"><span>{{item}}</span></div>
                         </template>
                         <template is="dom-repeat" items="{{createArray(calendar.postset)}}">
                             <div name="spacer"></div>
@@ -186,7 +191,7 @@
                 },
                 selectedDayFeed: {
                     type: Array,
-                    computed: 'setFeed(selected)'
+                    computed: 'setFeed(selected, appointments.*)'
                 },
                 selected: {
                     type: String
@@ -231,12 +236,19 @@
             },
             ready: function(){
                 this.date = new Date();
-                this.selected = this.date.getFullYear() + '-' + ('0' + (1+this.date.getMonth())).slice(-2) + '-' + ('0' + this.date.getDate()).slice(-2);
+                if(localStorage.getItem('appointments')){
+                    this.appointments = JSON.parse(localStorage.getItem('appointments'));
+                }
                 this.getAppointments();
-                this.$.storage.initializeStoredValue();
+                this.selected = this.date.getFullYear() + '-' + ('0' + (1+this.date.getMonth())).slice(-2) + '-' + ('0' + this.date.getDate()).slice(-2);
             },
             reloadSubcriptions: function(){
-                this.subscriptions = JSON.parse(localStorage.getItem('subscriptions'));
+                if(localStorage.getItem('subscriptions')){
+                    this.subscriptions = JSON.parse(localStorage.getItem('subscriptions'));
+                }
+                if(localStorage.getItem('appointments')){
+                    this.setAppointments({"type": "reload"}, {"response": JSON.parse(localStorage.getItem('appointments'))});
+                }
             },
             subscribe: function(event){
                 if(event.detail.element == "pen"){
@@ -252,7 +264,14 @@
                 }
             },
             getFeedClass: function(item, defaultClass){
-                return this.subscriptions[item.type] == 2 ? defaultClass + ' highlight' : defaultClass;
+                var style = defaultClass;
+                if(this.subscriptions[item.type] == 2){
+                    style += ' highlight';
+                }
+                if(item.custom){
+                    style += ' custom';
+                }
+                return style;
             },
             getDayClass: function(month, item){
                 var dayClass = 'day';
@@ -304,10 +323,23 @@
                     var year = ''+this.date.getFullYear();
                     var month = ('0' + (1+this.date.getMonth())).slice(-2);
                     var keys = Object.keys(data.response[year][month]);
+                    console.log(keys);
                     this.createPathIfNotExists('appointments.' + year + '.' + month);
                     for(var i = 0; i < keys.length; i++){
                         var path = 'appointments.' + year + '.' + month + '.' + keys[i];
-                        this.set(path, data.response[year][month][keys[i]]);
+                        if(!this.get(path)){
+                            this.set(path, data.response[year][month][keys[i]]);
+                        } else {
+                            for(var n = 0; n < data.response[year][month][keys[i]].length; n++){
+                                for(var x = 0; x < this.get(path).length; x++){
+                                    if(this.isEquivalent(this.get(path)[x], data.response[year][month][keys[i]][n])){
+                                        break;
+                                    } else if(x + 1 == this.get(path).length){
+                                        this.push(path, data.response[year][month][keys[i]][n]);
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
                 this.set('calendar.month', {"name": this.calendar.months[this.date.getMonth()].name, "key": ('0' + (1+this.date.getMonth())).slice(-2)});
@@ -385,6 +417,41 @@
                     this.calendar.months[this.date.getMonth()].max_day = days;
                 }
                 this.getAppointments();
+            },
+            isEquivalent: function(a, b) {
+                // Create arrays of property names
+                var aProps = Object.getOwnPropertyNames(a);
+                var bProps = Object.getOwnPropertyNames(b);
+
+                // If number of properties is different,
+                // objects are not equivalent
+                if (aProps.length != bProps.length) {
+                    return false;
+                }
+
+                for (var i = 0; i < aProps.length; i++) {
+                    var propName = aProps[i];
+
+                    // If values of same property are not equal,
+                    // objects are not equivalent
+                    if (a[propName] !== b[propName]) {
+                        return false;
+                    }
+                }
+
+                // If we made it this far, objects
+                // are considered equivalent
+                return true;
+            },
+            removeAppointment: function(event){
+                var target = event.target;
+                console.log(event);
+                while(!~target.className.indexOf("entry")){
+                    target = target.parentNode;
+                }
+                if(~target.className.indexOf('custom')){
+                    console.log(target)//has to be removed
+                }
             }
         });
     </script>
