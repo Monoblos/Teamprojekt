@@ -84,6 +84,11 @@
                 color: var(--weather-highlight-color);
             }
 
+            htwg-button {
+                width: calc(100% - 32px);
+                margin: 0px auto;
+            }
+
         </style>
 
         <app-localstorage-document key="customLinks" data="{{customElements}}"></app-localstorage-document>
@@ -101,7 +106,7 @@
         </div>
 
         <div class="border-container">
-            <h1 on-tap="toggle">Voraussetzungen</h1>
+            <h1 on-tap="toggle" data-collapse="collapse">Voraussetzungen</h1>
             <iron-collapse id="collapse">
                 <div class="content">
                     <div class="block" align="justify" id="zulassung">
@@ -110,7 +115,7 @@
                 </div>
             </iron-collapse>
             <hr class="smallLine">
-            <h1 on-tap="toggle">Zulassung</h1>
+            <h1 on-tap="toggle" data-collapse="collapse2">Zulassung</h1>
 
             <iron-collapse id="collapse2">
                 <div class="content">
@@ -120,7 +125,7 @@
                 </div>
             </iron-collapse>
             <hr class="smallLine">
-            <h1 on-tap="toggle">Termine</h1>
+            <h1 on-tap="toggle" data-collapse="collapse3">Termine</h1>
 
             <iron-collapse id="collapse3">
                 <div class="content">
@@ -164,8 +169,10 @@
 
                 this.querySelector("app-localstorage-document").initializeStoredValue();
             },
-            toggle: function() {
-                this.$.collapse.toggle();
+            toggle: function(event) {
+                var collapse = event.target.getAttribute('data-collapse');
+                console.log(collapse);
+                this.$[collapse].toggle();
             },
             setZulassungText: function() {
 

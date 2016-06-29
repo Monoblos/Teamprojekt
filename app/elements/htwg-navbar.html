@@ -99,17 +99,17 @@
         .resultcontainer {
             max-height: 100%;
             width: 100%;
-            overflow-y: scroll;
+            overflow-y: auto;
         }
 
         .block {
-            width: 100%;
+            width: calc(100% - 32px);
             margin-left: 16px;
             margin-right: 16px;
             margin-top: 30px;
             margin-bottom: 30px;
             color: var(--weather-primary-color);
-            font-size: 16px:;
+            font-size: 16px;
             cursor: pointer;
         }
 
@@ -146,7 +146,7 @@
                 <span on-tap="checkLink" id="gib">Das Studium Gesundheits<b>informatik</b> vermittelt Ihnen die Kenntnisse und Fähigkeiten, die Sie benötigen, um Informationssysteme (u.a mobile Anwendungen) für das Gesundheitswesen zu entwickeln, zu konfigurieren, zu betreiben und anzuwenden. Sie [...]</span>
             </div>
              <div class="block" hidden$="{{!foundnothing}}">
-                <span on-tap="checkLink" id="gib">Keine passenden Suchergebnisse gefunden</span>
+                <span>Keine passenden Suchergebnisse gefunden</span>
             </div>
         </div>
         </div>
