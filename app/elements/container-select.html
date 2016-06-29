@@ -8,7 +8,7 @@
 <link rel="import" href="/bower_components/paper-listbox/paper-listbox.html">
 <link rel="import" href="/bower_components/paper-item/paper-item.html">
 
-<dom-module name="container-select" attributes="url title">
+<dom-module name="container-select" attributes="url title tag">
     <style>
         paper-dropdown-menu {
             border: 3px solid var(--weather-primary-color);
@@ -73,10 +73,9 @@
     </style>
 
     <template>
-        <paper-dropdown-menu id="menu" label="[[title]]" no-label-float vertical-align="top" horizontal-align="left"
-                             horizontal-offset="-8">
+        <paper-dropdown-menu id="menu" label="[[title]]" no-label-float vertical-align="top" horizontal-align="left">
             <paper-listbox class="dropdown-content" selected="{{selected}}" on-iron-activate="closeMenu">
-                <template is="dom-repeat" items="[[items]]" as="item">
+                <template is="dom-repeat" items="[[effectiveItems]]" as="item">
                     <paper-item value="[[item.value]]">[[item.name]]</paper-item>
                 </template>
             </paper-listbox>
@@ -91,9 +90,13 @@
                 url: String,
                 title: String,
                 items: {
-                    type: Array,
-                    notify: true
+                    type: Object
                 },
+				effectiveItems: {
+					type: Array,
+					computed: "compEffectiveItems(items, tag)",
+					notify: true
+				},
                 selected: {
                     type: Number,
                     notify: true
@@ -101,12 +104,16 @@
                 value: {
                     type: String,
                     notify: true
-                }
+                },
+				tag: {
+					type: String,
+					value: ""
+				}
             },
             listeners: {
                 "selected-changed": "onSelectedChanged",
                 "value-changed": "onValueChanged",
-                "items-changed": "onItemsChanged"
+                "effective-items-changed": "onItemsChanged"
             },
             ready: function () {
                 // change paper-dropdown-menu icon
@@ -124,31 +131,41 @@
                 }
             },
 
-            onSelectedChanged: function (e, o) {
-                if (this.items && this.selected >= 0 && this.selected < this.items.length && this.items[this.selected]) {
-                    this.value = this.items[this.selected].value;
+            onSelectedChanged: function (e) {
+				var selected = e.detail.value;
+				var items = this.effectiveItems;
+                if (items && selected >= 0 && selected < items.length && items[selected]) {
+                    this.value = items[selected].value;
 				}
             },
-            onValueChanged: function (e, o) {
-                if (this.value && this.items) {
-                    for (var i = 0; i < this.items.length; i++) {
-                        if (this.items[i].value == this.value)
+            onValueChanged: function (e) {
+				var value = e.detail.value;
+                if (value && this.effectiveItems) {
+                    for (var i = 0; i < this.effectiveItems.length; i++) {
+                        if (this.effectiveItems[i].value == value)
                             this.selected = i;
                     }
                 }
             },
-            onItemsChanged: function () {
+            onItemsChanged: function (e) {
                 var value = this.value;
+				var items = e.detail.value;
                 this.value = null;
                 this.selected = null;
 
-                if (value && this.items) {
-                    for (var i = 0; i < this.items.length; i++) {
-                        if (this.items[i].value == value)
+                if (value && items) {
+                    for (var i = 0; i < items.length; i++) {
+                        if (items[i].value == value)
                             this.selected = i;
                     }
                 }
-            }
+            },
+			compEffectiveItems: function(items, tag) {
+				if (!tag) {
+					return items;
+				}
+				return this.get("items." + tag);
+			}
         });
 
     </script>

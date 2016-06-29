@@ -1,4 +1,5 @@
-[
+{
+                    "ain": [
   {
     "value": "digi",
     "name": "Digitaltechnik"
@@ -151,4 +152,23 @@
     "value": "bwl",
     "name": "Betriebswirtschaftslehre"
   }
+],
+                    "bkd": [
+  {
+    "value": "ll",
+    "name": "Liquid Layout"
+  },
+  {
+    "value": "3d",
+    "name": "3D Darstellung"
+  },
+  {
+    "value": "t3",
+    "name": "Technik 3"
+  },
+  {
+    "value": "kir",
+    "name": "Kommunikation im Raum"
+  }
 ]
+                }
