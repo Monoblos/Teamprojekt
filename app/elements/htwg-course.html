@@ -59,14 +59,14 @@
             </p>
 			<template is="dom-if" if="[[faculty]]">
 				<p>
-					<container-select url="/public/data/path/[[faculty]].json" title="Studiengang"
-									  value="{{studyPath}}"></container-select>
+					<container-select url="/public/data/path.json" title="Studiengang"
+									  value="{{studyPath}}" tag="[[faculty]]"></container-select>
 				</p>
 			</template>
 			<template is="dom-if" if="[[studyPath]]">
 				<p>
-					<container-select url="/public/data/course/[[studyPath]].json" title="Kurse" value="{{course}}"
-									  on-value-changed="courseSelected"></container-select>
+					<container-select url="/public/data/course.json" title="Kurse" value="{{course}}"
+									  on-value-changed="courseSelected" tag="[[studyPath]]"></container-select>
 				</p>
 			</template>
 

@@ -19,7 +19,7 @@
 				-moz-hyphens: auto;
 				-webkit-hyphens: auto;
 				hyphens: auto;
-				text-align: justify;
+				text-align: left;
 			}
 			h1 {
 				margin-bottom: 8px;
@@ -32,7 +32,7 @@
 		</h1>
 		<div id="content">
 			<content></content>
-			<!-- Add automatic cropping to 270 chars / 34 words -->
+			[[displayedText]]
 		</div>
 	</template>
 
@@ -40,23 +40,74 @@
 		Polymer({
 			is: "container-news",
 			listeners: {
+				"tap": "tapAction"
 			},
 			properties: {
+				SHORT: {
+					type: Number,
+					value: 120,
+					readonly: true
+				},
+				MEDIUM: {
+					type: Number,
+					value: 270,
+					readonly: true
+				},
 				headline: {
 					type: String,
 					value: 'No headline given'
+				},
+				fullText: {
+					type: String,
+					value: "No text given"
+				},
+				displayMode: {
+					type: Number,
+					value: 0
+				},
+				modes: {
+					type: Number,
+					computed: "compNumberModes(fullText)"
+				},
+				displayedText: {
+					type: String,
+					computed: "compDispText(fullText, displayMode)"
 				}
 			},
 			ready: function() {
-				text = this.getEffectiveChildNodes()[0].textContent;
-				
+				var text = this.getEffectiveChildNodes()[0].textContent;
 				text = text.replace(/\n\t*/g, " ");
-				if (text.length > 270) {
-					text = text.substr(0, text.lastIndexOf(" ", 270));
+				this.fullText = text;
+				
+				this.getEffectiveChildNodes()[0].remove();
+			},
+			compDispText: function(text, mode) {
+				if (mode == 0) {
+					return this.cropText(text, this.SHORT);
+				} else if (mode == 1) {
+					return this.cropText(text, this.MEDIUM);
+				} else {
+					return text;
+				}
+			},
+			compNumberModes: function(text) {
+				if (text.length < this.SHORT) {
+					return 1;
+				}
+				if (text.length < this.MEDIUM) {
+					return 2;
+				}
+				return 3;
+			},
+			cropText: function(text, chars) {
+				if (text.length > chars) {
+					text = text.substr(0, text.lastIndexOf(" ", chars));
 					text += " [...]";
 				}
-				
-				this.getEffectiveChildNodes()[0].textContent = text;
+				return text;
+			},
+			tapAction: function() {
+				this.displayMode = (this.displayMode + 1) % this.modes;
 			}
 		});
 	</script>

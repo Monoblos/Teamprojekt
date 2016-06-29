@@ -1,9 +1,12 @@
 <link rel="import" href="/bower_components/polymer/polymer.html">
 <link rel="import" href="/bower_components/paper-item/paper-item.html">
+<link rel="import" href="/bower_components/iron-ajax/iron-ajax.html">
 
 <dom-module name="container-fakultys" attributes="attrA attrb">
 	<template>
 		<style>
+			:host {
+			}
 			#bb1 {
 				padding-left: 4px;
 				padding-right: 4px;
@@ -20,21 +23,30 @@
 			}
 			#ele1 {
 				width: 20%;
+				padding-top: 150px;
 			}
 			#ele2 {
 				width: 80%;
+			    overflow-x: hidden;
+				overflow-y: scroll;
 			}
 			.column {
 				float: left;
+				max-height: 400px;
 			}
 			#close {
 				padding-left: 14pt;
 			}
 			#open {
-				overflow-x: none;
-				overflow-y: always;
+			}
+
+			a {
+				color: inherit;
+				text-decoration: inherit;
 			}
 		</style>
+		
+        <iron-ajax auto url="/public/data/path.json" handle-as="json" last-response="{{rawItems}}"></iron-ajax>
 		<div id="bb1">
 			<div class="container">
 				<div id="close" hidden$="{{isOpen}}">
@@ -49,11 +61,9 @@
 					  <paper-item>MA</paper-item>
 					</div>
 					<div role="listbox" id="ele2" class="column">
-					  <paper-item>Angewandte Informatik</paper-item>
-					  <paper-item>Architektur (BA6/BA8)</paper-item>
-					  <paper-item>Automobilinformationstechnik</paper-item>
-					  <paper-item>Bauingenieurwesen</paper-item>
-					  <paper-item>Betriebswirtschaftslehre</paper-item>
+						<template is="dom-repeat" items="[[studies]]" as="item">
+							<paper-item><a href="/studiengang/[[item.value]]">[[item.name]]</a></paper-item>
+						</template>
 					</div>
 				</div>
 			</div>
@@ -73,15 +83,17 @@
 				isOpen: {
 					type: Boolean,
 					value: false
+				},
+				rawItems: {
+					type: Object,
+					value: {}
+				},
+				studies: {
+					type: Array,
+					computed: "compStudies(rawItems)"
 				}
 			},
 			ready: function() {
-			},
-			isVisible: function(id, isOpen) {
-				if (isOpen == id) {
-					return "";
-				}
-				return "hidden";
 			},
 			clickListener: function() {
 				this.doOpen();
@@ -91,6 +103,13 @@
 			},
 			doClose: function() {
 				this.isOpen = false;
+			},
+			compStudies: function(rawItems) {
+				var result = [];
+				for (var prop in rawItems) {
+					result = result.concat(rawItems[prop]);
+				}
+				return result;
 			}
 		});
 	</script>

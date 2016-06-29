@@ -182,20 +182,17 @@
 				var ident = src.rootTarget.ident;
 				this.moveElement(ident, "displayedElements", "undisplayedElements");
 				localStorage.setItem("undisplayedLinks", JSON.stringify(this.undisplayedElements));
-				console.log("removeTap");
 			},
 			addTap: function(e) {
 				var src = Polymer.dom(e);
 				var ident = src.rootTarget.ident;
 				this.moveElement(ident, "undisplayedElements", "");
 				localStorage.setItem("undisplayedLinks", JSON.stringify(this.undisplayedElements));
-				console.log("addTap");
 			},
 			removeCustomTap: function(e) {
 				var src = Polymer.dom(e);
 				var ident = src.rootTarget.ident;
 				this.moveElement(ident, "customElements", "");
-				console.log("removeCustomTap");
 			},
 			moveElement: function(ident, src, dst) {
 				var index = -1;
