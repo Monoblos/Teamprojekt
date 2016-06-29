@@ -3,7 +3,7 @@
 <link rel="import" href="/bower_components/app-route/app-route.html">
 <link rel="import" href="/bower_components/iron-ajax/iron-ajax.html">
 
-<dom-module name="page-container" attributes="defaultPage">
+<dom-module name="page-container" attributes="defaultPage greedy">
 	<template id="page-container">
 		<style>
 			#tofill > * {
@@ -86,6 +86,10 @@
 				options: {
 					type: Object,
 					computed: "compOptions(queryParams, extraOptions, routeData.x)"
+				},
+				greedy: {
+					type: Boolean,
+					value: false
 				}
 			},
 			ready: function() {
@@ -122,17 +126,20 @@
 				console.log("Replacing active node.");
 				var nodeName = this.contentName;
 				
-				var el = document.createElement("link");
-				el.rel = "import";
-				el.href = "/app/elements/" + nodeName + ".html";
-				Polymer.dom(this.root).appendChild(el);
+				this.postLoadElement(nodeName);
 				
-				el = document.createElement(nodeName);
+				var el = document.createElement(nodeName);
 				var cont = Polymer.dom(tofill);
 				cont._clear();
 				cont.appendChild(el);
 				this.currentlyLoaded = nodeName;
 				this.setChildArg();
+			},
+			postLoadElement: function(name) {
+				var el = document.createElement("link");
+				el.rel = "import";
+				el.href = "/app/elements/" + name + ".html";
+				Polymer.dom(this.root).appendChild(el);
 			},
 			setChildArg: function() {
 				var child = Polymer.dom(tofill).children[0];
@@ -154,6 +161,23 @@
 			dictLoaded: function(e) {
 				this.routeDict = this.jsonToOject(e.detail.value);
 				console.log("Routes loaded.");
+				if (this.greedy) {
+					this.async(function() {
+						console.log("Greedy importer started");
+						var allrLoaded = [];
+						for (var rut in this.routeDict) {
+							console.log("Got element " + this.routeDict[rut] + " for route " + rut);
+							if (~allrLoaded.indexOf(this.routeDict[rut])) {
+								//skip
+							} else {
+								console.log("Importing " + this.routeDict[rut]);
+								this.postLoadElement(this.routeDict[rut]);
+								allrLoaded.push(this.routeDict[rut]);
+							}
+						}
+						console.log("Greedy importer finished");
+					}, 2000);
+				}
 			},
 			jsonToOject: function(text) {
 				return JSON.parse(text);

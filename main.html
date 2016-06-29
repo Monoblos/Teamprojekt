@@ -22,7 +22,7 @@
 	</head>
 	<body>
 		<weather-provider location="Germany/Konstanz"></weather-provider>
-		<page-container default-page="htwg-image"></page-container>
+		<page-container default-page="htwg-image" greedy></page-container>
 	</body>
 	<script>
 		document.querySelector('weather-provider').addEventListener('weather-update', function (e) {
