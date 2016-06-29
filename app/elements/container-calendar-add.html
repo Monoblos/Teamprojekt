@@ -29,7 +29,8 @@
             line-height: 24px;
             font-weight: bold;
             padding: 8px 5px;
-            width: calc(100% - 20px);
+            width: calc(100% - 16px);
+            color: var(--weather-primary-color);
         }
 
         input::-webkit-input-placeholder,
@@ -43,7 +44,7 @@
         }
 
         .row {
-            margin-bottom: 10px;
+            margin-bottom: 16px;
         }
 
         .button{
@@ -56,8 +57,10 @@
         <div id="wrapper">
             <htwg-subnavbar arg="[[arg]]" options="[[options]]"></htwg-subnavbar>
             <h1>Termin hinzufügen</h1>
-            <input type="text" placeholder="Titel" class="row" value="{{title::input}}">
-            <container-select class="row" title="Kategorie" value="{{category}}"></container-select>
+            <input type="text" placeholder="Titel" value="{{title::input}}">
+            <p>
+                <container-select title="Kategorie" value="{{category}}"></container-select>
+            </p>
             <template is="dom-if" if="{{title}}">
                 <input type="date" placeholder="Datum" class="row" value="{{date::input}}">
             </template>
