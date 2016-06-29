@@ -103,17 +103,16 @@
         }
 
         .block {
-            height: 180px;
             width: 100%;
             margin-left: 16px;
             margin-right: 16px;
             margin-top: 30px;
-            margin-bottom: 30px
+            margin-bottom: 30px;
             color: var(--weather-primary-color);
-            font-size: 16px;
-            
+            font-size: 16px:;
+            cursor: pointer;
         }
-                
+
     </style>
 
     <template>
@@ -129,22 +128,25 @@
                 </div>
             </nav>
             <div id="searchbar" class="collapsed">
-                <iron-icon icon="htwg:magnifier"></iron-icon>
+                <iron-icon icon="htwg:magnifier" on-tap="search"></iron-icon>
                 <input on-keydown="checkForEnter" type="text" placeholder="Suche..." id="searchInput"/>
             </div>
 
 
             <div class="resultcontainer" hidden$="{{!showSearchResult}}" id="searchResult">
                 <h1>{{searchString}}:</h1>
-            <div class="block" id="searchblock">  
+            <div class="block" hidden$="{{!isInformatik}}">  
                 <span on-tap="checkLink" id="wib">Wirtschafts<b>informatik</b> versteht sich als interdisziplinäres Fach zwischen <b>Informatik</b> und Betriebswirtschaftslehre. Viele ihrer technologischen und methodischen Grundlagen stammen aus der <b>Informatik</b>, während die Anwendungsfelder überwiegend im betrieblichen Bereich liegen.
                 Die Wirtschafts<b>informatik</b> [...]</span>
             </div>
-            <div class="block">
+            <div class="block" hidden$="{{!isInformatik}}">
                 <span on-tap="checkLink" id="ainb"><b>Informatik</b>systeme sind allgegenwärtig, vom Internet über Mobilfunk, Auto und Flugzeug, bis hin zu Geräten der Unterhaltungselektronik und Medizintechnik. Moderne Produktions- und Dienstleistungssysteme in Industrie und Wirtschaft und die zahlreichen internetbasierten [...]</span>
             </div>
-            <div class="block">
+            <div class="block" hidden$="{{!isInformatik}}">
                 <span on-tap="checkLink" id="gib">Das Studium Gesundheits<b>informatik</b> vermittelt Ihnen die Kenntnisse und Fähigkeiten, die Sie benötigen, um Informationssysteme (u.a mobile Anwendungen) für das Gesundheitswesen zu entwickeln, zu konfigurieren, zu betreiben und anzuwenden. Sie [...]</span>
+            </div>
+             <div class="block" hidden$="{{!foundnothing}}">
+                <span on-tap="checkLink" id="gib">Keine passenden Suchergebnisse gefunden</span>
             </div>
         </div>
         </div>
@@ -171,6 +173,14 @@
                     type: Boolean,
                     value: false
                 },
+                foundnothing: {
+                    type: Boolean,
+                    value: false
+                },
+                isInformatik: {
+                    type: Boolean,
+                    value: false
+                },
                 targetUrl: {
                     type: String,
                     value: ""
@@ -188,11 +198,19 @@
                     this.search();
                 }
             },
-            search: function(e) {
+            search: function() {
+
                 if(this.$.searchInput.value.toLowerCase() == "informatik") {
                    this.searchString = this.$.searchInput.value;
+                   this.foundnothing = false;
                    this.showSearchResult = true;
-                } else {
+                   this.isInformatik = true;
+                } 
+                else if(this.$.searchInput.value.toLowerCase() != ""){ 
+                    this.searchString = this.$.searchInput.value;
+                     this.isInformatik = false;
+                    this.showSearchResult = true;
+                    this.foundnothing = true;
                     return;
                 }
             },
