@@ -31,10 +31,10 @@
         .navbar > div > a {
             border: 2px solid var(--weather-primary-color);
             padding: 1px 5px;
-			text-decoration: inherit;
+            text-decoration: inherit;
             font-weight: bold;
             display: inline;
-			color: inherit;
+            color: inherit;
         }
 
         .navbar > a {
@@ -49,6 +49,29 @@
 
         .collapsed {
             display: none !important;
+        }
+
+        h1 {
+            margin-right: 16px;
+            margin-left: 16px;
+        }
+
+        a:link {
+            text-decoration: none;
+            text-decoration-color: var(--weather-primary-color);
+        }
+
+        a:visited {
+            text-decoration: none;
+            color: var(--weather-primary-color);
+        }
+
+        a:hover {
+            text-decoration: none;
+        }
+
+        a:active {
+            text-decoration: none;
         }
 
         iron-icon {
@@ -72,6 +95,24 @@
             outline: none;
             width: calc(100% - 42px);
         }
+
+        .resultcontainer {
+            max-height: 100%;
+            width: 100%;
+            overflow-y: scroll;
+        }
+
+        .block {
+            width: 100%;
+            margin-left: 16px;
+            margin-right: 16px;
+            margin-top: 30px;
+            margin-bottom: 30px;
+            color: var(--weather-primary-color);
+            font-size: 16px:;
+            cursor: pointer;
+        }
+
     </style>
 
     <template>
@@ -87,29 +128,120 @@
                 </div>
             </nav>
             <div id="searchbar" class="collapsed">
-                <iron-icon icon="htwg:magnifier"></iron-icon>
-                <input type="text" placeholder="Suche..."/>
+                <iron-icon icon="htwg:magnifier" on-tap="search"></iron-icon>
+                <input on-keydown="checkForEnter" type="text" placeholder="Suche..." id="searchInput"/>
             </div>
+
+
+            <div class="resultcontainer" hidden$="{{!showSearchResult}}" id="searchResult">
+                <h1>{{searchString}}:</h1>
+            <div class="block" hidden$="{{!isInformatik}}">  
+                <span on-tap="checkLink" id="wib">Wirtschafts<b>informatik</b> versteht sich als interdisziplinäres Fach zwischen <b>Informatik</b> und Betriebswirtschaftslehre. Viele ihrer technologischen und methodischen Grundlagen stammen aus der <b>Informatik</b>, während die Anwendungsfelder überwiegend im betrieblichen Bereich liegen.
+                Die Wirtschafts<b>informatik</b> [...]</span>
+            </div>
+            <div class="block" hidden$="{{!isInformatik}}">
+                <span on-tap="checkLink" id="ainb"><b>Informatik</b>systeme sind allgegenwärtig, vom Internet über Mobilfunk, Auto und Flugzeug, bis hin zu Geräten der Unterhaltungselektronik und Medizintechnik. Moderne Produktions- und Dienstleistungssysteme in Industrie und Wirtschaft und die zahlreichen internetbasierten [...]</span>
+            </div>
+            <div class="block" hidden$="{{!isInformatik}}">
+                <span on-tap="checkLink" id="gib">Das Studium Gesundheits<b>informatik</b> vermittelt Ihnen die Kenntnisse und Fähigkeiten, die Sie benötigen, um Informationssysteme (u.a mobile Anwendungen) für das Gesundheitswesen zu entwickeln, zu konfigurieren, zu betreiben und anzuwenden. Sie [...]</span>
+            </div>
+             <div class="block" hidden$="{{!foundnothing}}">
+                <span on-tap="checkLink" id="gib">Keine passenden Suchergebnisse gefunden</span>
+            </div>
+        </div>
         </div>
         <div id="sizer"></div>
     </template>
 
+
     <script>
         Polymer({
             is: "htwg-navbar",
-			properties: {
-				leftIcon: {
-					type: String,
-					value: "htwg:compass"
-				},
-				leftLink: {
-					type: String,
-					value: "/switchboard"
-				},
+            properties: {
+                leftIcon: {
+                    type: String,
+                    value: "htwg:compass"
+                },
+                leftLink: {
+                    type: String,
+                    value: "/switchboard"
+                },
                 timeout: {
                     type: Object
+                },
+                showSearchResult: {
+                    type: Boolean,
+                    value: false
+                },
+                foundnothing: {
+                    type: Boolean,
+                    value: false
+                },
+                isInformatik: {
+                    type: Boolean,
+                    value: false
+                },
+                targetUrl: {
+                    type: String,
+                    value: ""
+                },
+                searchString: {
+                    text: String,
+                    value: ""
                 }
-			},
+            },
+            ready: function() {
+                
+            },
+            checkForEnter: function (e) {
+                if (e.keyCode === 13) {
+                    this.search();
+                }
+            },
+            search: function() {
+
+                if(this.$.searchInput.value.toLowerCase() == "informatik") {
+                   this.searchString = this.$.searchInput.value;
+                   this.foundnothing = false;
+                   this.showSearchResult = true;
+                   this.isInformatik = true;
+                } 
+                else if(this.$.searchInput.value.toLowerCase() != ""){ 
+                    this.searchString = this.$.searchInput.value;
+                     this.isInformatik = false;
+                    this.showSearchResult = true;
+                    this.foundnothing = true;
+                    return;
+                }
+            },
+             checkLink: function(e) {
+                var target = this.$.default.baseURI.split("/");
+                console.log(target[target.length-1]);
+                if(target[target.length-1] == "wib" || e.target.id == "wib") {
+                   this.navigate("/bewerbung/wib");
+                } 
+                if(target[target.length-1] == "ainb"  || e.target.id == "ainb") {
+                    this.navigate("/bewerbung/ainb");
+                }
+                if(target[target.length-1] == "gib"  || e.target.id == "gib") {
+                    this.navigate("/bewerbung/gib");
+                }
+            },
+            closeSearch: function() {
+      
+                console.log("in function");
+                this.showSearchResult = false;
+            },
+            navigate: function(target) {
+                var appLocation = document.querySelector("app-location");
+                if (appLocation == null) {
+                    window.location.href = target;
+                } else {
+                    this.showSearchResult = false;
+                    this.resetNavbar();
+                    appLocation.set("route.path", target);
+                }
+            },
             toggle: function(event){
                 if(event.target._iconName == 'magnifier') {
                     this.$.default.setAttribute('icon', 'htwg:close');
@@ -119,6 +251,7 @@
                 } else if(event.target._iconName == 'close') {
                     this.$.default.setAttribute('icon', 'htwg:toolbox');
                     this.$.searchbar.classList.add('collapsed');
+                    this.resetNavbar();
                 } else if(event.target._iconName == 'toolbox' || event.target.parentNode.getAttribute('id') == 'extended'){
                     this.$.default.classList.toggle('collapsed');
                     this.$.extended.classList.toggle('collapsed');
@@ -126,11 +259,15 @@
             },
             leaved: function(event){
                 this.timeout = setTimeout(() => {
-                    this.$.default.setAttribute('icon', 'htwg:toolbox');
-                    this.$.default.classList.remove('collapsed');
-                    this.$.searchbar.classList.add('collapsed');
-                    this.$.extended.classList.add('collapsed');
-                }, 5000);
+                    this.resetNavbar();
+                }, 5000);                                     
+            },
+            resetNavbar: function() {
+                this.$.default.setAttribute('icon', 'htwg:toolbox');
+                this.$.default.classList.remove('collapsed');
+                this.$.searchbar.classList.add('collapsed');
+                this.$.extended.classList.add('collapsed');
+                this.showSearchResult = false;
             },
             entered: function(){
                 clearTimeout(this.timeout);

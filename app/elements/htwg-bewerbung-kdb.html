@@ -3,6 +3,7 @@
 <link rel="import" href="/bower_components/paper-button/paper-button.html">
 <link rel="import" href="/app/elements/htwg-navbar.html">
 <link rel="import" href="/app/elements/htwg-iconset.html">
+<link rel="import" href="/app/elements/htwg-button.html">
 
 <dom-module id="htwg-bewerbung-kdb">
     <template>
@@ -48,10 +49,11 @@
             }
             .center {
                 display: inline-block;
-                margin: 0 auto;
+                margin: 0 ;
             }
             .right {
                 float: right;
+                width: 32px;
                 margin-right: 16px;
             }
             .container {
@@ -59,6 +61,7 @@
                 display: inline-block;
                 text-align: center;
                 z-index: 99;
+                width: 100%;
             }
             .border-container {
                 padding-top: 50px;
@@ -79,8 +82,14 @@
                 <div class="center">
                     <span>KD</span>
                 </div>
+                <div class="right">&nbsp;</div>
             </div>
         </div>
+
+
+
+
+
 
         <div class="border-container">
             <h1 on-tap="toggle">Voraussetzungen</h1>
@@ -120,7 +129,7 @@
             </iron-collapse>
         </div>
 
-        <paper-button toggles raised id="bewerbenBtn">toggles</paper-button>
+        <htwg-button>Bewerben</htwg-button>
 
     </template>
 
@@ -148,8 +157,7 @@
                 }
             },
             back: function() {
-                this.navigate("/bewerbung/zero");
-                //this.navigate("/switchboard");
+                this.navigate("/bewerbung");
             }
         });
     </script>
