@@ -31,10 +31,10 @@
         .navbar > div > a {
             border: 2px solid var(--weather-primary-color);
             padding: 1px 5px;
-			text-decoration: inherit;
+            text-decoration: inherit;
             font-weight: bold;
             display: inline;
-			color: inherit;
+            color: inherit;
         }
 
         .navbar > a {
@@ -97,16 +97,14 @@
         }
 
         .resultcontainer {
-            height: 450px;
-            min-width: 300px;
-            max-width: 400px;
+            max-height: 100%;
+            width: 100%;
             overflow-y: scroll;
         }
 
         .block {
             height: 180px;
-            min-width: 300px;
-            max-width: 400px;
+            width: 100%;
             margin-left: 16px;
             margin-right: 16px;
             margin-top: 30px;
@@ -157,15 +155,15 @@
     <script>
         Polymer({
             is: "htwg-navbar",
-			properties: {
-				leftIcon: {
-					type: String,
-					value: "htwg:compass"
-				},
-				leftLink: {
-					type: String,
-					value: "/switchboard"
-				},
+            properties: {
+                leftIcon: {
+                    type: String,
+                    value: "htwg:compass"
+                },
+                leftLink: {
+                    type: String,
+                    value: "/switchboard"
+                },
                 timeout: {
                     type: Object
                 },
@@ -181,7 +179,7 @@
                     text: String,
                     value: ""
                 }
-			},
+            },
             ready: function() {
                 
             },
@@ -195,18 +193,19 @@
                    this.searchString = this.$.searchInput.value;
                    this.showSearchResult = true;
                 } else {
-                    alert("keine Suche ");
                     return;
                 }
             },
              checkLink: function(e) {
-                if(e.target.id == "wib") {
+                var target = this.$.default.baseURI.split("/");
+                console.log(target[target.length-1]);
+                if(target[target.length-1] == "wib" || e.target.id == "wib") {
                    this.navigate("/bewerbung/wib");
                 } 
-                if(e.target.id == "ainb") {
-                    this.navigate("/bewerbung/aib");
+                if(target[target.length-1] == "ainb"  || e.target.id == "ainb") {
+                    this.navigate("/bewerbung/ainb");
                 }
-                if(e.target.id == "gib") {
+                if(target[target.length-1] == "gib"  || e.target.id == "gib") {
                     this.navigate("/bewerbung/gib");
                 }
             },
@@ -234,6 +233,7 @@
                 } else if(event.target._iconName == 'close') {
                     this.$.default.setAttribute('icon', 'htwg:toolbox');
                     this.$.searchbar.classList.add('collapsed');
+                    this.resetNavbar();
                 } else if(event.target._iconName == 'toolbox' || event.target.parentNode.getAttribute('id') == 'extended'){
                     this.$.default.classList.toggle('collapsed');
                     this.$.extended.classList.toggle('collapsed');

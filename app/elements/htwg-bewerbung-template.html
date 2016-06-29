@@ -99,11 +99,6 @@
             </div>
         </div>
 
-
-
-
-
-
         <div class="border-container">
             <h1 on-tap="toggle">Voraussetzungen</h1>
             <iron-collapse id="collapse">
@@ -158,18 +153,41 @@
                 bookmarkclass: {
                     type: String,
                     computed: "getbookmarkclass(customElements.*, url)"
+                },
+                ZulassungText: {
+                    type: String,
+                    computed: "setZulassungText(url)"
                 }
             },
             ready: function() {
 
                 this.querySelector("app-localstorage-document").initializeStoredValue();
-
-                console.log("ready template");
-                var distributed = this.getContentChildren('#myContent');
-                console.log(distributed.length);
             },
             toggle: function() {
                 this.$.collapse.toggle();
+            },
+            setZulassungText: function() {
+
+                if(this.$.collapse.opened) {
+                    this.$.collapse.opened = false;
+                }
+
+                
+                this.text = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua."
+
+
+                + "                                                                                                                                                                             At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.";
+
+                if(this.url == "ainb") {
+                    this.text = "Informatiksysteme sind allgegenwärtig, vom Internet über Mobilfunk, Auto und Flugzeug, bis hin zu Geräten der Unterhaltungselektronik und Medizintechnik.  Moderne Produktions- und Dienstleistungssysteme in Industrie und Wirtschaft und die zahlreichen internetbasierten Kommunikationsformen werden erst mit Informatik ermöglicht. Software bildet heute das Rückgrat der meisten Unternehmen und einer Vielzahl von Produkten. Dabei steigt der Bedarf nach professioneller Software, die hohe Qualitätsstandards erfüllt, kontinuierlich in allen Zweigen der produzierenden Industrie, bei Dienstleistern, in der Verwaltung und in weltweit operierenden Organisationen. Informatiker haben daher ausgezeichnete Berufschancen in allen Bereichen. Das Studium ist auch eine Grundlage für den Sprung in die Selbstständigkeit."
+                }
+                if(this.url == "wib") {
+                    this.text = "Wirtschaftsinformatik versteht sich als interdisziplinäres Fach zwischen Informatik und Betriebswirtschaftslehre. Viele ihrer technologischen und methodischen Grundlagen stammen aus der Informatik, während die Anwendungsfelder überwiegend im betrieblichen Bereich liegen.Die Wirtschaftsinformatik hat für die Lösung Ihrer Aufgaben eigene Ansätze entwickelt. Wirtschaftsinformatiker beschäftigen sich mit der Konzeption, der Entwicklung und Anwendung von betrieblichen Informationssystemen sowie generell mit dem Management von Informationen und Geschäftsprozessen. Wirtschaftsinformatiker kennen die aktuellen Methoden zur Erstellung von Unternehmens-Software, und sind in der Lage, komplexe Software-Projekte im betrieblichen Umfeld zu positionieren und voranzutreiben. Im Unternehmen bilden sie die Schnittstelle zwischen IT, Management und Anwendern."
+                }
+                if(this.url == "gib") {
+                    this.text = "Das Studium Gesundheitsinformatik vermittelt Ihnen die Kenntnisse und Fähigkeiten, die Sie benötigen, um Informationssysteme (u.a mobile Anwendungen) für das Gesundheitswesen zu entwickeln, zu konfigurieren, zu betreiben und anzuwenden. Sie lernen, die Anforderungen der Anwender wie Ärzte, Pflegekräfte und Betriebswirte zu erfassen, diese in Spezifikationen für die Systementwicklung zu überführen und selbst Software zu entwickeln und zu testen. Das Studium qualifiziert Sie, klinische Prozesse mit Hilfe der IT abzubilden, die Informationssysteme entsprechend zu adaptieren und zu schulen. Darüberhinaus werden Sie in der Lage sein, diese Systeme gesetzeskonform zu betreiben und in Krankenhaus-IT-Abteilungen, in der Qualitätssicherung und bei Medizinprodukteherstellern als Fachkraft zu überzeugen. Netzwerk und Fachbeirat. Eine Besonderheit dieses Studiengangs ist die unmittelbare Abstimmung der Studieninhalte mit Krankenhäusern, Klinikketten und Medizinprodukte - Herstellern, die uns den Bedarf an Gesundheitsinformatikfachkräften bestätigt haben und dringend auf spezialisierten Nachwuchs warten. Die HTWG hat bereits vielfältige Kontakte zum Gesundheitssektor geknüpft, so dass Experten aus der Region zu aktuellen Themen der Gesundheitsinformatik zur Verfügung stehen. Der Fachbeirat ist bei der Entwicklung des Studienangebots aktiv involviert, so dass eine enge Verzahnung mit potenziellen Arbeitgebern gewährleistet ist."
+
+                }
             },
             navigate: function(target) {
                 var appLocation = document.querySelector("app-location");
