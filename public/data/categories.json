@@ -1,0 +1,10 @@
+{
+  "categories": [
+    {"value": "profile-filled", "name": "Persönliches"},
+    {"value": "doctorate", "name": "Vorlesungen"},
+    {"value": "exam", "name": "Abgabe/Prüfungen"},
+    {"value": "room", "name": "Räume"},
+    {"value": "canteen", "name": "Mensa"},
+    {"value": "balloon", "name": "Veranstaltungen"}
+  ]
+}
