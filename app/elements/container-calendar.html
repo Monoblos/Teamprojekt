@@ -239,7 +239,7 @@
             },
             reloadSubcriptions: function(){
                 if(localStorage.getItem('subscriptions')){
-                    this.subscriptions = JSON.parse(localStorage.getItem('subscriptions'));
+                    this.set('subscriptions', JSON.parse(localStorage.getItem('subscriptions')));
                 }
                 if(localStorage.getItem('appointments')){
                     this.setAppointments({"type": "reload"}, {"response": JSON.parse(localStorage.getItem('appointments'))});
@@ -314,27 +314,18 @@
                 this.$.appointments.url = '/public/data/appointments-' + this.date.getFullYear() + '-' + ('0' + (1+this.date.getMonth())).slice(-2) + '.json';
             },
             setAppointments: function(event, data){
-                if(event.type != 'error'){
-                    var year = ''+this.date.getFullYear();
-                    var month = ('0' + (1+this.date.getMonth())).slice(-2);
-                    var keys = Object.keys(data.response[year][month]);
-                    this.createPathIfNotExists('appointments.' + year + '.' + month);
-                    for(var i = 0; i < keys.length; i++){
-                        var path = 'appointments.' + year + '.' + month + '.' + keys[i];
-                        if(!this.get(path)){
-                            this.set(path, data.response[year][month][keys[i]]);
-                        } else {
-                            for(var n = 0; n < data.response[year][month][keys[i]].length; n++){
-                                for(var x = 0; x < this.get(path).length; x++){
-                                    if(this.isEquivalent(this.get(path)[x], data.response[year][month][keys[i]][n])){
-                                        break;
-                                    } else if(x + 1 == this.get(path).length){
-                                        this.push(path, data.response[year][month][keys[i]][n]);
-                                    }
-                                }
-                            }
+                if(event.type === 'reload') {
+                    var years = Object.keys(data.response);
+                    for(var i = 0; i < years.length; i++){
+                        var months = Object.keys(data.response[years[i]]);
+                        for(var n = 0; n < months.length; n++){
+                            this.fillAppointments(data, years[i], months[n]);
                         }
                     }
+                } else if(event.type != 'error'){
+                    var year = ''+this.date.getFullYear();
+                    var month = ('0' + (1+this.date.getMonth())).slice(-2);
+                    this.fillAppointments(data, year, month);
                 }
                 this.set('calendar.month', {"name": this.calendar.months[this.date.getMonth()].name, "key": ('0' + (1+this.date.getMonth())).slice(-2)});
                 this.set('calendar.max_day', this.calendar.months[this.date.getMonth()].max_day);
@@ -342,6 +333,26 @@
                 this.set('calendar.offset', (this.date.getDay() + 6) % 7);
                 this.set('calendar.postset', 7 - ((this.calendar.offset + this.calendar.max_day) % 7));
                 this.set('calendar.year', this.date.getFullYear());
+            },
+            fillAppointments: function(data, year, month){
+                var keys = Object.keys(data.response[year][month]);
+                this.createPathIfNotExists('appointments.' + year + '.' + month);
+                for(var i = 0; i < keys.length; i++){
+                    var path = 'appointments.' + year + '.' + month + '.' + keys[i];
+                    if(!this.get(path)){
+                        this.set(path, data.response[year][month][keys[i]]);
+                    } else {
+                        for(var n = 0; n < data.response[year][month][keys[i]].length; n++){
+                            for(var x = 0; x < this.get(path).length; x++){
+                                if(this.isEquivalent(this.get(path)[x], data.response[year][month][keys[i]][n])){
+                                    break;
+                                } else if(x + 1 == this.get(path).length){
+                                    this.push(path, data.response[year][month][keys[i]][n]);
+                                }
+                            }
+                        }
+                    }
+                }
             },
             createPathIfNotExists: function(path){
                 if(this.get(path)){

@@ -1,162 +1,162 @@
- {
-                    "ag": [
-						  {
-							"value": "ba6",
-							"name": "Architektur6"
-						  },
-						  {
-							"value": "ba8",
-							"name": "Architektur8"
-						  },
-						  {
-							"value": "bkd",
-							"name": "Kommunikationsdesign"
-						  },
-						  {
-							"value": "mkd",
-							"name": "Kommunikationsdesign Master"
-						  }
-					],
-                    "bi": [
-  {
-    "value": "bib",
-    "name": "Bauingenieurwesen"
-  },
-  {
-    "value": "mib",
-    "name": "Bauingenieurwesen Master"
-  },
-  {
-    "value": "mwi",
-    "name": "Wirtschaftsingenieurwesen Studienrichtung Bauwesen Master"
-  },
-  {
-    "value": "urb",
-    "name": "Umwelttechnik und Ressourcenmanagement"
-  },
-  {
-    "value": "wib",
-    "name": "Wirtschaftsingenieurwesen Bau"
-  }
-],
-                    "ei": [
-  {
-    "value": "ait",
-    "name": "Automobilinformationstechnik"
-  },
-  {
-    "value": "eib",
-    "name": "Elekto- und Informationstechnik"
-  },
-  {
-    "value": "eim",
-    "name": "Elektrische Systeme Master"
-  },
-  {
-    "value": "ipe",
-    "name": "International Project Engineering Master"
-  },
-  {
-    "value": "eiw",
-    "name": "Wirtschaftsingenieurwesen Elektrotechnik und Informationstechnik"
-  },
-  {
-    "value": "mwi",
-    "name": "Wirtschaftsingenieurwesen Master"
-  },
-  {
-    "value": "sem",
-    "name": "System Engineering Master"
-  }
-],
-                    "in": [
-  {
-    "value": "ain",
-    "name": "Angewandte Informatik"
-  },
-  {
-    "value": "bit",
-    "name": "Buisness Information Technology"
-  },
-  {
-    "value": "gib",
-    "name": "Gesundheitsinformatik"
-  },
-  {
-    "value": "msi",
-    "name": "Master Informatics"
-  },
-  {
-    "value": "win",
-    "name": "Wirtschaftsinformatik"
-  }
-],
-                    "ma": [
-  {
-    "value": "ase",
-    "name": "Automotive Systems Engineering Master"
-  },
-  {
-    "value": "mep",
-    "name": "Machinenbau Entwicklung und Produktion"
-  },
-  {
-    "value": "mke",
-    "name": "Maschinenbau Konstruktion und Entwicklung"
-  },
-  {
-    "value": "mme",
-    "name": "Mechatronik Master"
-  },
-  {
-    "value": "mms",
-    "name": "Mechanical Engineering and International Sales Management Master"
-  },
-  {
-    "value": "mwi",
-    "name": "Wirtschaftsingenieurwesen Master"
-  },
-  {
-    "value": "uvt",
-    "name": "Umwelt- und Verfahrenstechnik Master"
-  },
-  {
-    "value": "vub",
-    "name": "Verfahrens- und Umwelttechnik"
-  },
-  {
-    "value": "wim",
-    "name": "Wirtschaftsingenieurwesen Maschinenbau"
-  }
-],
-                    "ws": [
-  {
-    "value": "asm",
-    "name": "Internationales Management Asien Master"
-  },
-  {
-    "value": "bac",
-    "name": "Wirtschaftssprachen Asien und Management China"
-  },
-  {
-    "value": "bas",
-    "name": "Wirtschaftssprachen Asien und Management Südost- und Südasien"
-  },
-  {
-    "value": "bwb",
-    "name": "Betriebswirtschaftslehre"
-  },
-  {
-    "value": "bwm",
-    "name": "Unternehmensführung Master"
-  },
-  {
-    "value": "wrb",
-    "name": "Wirtschaftsrecht"
-  },
-  {
-    "value": "wrm",
-    "name": "Legal Management Master"
-  }
-]
+{
+  "ag": [
+    {
+      "value": "ba6",
+      "name": "Architektur6"
+    },
+    {
+      "value": "ba8",
+      "name": "Architektur8"
+    },
+    {
+      "value": "bkd",
+      "name": "Kommunikationsdesign"
+    },
+    {
+      "value": "mkd",
+      "name": "Kommunikationsdesign Master"
+    }
+  ],
+  "bi": [
+    {
+      "value": "bib",
+      "name": "Bauingenieurwesen"
+    },
+    {
+      "value": "mib",
+      "name": "Bauingenieurwesen Master"
+    },
+    {
+      "value": "mwi",
+      "name": "Wirtschaftsingenieurwesen Studienrichtung Bauwesen Master"
+    },
+    {
+      "value": "urb",
+      "name": "Umwelttechnik und Ressourcenmanagement"
+    },
+    {
+      "value": "wib",
+      "name": "Wirtschaftsingenieurwesen Bau"
+    }
+  ],
+  "ei": [
+    {
+      "value": "ait",
+      "name": "Automobilinformationstechnik"
+    },
+    {
+      "value": "eib",
+      "name": "Elekto- und Informationstechnik"
+    },
+    {
+      "value": "eim",
+      "name": "Elektrische Systeme Master"
+    },
+    {
+      "value": "ipe",
+      "name": "International Project Engineering Master"
+    },
+    {
+      "value": "eiw",
+      "name": "Wirtschaftsingenieurwesen Elektrotechnik und Informationstechnik"
+    },
+    {
+      "value": "mwi",
+      "name": "Wirtschaftsingenieurwesen Master"
+    },
+    {
+      "value": "sem",
+      "name": "System Engineering Master"
+    }
+  ],
+  "in": [
+    {
+      "value": "ain",
+      "name": "Angewandte Informatik"
+    },
+    {
+      "value": "bit",
+      "name": "Buisness Information Technology"
+    },
+    {
+      "value": "gib",
+      "name": "Gesundheitsinformatik"
+    },
+    {
+      "value": "msi",
+      "name": "Master Informatics"
+    },
+    {
+      "value": "win",
+      "name": "Wirtschaftsinformatik"
+    }
+  ],
+  "ma": [
+    {
+      "value": "ase",
+      "name": "Automotive Systems Engineering Master"
+    },
+    {
+      "value": "mep",
+      "name": "Machinenbau Entwicklung und Produktion"
+    },
+    {
+      "value": "mke",
+      "name": "Maschinenbau Konstruktion und Entwicklung"
+    },
+    {
+      "value": "mme",
+      "name": "Mechatronik Master"
+    },
+    {
+      "value": "mms",
+      "name": "Mechanical Engineering and International Sales Management Master"
+    },
+    {
+      "value": "mwi",
+      "name": "Wirtschaftsingenieurwesen Master"
+    },
+    {
+      "value": "uvt",
+      "name": "Umwelt- und Verfahrenstechnik Master"
+    },
+    {
+      "value": "vub",
+      "name": "Verfahrens- und Umwelttechnik"
+    },
+    {
+      "value": "wim",
+      "name": "Wirtschaftsingenieurwesen Maschinenbau"
+    }
+  ],
+  "ws": [
+    {
+      "value": "asm",
+      "name": "Internationales Management Asien Master"
+    },
+    {
+      "value": "bac",
+      "name": "Wirtschaftssprachen Asien und Management China"
+    },
+    {
+      "value": "bas",
+      "name": "Wirtschaftssprachen Asien und Management Südost- und Südasien"
+    },
+    {
+      "value": "bwb",
+      "name": "Betriebswirtschaftslehre"
+    },
+    {
+      "value": "bwm",
+      "name": "Unternehmensführung Master"
+    },
+    {
+      "value": "wrb",
+      "name": "Wirtschaftsrecht"
+    },
+    {
+      "value": "wrm",
+      "name": "Legal Management Master"
+    }
+  ]
 }
